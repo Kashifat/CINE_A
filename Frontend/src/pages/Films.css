@@ -1,0 +1,104 @@
+.films-page {
+  padding-top: 80px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 20px;
+  background-color: var(--background-light);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.btn-search {
+  padding: 12px 24px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-search:hover {
+  background-color: var(--secondary-color);
+}
+
+.categories-filter {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.btn-categorie {
+  padding: 10px 20px;
+  background-color: var(--background-light);
+  color: var(--text-secondary);
+  border: 2px solid transparent;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: capitalize;
+}
+
+.btn-categorie:hover {
+  border-color: var(--primary-color);
+  color: var(--text-primary);
+}
+
+.btn-categorie.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.resultats-info {
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.no-results p {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .btn-search {
+    width: 100%;
+  }
+
+  .categories-filter {
+    justify-content: center;
+  }
+}

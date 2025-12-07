@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CinèA - Mon Profil</title>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Spline+Sans:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#F97316',
+              'background-light': '#F3F4F6',
+              'background-dark': '#111827',
+              'card-dark': '#1F2937',
+              'text-light': '#1F2937',
+              'text-dark': '#F9FAFB',
+              'text-muted-light': '#6B7280',
+              'text-muted-dark': '#9CA3AF',
+            },
+            fontFamily: {
+              display: ['Spline Sans', 'sans-serif'],
+              body: ['Noto Sans', 'sans-serif'],
+            },
+            borderRadius: { DEFAULT: '0.375rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem', '3xl': '1.5rem', full: '9999px' },
+          },
+        },
+      };
+    </script>
+<style>
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-body text-text-light dark:text-text-dark">
+<div class="flex min-h-screen">
+<aside class="w-64 flex-shrink-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-6 border-r border-gray-200 dark:border-gray-800">
+<div class="flex flex-col h-full">
+<h1 class="text-3xl font-bold text-primary mb-12">CinèA</h1>
+<nav class="flex flex-col space-y-3">
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-text-muted-light dark:text-text-muted-dark hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/10 dark:hover:text-primary transition-all duration-300" href="#">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+<span class="font-medium">Accueil</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-text-muted-light dark:text-text-muted-dark hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/10 dark:hover:text-primary transition-all duration-300" href="#">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 12h14"></path>
+<path d="m12 5 7 7-7 7"></path>
+</svg>
+<span class="font-medium">Nouveautés</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-white bg-primary shadow-lg shadow-primary/30" href="#">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path>
+</svg>
+<span class="font-semibold">Mon Profil</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-text-muted-light dark:text-text-muted-dark hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/10 dark:hover:text-primary transition-all duration-300" href="#">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<line x1="3" x2="21" y1="9" y2="9"></line>
+<line x1="3" x2="21" y1="15" y2="15"></line>
+</svg>
+<span class="font-medium">Parcourir</span>
+</a>
+</nav>
+<div class="mt-auto">
+<a class="flex items-center gap-4 px-4 py-3 rounded-xl text-text-muted-light dark:text-text-muted-dark hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/10 dark:hover:text-primary transition-all duration-300" href="#">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="11" cy="11" r="8"></circle>
+<line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+</svg>
+<span class="font-medium">Rechercher</span>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<div class="p-8 md:p-10">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-4xl font-bold text-text-light dark:text-text-dark font-display">Mon Profil</h2>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+<svg class="w-6 h-6 text-text-muted-light dark:text-text-muted-dark" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+</button>
+<img alt="User profile" class="h-12 w-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD1Lrv6BO4RrXbhOMeVn1W4mFoFW9XSaKiVK6ZrWzzeZlNL6ky9ukom_OGZ_-FDg9A8-krQRlVvZ6QIpXCQ3tOs2D8Ty_ViwQNLj1k54AG_RMLXvuY8_i2AqoYwKlMRnBzIxhxZggrL-yOTgMmgfboi-gLb88DENTfVCQFHKKOU6q3a-6dD-yXAlYhLDD35EBo8PM41ZugDFo1T6_IosqCaj4_AAvB7J2YneBV2Eip0wNdnChSiG3E56bM8GUQj-bxXjER04oiP3E"/>
+</div>
+</div>
+<div class="border-b border-gray-200 dark:border-gray-700">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8">
+<a class="border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" href="#"> Ma liste </a>
+<a class="border-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-primary hover:border-primary/50 dark:hover:border-primary/50 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-base transition-all duration-200" href="#"> Regarder plus tard </a>
+<a class="border-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-primary hover:border-primary/50 dark:hover:border-primary/50 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-base transition-all duration-200" href="#"> Regarder à nouveau </a>
+</nav>
+</div>
+<div class="mt-8">
+<h3 class="text-2xl font-bold text-text-light dark:text-text-dark mb-6 font-display">Films</h3>
+<div class="relative">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBl4tW0Wv0IL6MJkoBSpfhEhvd9FBqiIDkYJI-wlk9OpnySQD8PjTfY8xpZjs3HaWJfcuxOQ0gp0UvyiZDJKJkmfWqMZUtEUllDOHh0M9WGIXrJkN8HvJLG642gX4rRYRHQzJZWZl78kM5aFjg50YFp3UsBovyCBtxzM5wUV4XRytkXsr7QHWxhs2kYczR8OmEogdzvAlDGEHqeJtOtNaCtRYpgm1Pwpo6fgW1HigvYBPAbBQfOpDZc3T45axPaull7lPhgQTJufhM");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">The Silent Echo</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB-C5hxwIAmTlRtCW_CMc5rs21PU8wyHVg6YROYiHdA1qYxkYJL5LvVO0z2hBt4vFnlErQTKQaZO6H1lIWsy8IwdlPM_S_Kx8Xxh7A-NMespN-aSMR2yq9l9bcxK0FGWQ1Cz7rvMr2gGOmbul64q38-RxGtx2WyVhOgWpZ5kVeV_EIuPx5jchdWxruo9wKH418ZoOvyy4xIP_5Kv2Y3NsBgUZpPoSVL8f6HEOk7ESKiEs8Aj53X7p3B4uk7qhB1t8Ut5cvPXdMcG7M");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Crimson Tide</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDqu-npH7d6p_JljEee3SVx7p1-JrnuU_DP9oLZ3i_rbQr0hIjcGe9CnYV1_E-v5Qc4gIW77-zDYmkM52CcE5KrChaGvHIuocWSnpeeHq2GDXttj25MVv2d-2P3l5Pp6655lZpW89pmqL8l4gvP3Fxj5HxHFxW9OTMGOiCn2blNzDvLM1ZLkdDoIBNjdYeOTL0v7PolLJAVcHmka5BPZJIiwyWR9-aF-LwLZ-ujaQjND5EcB8QfG93MAHrOJSjegp06KgT7CpmmagI");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Whispers of the Past</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUn6wnRbl5MEa4LZ_cdASmU9-voIePYereG_gskeKtsXPn5FFO2s__RsmPuPbpXMXBfIoIOKCZP8y09IxppONjHQRotYoU0MIl6AFVMtEP_FpMfKQHVs_q0WQf66RpMNtIOWaBz42JqfkDPMApHZ612eR6Q2eqFFjlJg0V3WGhWuBvyW0cesugOU3Uvfbhd8zexZE1aGAkf5eMxlKEy07R_8iWVoUwOv-zPsrBKycv1XNetvaFMYKLU4o53aJO0f4DAXBHoDg1UPw");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Starlight Serenade</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBD1Lrv6BO4RrXbhOMeVn1W4mFoFW9XSaKiVK6ZrWzzeZlNL6ky9ukom_OGZ_-FDg9A8-krQRlVvZ6QIpXCQ3tOs2D8Ty_ViwQNLj1k54AG_RMLXvuY8_i2AqoYwKlMRnBzIxhxZggrL-yOTgMmgfboi-gLb88DENTfVCQFHKKOU6q3a-6dD-yXAlYhLDD35EBo8PM41ZugDFo1T6_IosqCaj4_AAvB7J2YneBV2Eip0wNdnChSiG3E56bM8GUQj-bxXjER04oiP3E");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">The Last Frontier</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDi9imUK_XvWLnkrgVpINTkBscKQRm4r6kQYB-zHrYgUY9IvxQgHilYmGgpiEmA9muN0QKFNC3KiSBi8wA2S0zeYrIyihlJaXGAXB601hu7lJeua2fTtISunAwmw6yrZ72eqd14vjODfPoAH48MsT-CkwzP2_lDfMrkiKVQAwV07MSNvVQ4IqR8GVD36JIN4r74_FGrjqi4JtF8JfexYI5uATGt52QO1VScW8eLfhVhf7iEow2kF-WKw-ric_jLSZtrW61Lo54eThM");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Eternal Embrace</h4>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12">
+<h3 class="text-2xl font-bold text-text-light dark:text-text-dark mb-6 font-display">Séries</h3>
+<div class="relative">
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-QI6Yyqvt_Q0znoVz4-W-qMXNmpM-cJijbIzao3xUI6nD_3nO9t7uCruqUPg7haj8ekLOaT0otSMNJyZ8nQ0nWWcpGtEebxsZj2b6G3zW2xdp0GyfQiOhQOJhiDkdiZhPRRvboP-rp2LcoDLpBiUL1ofwL4GxvB0pAjAi10SsU-ZHSXHmhofgzrNEA1qDa850BQrxpp8m9UHTh7BeLBF9Lz_HpFpzBTAeHLglvK88uxg0FstyKN5T-tvciQKF59GpQb1Zv6GQMdU");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Echoes of the Past</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAYYp6pneP1M0lIOT9y1h899qqnXMp8NiX8OsoMfHs0gK_PJvK-pjR5cuEyQ2K-qS_WfS4eS8Tn_IfhHBdvaBHh26z7lvTM8kwRxQr2THek5SOzRzli_vWKRp-qswSw9Fi1-8lHL3OgKvxQ-zK1xO35QDH9PZm9PLqjLBk3VMQNvutCeLZeZOwythVh7ECok2_VR5FaZz74ulls28ghJgdIrAJBuahi48rAF-DKyC4jOCOT3zYQQGk3xGjELyOn8T21MPq-TYMFjkk");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Crimson Skies</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCNeQvoyTKl1v0x0CKiW6qeKvw8hxglz4eyMLVD8AhXZP6fg3EF6-IwVMk1_pvs9pZZPGopKMjEsQcOUvtgpxjHe5oOk6NGMCAZYImWc8mz-SCO0waCmbR0F70Y8wbilEhWcJ_ujbCuedxKHr47ccoVVcT7vPyoPgrAwq7iLBC5ca0e2NCmiMHmjbMfhSk8SS58d0k3QRm-pPiu0qDZ6ejhqKMrczQw8IZP5H9fc5UYIwZEWz6LJ5mfowljr8YmvUCsEOLu_uH8Ieo");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Whispers of the Night</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAc7PbmC63D4jArUw7L4gAlzLXCLOzJIHFSrRS9q6HXV9DHN5nNHl6bk9fFbilPLzLQI7rrSDscEbP0m1gSc3ces4ANolrRb8shGqEv_biaSfgtxFSF8jbtkeQl60rE4vDnRttNxyMA5XO0dO4OO0iE9wkIsyLRag7zv1dn8ksDBd28LKwHjZb9XWpQ_DLzEB34saJv1rLKCLLDKgq37kjXmxD3ODIqcKtvSI2lsVHxM6JeDYNKzkrvVovoKpFEBzNEGpnKse8vl8c");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Starlight Symphony</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAGq7huNgjXVW7y8OsuN1bofHYwgFMVckQKTbANvjy7mj4Gx1pjrArcTOuFl_9cp_H8tQnpe-9o3671Ad5dbfoX2LnIey7MzsBqTwXxw8dqSlOa4wA755UpZnnn6ipaaTKO8GnDWIrJT4my1TYf2iVJ_-ALLFPeaKzRJOTkIsXh_n2ulYsUQU8n2am4uMWTLuWxLVPMAHibmJ0uyKC8eGtrykq4l3ZPcn1aEN0jKKzqsM14Dsk6xvN1JO7BrdQUV_rPvx3G4lbnSmo");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">The Final Frontier</h4>
+</div>
+<div class="space-y-3 group">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:scale-105 transition-all duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBXZT3Eouha457JLraNfuWswtyxenBFt342ldN1z-8UQDrXEmkTWbCpj6R2YWSl9eIbbwT5HpxXugoMaxyGraVCL4i8qTwdlOTo-dzu16lB2yuTnYC4i2OqQ4Sv7le0dF0x7o-vgcmMa4t7IcqSWiH815GqXhKnNnzr9HK6oqkVmKPKxM6IPWH517NpHsR3sxbRzVA4_JaEKv1P4DJGG4fA-h_6yV0ybDYGkddwZwia0lmwFf0EtMckGNCThIjNiB_yLEH3SplHOp8");'></div>
+<h4 class="text-base font-semibold text-text-light dark:text-text-dark truncate">Eternal Bonds</h4>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

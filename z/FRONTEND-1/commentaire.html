@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CinèA - Modération</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f97316", // Orange
+            "background-light": "#1c1c1e",
+            "background-dark": "#121212",
+            "surface-light": "#2c2c2e",
+            "surface-dark": "#1e1e1e",
+            "text-light": "#f5f5f7",
+            "text-dark": "#e5e5e7",
+            "text-muted-light": "#9ca3af",
+            "text-muted-dark": "#71717a",
+          },
+          fontFamily: {
+            "display": ["Spline Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 24
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+</head>
+<body class="bg-background-dark font-display text-text-light">
+<div class="flex h-screen">
+<aside class="w-64 flex-shrink-0 bg-background-light border-r border-surface-dark flex flex-col">
+<div class="p-6">
+<h1 class="text-2xl font-bold text-primary">CinèA</h1>
+</div>
+<nav class="flex-grow px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-bold" href="#">
+<span class="material-symbols-outlined">shield_person</span>
+<span>Modération</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted-light hover:bg-surface-light/50 hover:text-text-light transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span>Accueil</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted-light hover:bg-surface-light/50 hover:text-text-light transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">movie</span>
+<span>Nouveautés</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted-light hover:bg-surface-light/50 hover:text-text-light transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span>Tendances</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted-light hover:bg-surface-light/50 hover:text-text-light transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span>Ma liste</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted-light hover:bg-surface-light/50 hover:text-text-light transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">language</span>
+<span>Parcourir</span>
+</a>
+</nav>
+<div class="p-4 border-t border-surface-dark">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted-light hover:bg-surface-light/50 hover:text-text-light transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Déconnexion</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col bg-background-dark">
+<header class="flex items-center justify-between p-6 border-b border-surface-dark">
+<h2 class="text-2xl font-bold text-text-light">Modération des commentaires</h2>
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-muted-dark">search</span>
+<input class="w-full pl-12 pr-4 py-2.5 rounded-lg bg-surface-dark border border-transparent focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Rechercher des commentaires..." type="text"/>
+</div>
+</header>
+<div class="flex-1 overflow-x-auto p-6">
+<div class="w-full min-w-[960px] bg-surface-dark rounded-xl shadow-lg">
+<div class="overflow-hidden rounded-xl">
+<table class="w-full text-left">
+<thead class="bg-surface-light/30">
+<tr>
+<th class="px-6 py-4 font-semibold text-text-dark uppercase tracking-wider text-sm" scope="col">Utilisateur</th>
+<th class="px-6 py-4 font-semibold text-text-dark uppercase tracking-wider text-sm" scope="col">Film/Série</th>
+<th class="px-6 py-4 font-semibold text-text-dark uppercase tracking-wider text-sm" scope="col">Commentaire</th>
+<th class="px-6 py-4 font-semibold text-text-dark uppercase tracking-wider text-sm text-center" scope="col">Note</th>
+<th class="px-6 py-4 font-semibold text-text-dark uppercase tracking-wider text-sm text-center" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-light/20">
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Alexandre Dubois</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Le Trône de Fer</td>
+<td class="px-6 py-4 max-w-xs truncate text-text-muted-light">Saison 8 décevante, intrigue bâclée.</td>
+<td class="px-6 py-4 text-center">
+<div class="flex items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="ml-2 text-sm font-medium text-text-muted-light">(2/5)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="px-4 py-2 text-sm font-medium text-red-400 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors duration-200">Supprimer</button>
+</td>
+</tr>
+<tr class="bg-surface-light/10">
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Sophie Martin</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">La Casa de Papel</td>
+<td class="px-6 py-4 max-w-xs truncate text-text-muted-light">Une série pleine de rebondissements, j'adore !</td>
+<td class="px-6 py-4 text-center">
+<div class="flex items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="ml-2 text-sm font-medium text-text-muted-light">(5/5)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="px-4 py-2 text-sm font-medium text-red-400 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors duration-200">Supprimer</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Thomas Leclerc</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Stranger Things</td>
+<td class="px-6 py-4 max-w-xs truncate text-text-muted-light">L'ambiance des années 80 est incroyable.</td>
+<td class="px-6 py-4 text-center">
+<div class="flex items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="ml-2 text-sm font-medium text-text-muted-light">(4/5)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="px-4 py-2 text-sm font-medium text-red-400 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors duration-200">Supprimer</button>
+</td>
+</tr>
+<tr class="bg-surface-light/10">
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Camille Dupont</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">The Crown</td>
+<td class="px-6 py-4 max-w-xs truncate text-text-muted-light">Une plongée fascinante dans la monarchie britannique.</td>
+<td class="px-6 py-4 text-center">
+<div class="flex items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="ml-2 text-sm font-medium text-text-muted-light">(4/5)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="px-4 py-2 text-sm font-medium text-red-400 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors duration-200">Supprimer</button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Antoine Girard</td>
+<td class="px-6 py-4 whitespace-nowrap text-text-light">Black Mirror</td>
+<td class="px-6 py-4 max-w-xs truncate text-text-muted-light">Des épisodes qui font réfléchir, parfois dérangeants.</td>
+<td class="px-6 py-4 text-center">
+<div class="flex items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="material-symbols-outlined text-base text-text-muted-dark">star</span>
+<span class="ml-2 text-sm font-medium text-text-muted-light">(3/5)</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="px-4 py-2 text-sm font-medium text-red-400 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors duration-200">Supprimer</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

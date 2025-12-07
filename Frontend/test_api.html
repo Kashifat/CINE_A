@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API CineA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        button {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #f40612;
+        }
+        pre {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test API Backend CineA</h1>
+    
+    <div>
+        <button onclick="testFilms()">📽️ Tester GET /contenus/films</button>
+        <button onclick="testFilmById()">🎬 Tester GET /contenus/films/4</button>
+        <button onclick="testSeries()">📺 Tester GET /contenus/series</button>
+        <button onclick="clearResults()">🗑️ Effacer</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const API_URL = 'http://localhost:5002';
+        const resultsDiv = document.getElementById('results');
+
+        function log(message, type = 'info') {
+            const p = document.createElement('p');
+            p.className = type;
+            p.textContent = message;
+            resultsDiv.appendChild(p);
+        }
+
+        function logJson(data) {
+            const pre = document.createElement('pre');
+            pre.textContent = JSON.stringify(data, null, 2);
+            resultsDiv.appendChild(pre);
+        }
+
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+
+        async function testFilms() {
+            log('🔄 Test: GET /contenus/films', 'info');
+            try {
+                const response = await fetch(`${API_URL}/contenus/films`);
+                log(`✅ Statut: ${response.status} ${response.statusText}`, 'success');
+                
+                const data = await response.json();
+                log(`📊 Nombre de films: ${data.length}`, 'success');
+                logJson(data);
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`, 'error');
+                console.error(error);
+            }
+            log('---', 'info');
+        }
+
+        async function testFilmById() {
+            log('🔄 Test: GET /contenus/films/4', 'info');
+            try {
+                const response = await fetch(`${API_URL}/contenus/films/4`);
+                log(`✅ Statut: ${response.status} ${response.statusText}`, 'success');
+                
+                const data = await response.json();
+                log(`🎬 Film trouvé: ${data.titre}`, 'success');
+                logJson(data);
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`, 'error');
+                console.error(error);
+            }
+            log('---', 'info');
+        }
+
+        async function testSeries() {
+            log('🔄 Test: GET /contenus/series', 'info');
+            try {
+                const response = await fetch(`${API_URL}/contenus/series`);
+                log(`✅ Statut: ${response.status} ${response.statusText}`, 'success');
+                
+                const data = await response.json();
+                log(`📊 Nombre de séries: ${data.length}`, 'success');
+                logJson(data);
+            } catch (error) {
+                log(`❌ Erreur: ${error.message}`, 'error');
+                console.error(error);
+            }
+            log('---', 'info');
+        }
+
+        // Test automatique au chargement
+        log('🚀 Page de test chargée. Cliquez sur les boutons pour tester les endpoints.', 'info');
+        log('---', 'info');
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Spline+Sans:wght@400;500;700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<title>CinèA - Streaming de Films et Séries</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#ff7a00",
+              "background-light": "#f5f5f5",
+              "background-dark": "#121212",
+            },
+            fontFamily: {
+              "display": ["Spline Sans"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.5rem",
+              "lg": "0.75rem",
+              "xl": "1rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap bg-background-light/80 px-10 py-4 backdrop-blur-md dark:bg-background-dark/80 border-b border-gray-200/10 dark:border-gray-800/50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-primary">
+<svg class="h-8 w-8 text-primary" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4ZM19 32L34 24L19 16V32Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+<h1 class="text-3xl font-bold text-gray-900 dark:text-white">CinèA</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-base font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors" href="#">Accueil</a>
+<a class="text-base font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors" href="#">Séries</a>
+<a class="text-base font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors" href="#">Films</a>
+<a class="text-base font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors" href="#">Nouveautés</a>
+<a class="text-base font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors" href="#">Ma liste</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-primary/10 hover:text-primary dark:text-gray-400 dark:hover:bg-primary/20 dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-primary/10 hover:text-primary dark:text-gray-400 dark:hover:bg-primary/20 dark:hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-cover bg-center ring-2 ring-offset-2 ring-offset-background-dark ring-primary" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD5QcZ3dmjCZNl_RlbLl3Myt5uaV-i1-UOTLKkyzpGEdtDW3QCbJw-eZelMP6ySIETorJVu2YGyflBo8oZp3vfEXHai1WU9LHDJXHXQZF0pOHU58O6pA-FGuIiG5uV7vXEZO1eWF2sCyiNg_sDa3TV7id1NZMVnSSPSLiCYe2XlcCdldd0T_H_AxlUL7UUohSSq9pFv5ft71A6pjiNUK-8EQvR6P-YsuP4Acpk2y6pjPi1XhYki3x8xd799R10-_D5BoGjZR__iXD8");'></div>
+</div>
+</header>
+<main class="flex-grow">
+<section class="relative h-[70vh] min-h-[500px] w-full bg-cover bg-center" style='background-image: linear-gradient(to top, rgba(18, 18, 18, 1) 0%, rgba(18, 18, 18, 0) 50%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAEl4A518AmpW0fZVg58Kt_h9VLVWk3P9HoooIT8dNTI7c-vxdy7_4VPOU6wH2Q7S8SLb5J4gC32uzWiBziHZjKFypuWaSfIaKtp0GhIkKioxYraUhKBFgBuE6GGpZJNd3-Zk-KIa9X-RUd5Xpj9Tqm9rWBSoIfjpP5g4M_2XXYzzylVzzGT9ZW0MgzvqCpGwc3-iRQXQRxMpRHh5s7XHZFGq2-pq4GDImNzINJ72t7HHy5HT7-0kTKyfvWg0flHlqTFYQJfq65SrY");'>
+<div class="absolute inset-0 flex flex-col justify-end p-10 lg:p-20">
+<div class="max-w-3xl">
+<h2 class="text-6xl font-bold text-white drop-shadow-lg">Le Trône de Fer</h2>
+<p class="mt-4 text-xl text-white/90 drop-shadow-md">Neuf familles nobles se battent pour le contrôle des terres de Westeros, tandis qu'un ancien ennemi revient après avoir été endormi pendant des milliers d'années.</p>
+<div class="mt-8 flex gap-4">
+<button class="flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-xl font-bold text-white transition-transform hover:scale-105 shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined">play_arrow</span>
+                  Lecture
+                </button>
+<button class="flex items-center justify-center gap-2 rounded-lg bg-white/20 px-8 py-4 text-xl font-bold text-white backdrop-blur-sm transition-transform hover:scale-105 hover:bg-white/30">
+<span class="material-symbols-outlined">add</span>
+                  Ma Liste
+                </button>
+</div>
+</div>
+</div>
+</section>
+<div class="flex flex-col gap-16 py-16">
+<section class="px-10 lg:px-20">
+<h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Nouveautés</h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+<div class="group flex flex-col gap-3">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-xl overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChpVjlsrsF6Szb43xzCA3WIEqCTZjvZl-iqaqDJVcl1a5vmbcRUMHgGU_rdJCWCUgGMcqRH2fOsTTu408bMAWH0R0eUgs0BmDe2uhUNGDjkzRxFGzYKYX_3OgTPuAOqwB_5Me6O171APPba7U0O9r5MnPG9de0msZFSjpaS4ujxpUOpsRycTM1yGVa0fJHF9XHkPZStXR2vzj0o_0d7D1CKLzt0RksPZ1vCgxLe_9exVs0JeKBIeNH4gtwULksVV8bDUpG4dSWT3c");'></div>
+<p class="text-base font-medium text-gray-700 dark:text-gray-300 truncate">L'Odyssée</p>
+</div>
+<div class="group flex flex-col gap-3">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-xl overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTwSQgGh9ZiT1zRLl3E1uBj1j9XMoNC2Ovv84qVJgY8I0-ubKcHQaMIHvm_odDtFNWTYSNzZX0V_K22vSOKMHWOAo2ujwI-HjcX_FhqM3_mBn6_dhk-YFMhq4WrLgNEgTcKg51BXNYLQT6z30lwn2kaFXR120U1X50kug9dhL0B9SiRgb9Luvp6U4KT4fU4bIkwMrQIu0x5yXK_uRDgVPSSoRx_Z7qY75BrrnXpfoVL8940guafOjFtKuNzT4hqPty_mlne5zDDMQ");'></div>
+<p class="text-base font-medium text-gray-700 dark:text-gray-300 truncate">Les Ombres du Passé</p>
+</div>
+<div class="group flex flex-col gap-3">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-xl overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDWzdV7nyemslO9Kt6xhs7xgNek-uOZFw-vJysjrIEyPDk02fOmNEKJGWLppYiXVuPbv1qBIIqdxXGaOXc4m8b26YZ3ZdKnN5Z3UDukNpB4Hy9RpwnEhb35CxCFrp_TAB9gIGne8fVUpT61fV5AoHCErypSU6Z3KZawnNhoeTjCat56e_UXyj7D_AmdYZLAiJQ_GMMredWoqlJbzEEPklXeuwa5b88a_tHune1lQuXPvrM7oh71kAnqoSB-mYwtkkHFZRBGdBy1D54");'></div>
+<p class="text-base font-medium text-gray-700 dark:text-gray-300 truncate">Rire à Plein Poumons</p>
+</div>
+<div class="group flex flex-col gap-3">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-xl overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSclSb8YmmsnPjgAbtvsTExHnzsgmmi4SlO3NHEP9wx9_Lntgc8DR08XorKTwThHNh0mpaiI0qBc1O4x4HeiRzKDwtonb1Y-Me2IT99b7Uy1hNdhnsTvvHc-ZcJNi_T4jXP8fTBz3zZn8qafjFEp9-z5EZ7tu7WCbQ4baDQYll9EnYr8Ilnk7RJ8YgIF1qQ2PNCiagHF6rR-eo0wZJ62zXPdTWqQwwc2x0ZsLwhAO55S8isrhcDogCtnVYzshkUrOBgHW8YsfUUZA");'></div>
+<p class="text-base font-medium text-gray-700 dark:text-gray-300 truncate">Le Secret Englouti</p>
+</div>
+<div class="group flex flex-col gap-3">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-xl overflow-hidden transition-transform duration-300 group-hover:scale-105 shadow-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC6Vdr6KkANgBSZMqrDKWZuvfIrJExUrGsAFg3UOJNJdu-m86qzAjFdqbaxbTWpZl_P8h9xFhW6_yUbDHVoTMrF0aszSpPCOEy8JoXVB4BAA-TOwlCP2zKeX9sjVW_d_h7P6hJ9g0HLpiNl4PM1_q2mVwz--_ojIPjKu4-kl_VXFilFq6pOtxLrrtSoxiuMeK8gqIEmSzyJ6QvBwsv0s3w3fyiiRs_cnmV0Qt0v5z5tPfmcmDw_M-ebobe9T9f0rDzbuCCf9xFA4Oo");'></div>
+<p class="text-base font-medium text-gray-700 dark:text-gray-300 truncate">Amour à l'Horizon</p>
+</div>
+<div class="group flex flex-col gap-3">
+<div class="w-full aspect-[2/3] bg-cover bg-center rounded-xl overflow-hidden transition-transform duration-300 group-hover:scale-105 bg-gray-200 dark:bg-gray-800 flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-5xl text-gray-400 dark:text-gray-600">movie</span>
+</div>
+<p class="text-base font-medium text-gray-700 dark:text-gray-300 truncate">Nouveau Film</p>
+</div>
+</div>
+</section>
+<section class="px-10 lg:px-20">
+<h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Catégories Populaires</h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+<div class="group relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9xkKDIGl4IASwIhMxbeGiKQiXBbr-l8lmbIBwWBjCiwriBQ2LIcPv5yCu9zzz-uUb41_yT0LJ2ulEVMYNptKBOdvZt7FujPjN3h73fC2E_1ycmrvl2WtcCzG_TgRpUd9GHUn0cIbRLRLprN9B7lsuNkP5Faa4kx3LFGRheoB0-ZUas5pV_oVGh1eWVCN-mI6gWwXZ96kr2AQguORF6kaF8VWvey5pIOG4otTxx6xsaN6eSpystfB71jm0e5dfO2x5A_-uQoCRJfk");'></div>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+<p class="text-white font-bold text-xl drop-shadow-md">Action</p>
+</div>
+</div>
+<div class="group relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDrA5YRzeNjfc_MQXKMPm7sh1DAF6qhDGluvYS1Nz_h_H8Zsv8pZMalLTeTH3Onulw7dX0CZ96EnTcJtwBkqrkZq-an55R1YM5C_0KL8Miy93REaape62zWyajBDdUgmXI3ishfFD_vXrk74m_yuei7Ctk9Kx0oBXUj1fI64LclrSsn7fOHnl6XuJTxiRaXDG30VXSVP1sp8RWWtdiAJKVdbsidsPsMz5SGXFqI1VJfXzTUUq6IGPLZ4tzOvXHI3VlM-lJUKZUYY2M");'></div>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+<p class="text-white font-bold text-xl drop-shadow-md">Comédie</p>
+</div>
+</div>
+<div class="group relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCQzv-i4JeS3YCULWei-pi_NlDJF8rFAe920enyiGJXHSpsSMk54-t_Ch50tb1F3rgf7wMx2eE7l9b323uhLSd3DwGmg-ZYZdq-QtXOGw3sNPSf6PCrSSvbQ7aphYnJrlOYjBm7h4FOObJbOrKHL-JrB1BpFic3UkzVrA3eXmqTUijMg0uwM5P9CTwbdCjj0JLoZkcxll7uVt6eXOrDcwlS9QEuf1SkuIMzFOsH2xzmNoDyJvdYgKpS8SsiRUfufDSX8CEMNKzwBzo");'></div>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+<p class="text-white font-bold text-xl drop-shadow-md">Drame</p>
+</div>
+</div>
+<div class="group relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuABcuI3lxDEIFRcwdEhJTCo3L7_HHXWwSNX6-Go0dTW1AL3Ri6BSfSHneTzcH9iUgDWVIE8ORZpFOPxf-MnqIWFyOb6vq_RcuGZYVuQsBY6mWn8yK5tRrnGDEyMRr6FR6Y2G_SPxU0vV2ZVlREePqrZOLOryZ0bW9OdhtoDz180plom36uCUtfwytApu0K9OpR5WZJB_WV2hWG8Tt_d33Z6jwMSIfQU61q5G7pu4PWaJJj2e-OnmfHYKSuubaY2Y-uStrIvybFZtoM");'></div>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+<p class="text-white font-bold text-xl drop-shadow-md">Science-Fiction</p>
+</div>
+</div>
+<div class="group relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110 bg-gray-200 dark:bg-gray-800"></div>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+<p class="text-white font-bold text-xl drop-shadow-md">Horreur</p>
+</div>
+</div>
+<div class="group relative aspect-video w-full rounded-xl overflow-hidden shadow-lg">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-110 bg-gray-200 dark:bg-gray-800"></div>
+<div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+<p class="text-white font-bold text-xl drop-shadow-md">Romance</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="bg-background-light dark:bg-background-dark/50 border-t border-gray-200/10 dark:border-gray-800/50 text-gray-500 dark:text-gray-400 py-12 px-10 lg:px-20">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-gray-900 dark:text-white text-lg">Navigation</h4>
+<a class="hover:text-primary transition-colors text-base" href="#">Accueil</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Séries</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Films</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-gray-900 dark:text-white text-lg">Aide</h4>
+<a class="hover:text-primary transition-colors text-base" href="#">FAQ</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Centre d'aide</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Compte</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-gray-900 dark:text-white text-lg">Légal</h4>
+<a class="hover:text-primary transition-colors text-base" href="#">Conditions d'utilisation</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Confidentialité</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Mentions légales</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-gray-900 dark:text-white text-lg">Suivez-nous</h4>
+<div class="flex gap-4">
+<a class="hover:text-primary transition-colors text-base" href="#">Facebook</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Twitter</a>
+<a class="hover:text-primary transition-colors text-base" href="#">Instagram</a>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-gray-200/10 dark:border-gray-800/50 text-center text-base">
+<p>© 2023 CinèA. Tous droits réservés.</p>
+</div>
+</footer>
+</div>
+</body></html>

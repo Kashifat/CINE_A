@@ -1,0 +1,481 @@
+.serie-page {
+  padding-top: 20px;
+}
+
+/* En-tête de la série */
+.serie-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  align-items: start;
+}
+
+.serie-affiche {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  height: 450px;
+}
+
+.serie-affiche img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.affiche-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 68, 68, 0.1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.serie-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.btn-back {
+  align-self: flex-start;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid #00d4ff;
+  color: #00d4ff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: rgba(0, 212, 255, 0.2);
+  transform: translateX(-4px);
+}
+
+.serie-titre {
+  font-size: 2.5rem;
+  color: white;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.serie-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  color: #00d4ff;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.serie-description {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.serie-description h3 {
+  color: #00d4ff;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.serie-description p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Lecteur section */
+.lecteur-section {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+}
+
+.lecteur-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.lecteur-titre {
+  color: white;
+  margin: 0 0 1rem 0;
+  font-size: 1.4rem;
+}
+
+.version-selector {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-version {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.btn-version:hover {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.1);
+  color: #00d4ff;
+}
+
+.btn-version.active {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+}
+
+.episode-description {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 1rem;
+}
+
+.episode-description h3 {
+  color: #00d4ff;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.episode-description p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.episode-duree {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 1rem 0 0 0;
+  font-size: 0.95rem;
+}
+
+/* Contenu section */
+.contenu-section {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.section-title {
+  color: #00d4ff;
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Saisons */
+.saisons-selector {
+  margin-bottom: 2rem;
+}
+
+.saisons-list {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.btn-saison {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.btn-saison:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.btn-saison.active {
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+  border-color: #00d4ff;
+  color: black;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+/* Épisodes */
+.episodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.episode-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.episode-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(0, 212, 255, 0.3);
+  transform: translateX(4px);
+}
+
+.episode-item.active {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00d4ff;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.episode-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 212, 255, 0.05) 100%);
+  border-radius: 6px;
+  font-weight: 600;
+  color: #00d4ff;
+  font-size: 1.3rem;
+  min-height: 60px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.episode-contenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.episode-titre {
+  color: white;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.episode-synopsis {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.episode-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.episode-meta span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge-vo {
+  background: rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.badge-vf {
+  background: rgba(255, 200, 0, 0.2);
+  color: #ffc800;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.no-episodes {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.erreur-container {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: rgba(30, 30, 30, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.erreur-container h2 {
+  color: #ff4444;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .serie-header {
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+  }
+
+  .serie-affiche {
+    height: 350px;
+  }
+
+  .serie-titre {
+    font-size: 2rem;
+  }
+
+  .serie-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .serie-header {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .serie-affiche {
+    height: 300px;
+    width: 100%;
+  }
+
+  .serie-titre {
+    font-size: 1.5rem;
+  }
+
+  .serie-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem;
+  }
+
+  .lecteur-section,
+  .contenu-section {
+    padding: 1.5rem;
+  }
+
+  .episode-item {
+    grid-template-columns: 50px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .episode-numero {
+    min-height: 50px;
+    font-size: 1rem;
+  }
+
+  .saisons-list {
+    flex-wrap: wrap;
+  }
+
+  .btn-saison {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .serie-page {
+    padding-top: 10px;
+  }
+
+  .serie-affiche {
+    height: 250px;
+  }
+
+  .serie-titre {
+    font-size: 1.2rem;
+  }
+
+  .serie-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .episode-item {
+    grid-template-columns: 1fr;
+  }
+
+  .episode-numero {
+    order: -1;
+  }
+
+  .btn-saison {
+    min-width: 100px;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .lecteur-titre {
+    font-size: 1.1rem;
+  }
+
+  .version-selector {
+    flex-direction: column;
+  }
+
+  .btn-version {
+    width: 100%;
+  }
+}
