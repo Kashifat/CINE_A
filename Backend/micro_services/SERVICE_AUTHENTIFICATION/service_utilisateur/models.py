@@ -395,6 +395,30 @@ def obtenir_profil_complet(user_id):
     )
     profil["total_publications"] = (cur.fetchone() or {"count": 0})["count"]
     
+    # Total de likes (réactions) reçus sur les publications de l'utilisateur
+    cur.execute(
+        """
+        SELECT COUNT(*) as count 
+        FROM publication_reactions pr
+        INNER JOIN publication p ON pr.id_publication = p.id_publication
+        WHERE p.id_utilisateur = %s
+        """,
+        (user_id,)
+    )
+    profil["total_likes"] = (cur.fetchone() or {"count": 0})["count"]
+    
+    # Total de commentaires reçus sur les publications
+    cur.execute(
+        """
+        SELECT COUNT(*) as count 
+        FROM publication_commentaires pc
+        INNER JOIN publication p ON pc.id_publication = p.id_publication
+        WHERE p.id_utilisateur = %s
+        """,
+        (user_id,)
+    )
+    profil["total_commentaires"] = (cur.fetchone() or {"count": 0})["count"]
+    
     # Paiements récents
     cur.execute(
         """

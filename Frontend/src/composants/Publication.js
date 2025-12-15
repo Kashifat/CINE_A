@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import publicationService from '../services/publicationService';
 import commentaireService from '../services/commentaireService';
+import notificationService from '../services/notificationService';
 import './Publication.css';
+
+// ⚙️ Configuration des réactions
+const REACTIONS_CONFIG = {
+  like:      { emoji: "👍", label: "J'aime" },
+  adore:     { emoji: "❤️", label: "J'adore" },
+  rigole:    { emoji: "😂", label: "Haha" },
+  triste:    { emoji: "😢", label: "Triste" },
+  en_colere: { emoji: "😡", label: "En colère" }
+};
 
 const Publication = ({ publication, onDelete, onUpdate }) => {
   const [reactions, setReactions] = useState({
@@ -13,6 +23,7 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     en_colere: 0
   });
   const [reactionActive, setReactionActive] = useState(null);
+  const [afficherSelecteurReactions, setAfficherSelecteurReactions] = useState(false);
   const [commentaires, setCommentaires] = useState([]);
   const [afficherCommentaires, setAfficherCommentaires] = useState(false);
   const [nouveauCommentaire, setNouveauCommentaire] = useState('');
@@ -25,18 +36,36 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     (utilisateurConnecte.id_utilisateur === publication.id_utilisateur || 
      utilisateurConnecte.id_admin === publication.id_utilisateur);
 
+  const peutGererCommentaire = (comm) => {
+    if (!utilisateurConnecte) return false;
+    const estAuteur = comm.id_utilisateur === utilisateurConnecte.id_utilisateur;
+    const estAdmin = utilisateurConnecte.role === 'admin' || utilisateurConnecte.id_admin;
+    return estAuteur || !!estAdmin;
+  };
+
   useEffect(() => {
     chargerReactions();
+    chargerReactionUtilisateur();
     if (afficherCommentaires) {
       chargerCommentaires();
     }
+    // ✅ Pas de polling automatique - rafraîchissement uniquement après actions
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publication.id_publication, afficherCommentaires]);
 
   const chargerReactions = async () => {
     const result = await publicationService.obtenirStatistiquesReactions(publication.id_publication);
     if (result.succes) {
-      setReactions(result.data);
+      // ✅ Extraire uniquement les types de réactions (exclure id_publication et total)
+      const { id_publication, total, ...typesReactions } = result.data;
+      setReactions(typesReactions);
+    }
+  };
+
+  const chargerReactionUtilisateur = async () => {
+    const result = await publicationService.verifierReactionUtilisateur(publication.id_publication);
+    if (result.succes && result.data?.type) {
+      setReactionActive(result.data.type);
     }
   };
 
@@ -64,11 +93,19 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     }
   };
 
-  const supprimerCommentaire = async (idCommentaire) => {
+  const supprimerCommentaire = async (commentaire) => {
+    if (!peutGererCommentaire(commentaire)) {
+      notificationService.showError('❌ Vous ne pouvez pas supprimer ce commentaire');
+      return;
+    }
+
     if (window.confirm('Supprimer ce commentaire ?')) {
-      const result = await commentaireService.supprimerCommentaire(idCommentaire);
+      const result = await commentaireService.supprimerCommentaire(commentaire.id_commentaire);
       if (result.succes) {
+        notificationService.showSuccess('🗑️ Commentaire supprimé');
         chargerCommentaires();
+      } else {
+        notificationService.showError(result.erreur || '❌ Erreur lors de la suppression');
       }
     }
   };
@@ -77,10 +114,26 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     return commentaires.map(comm => (
       <div key={comm.id_commentaire} className={`commentaire niveau-${niveau}`}>
         <div className="commentaire-header">
-          <strong>{comm.nom_utilisateur || 'Utilisateur'}</strong>
-          <span className="commentaire-date">
-            {new Date(comm.date_creation).toLocaleDateString()}
-          </span>
+          {comm.photo_profil && (
+            <img 
+              src={comm.photo_profil.startsWith('http') ? comm.photo_profil : `http://localhost:5002/media/${comm.photo_profil}`}
+              alt={comm.nom_utilisateur}
+              className="commentaire-avatar"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          )}
+          <div className="commentaire-info">
+            <strong>{comm.nom_utilisateur || 'Utilisateur'}</strong>
+            <span className="commentaire-date">
+              {comm.date_ajout ? new Date(comm.date_ajout).toLocaleDateString('fr-FR', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              }) : 'Date invalide'}
+            </span>
+          </div>
         </div>
         <p className="commentaire-contenu">{comm.contenu}</p>
         <div className="commentaire-actions">
@@ -90,12 +143,14 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
           >
             Répondre
           </button>
-          <button 
-            onClick={() => supprimerCommentaire(comm.id_commentaire)} 
-            className="btn-supprimer-comm"
-          >
-            Supprimer
-          </button>
+          {peutGererCommentaire(comm) && (
+            <button 
+              onClick={() => supprimerCommentaire(comm)} 
+              className="btn-supprimer-comm"
+            >
+              Supprimer
+            </button>
+          )}
         </div>
         {comm.reponses && comm.reponses.length > 0 && (
           <div className="reponses">
@@ -107,16 +162,35 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
   };
 
   const handleReaction = async (type) => {
-    const result = await publicationService.ajouterReaction(publication.id_publication, type);
-    if (result.succes) {
-      setReactionActive(type);
-      chargerReactions();
+    // ✅ Au clic sur un emoji : insérer/mettre à jour directement dans la BD
+    if (reactionActive === type) {
+      // Si on clique sur la même réaction, on la supprime (toggle)
+      const result = await publicationService.supprimerReaction(publication.id_publication);
+      if (result.succes) {
+        setReactionActive(null);
+        setAfficherSelecteurReactions(false);
+        await chargerReactions();
+      }
+    } else {
+      // Sinon, on ajoute/change la réaction (le backend gère automatiquement l'UPDATE si existe)
+      const result = await publicationService.ajouterReaction(publication.id_publication, type);
+      if (result.succes) {
+        setReactionActive(type);
+        setAfficherSelecteurReactions(false);
+        await chargerReactions();
+        const config = REACTIONS_CONFIG[type];
+        if (config) {
+          notificationService.showSuccess(`Réaction ajoutée ${config.emoji}`);
+        }
+      } else {
+        notificationService.showError(result.erreur || 'Erreur lors de la réaction');
+      }
     }
   };
 
   const handleModifier = async () => {
     if (!contenuEdite.trim()) {
-      alert('Le contenu ne peut pas être vide');
+      notificationService.showWarning('Le contenu ne peut pas être vide');
       return;
     }
 
@@ -127,9 +201,10 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
 
     if (result.succes) {
       setModeEdition(false);
+      notificationService.showSuccess('Publication modifiée avec succès ✏️');
       if (onUpdate) onUpdate();
     } else {
-      alert('Erreur lors de la modification');
+      notificationService.showError(result.erreur || 'Erreur lors de la modification');
     }
   };
 
@@ -138,21 +213,26 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     setModeEdition(false);
   };
 
-  const iconeReaction = {
-    like: '❤️',
-    adore: '😍',
-    triste: '😢',
-    rigole: '😂',
-    surpris: '😲',
-    en_colere: '😡'
-  };
+  // Calculer le total des réactions (uniquement les types, pas id_publication ou total)
+  const totalReactions = ['like', 'adore', 'triste', 'rigole', 'surpris', 'en_colere']
+    .reduce((sum, type) => sum + (reactions[type] || 0), 0);
 
   return (
     <div className="publication-carte">
       <div className="publication-header">
         <div className="auteur-info">
-          <span className="auteur-avatar">👤</span>
-          <div>
+          <div className="auteur-avatar">
+            {publication.utilisateur_photo ? (
+              <img 
+                src={publication.utilisateur_photo.startsWith('http') ? publication.utilisateur_photo : `http://localhost:5002/media/${publication.utilisateur_photo}`}
+                alt={publication.utilisateur_nom}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+            ) : (
+              <span>👤</span>
+            )}
+          </div>
+          <div className="auteur-details">
             <p className="auteur-nom">{publication.utilisateur_nom || 'Utilisateur'}</p>
             <p className="publication-date">
               {new Date(publication.date_ajout || publication.date_publication).toLocaleDateString('fr-FR', {
@@ -195,12 +275,7 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
           </div>
         </div>
       ) : (
-        <>
-          {publication.titre && (
-            <h3 className="publication-titre">{publication.titre}</h3>
-          )}
-          <p className="publication-contenu">{publication.contenu}</p>
-        </>
+        <p className="publication-contenu">{publication.contenu}</p>
       )}
 
       {publication.image && (
@@ -213,34 +288,104 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
         </div>
       )}
 
-      <div className="publication-reactions">
-        {Object.entries(iconeReaction).map(([type, icone]) => (
-          <button
-            key={type}
-            onClick={() => handleReaction(type)}
-            className={`btn-reaction ${reactionActive === type ? 'active' : ''}`}
-            title={type}
+      {/* 🎯 Barre d'interactions avec sélecteur d'emojis */}
+      <div className="interactions-barre">
+        <div className="reaction-container">
+          <button 
+            onClick={() => {
+              if (reactionActive) {
+                handleReaction(reactionActive); // Toggle si déjà réagi
+              } else {
+                setAfficherSelecteurReactions(!afficherSelecteurReactions);
+              }
+            }}
+            onMouseEnter={() => setAfficherSelecteurReactions(true)}
+            className={`btn-interaction ${reactionActive ? 'active-reaction' : ''}`}
           >
-            <span className="reaction-icone">{icone}</span>
-            <span className="reaction-count">{reactions[type] || 0}</span>
+            <span className="interaction-icone">
+              {reactionActive && REACTIONS_CONFIG[reactionActive] 
+                ? REACTIONS_CONFIG[reactionActive].emoji 
+                : "👍"}
+            </span>
+            <span className="interaction-texte">
+              {reactionActive && REACTIONS_CONFIG[reactionActive]
+                ? REACTIONS_CONFIG[reactionActive].label
+                : "J'aime"}
+            </span>
+            {totalReactions > 0 && <span className="interaction-count">{totalReactions}</span>}
           </button>
-        ))}
+          
+          {/* 🎭 Sélecteur d'emojis */}
+          {afficherSelecteurReactions && (
+            <div 
+              className="selecteur-reactions"
+              onMouseLeave={() => setAfficherSelecteurReactions(false)}
+            >
+              {Object.entries(REACTIONS_CONFIG).map(([type, config]) => (
+                <button
+                  key={type}
+                  onClick={() => handleReaction(type)}
+                  className={`emoji-btn ${reactionActive === type ? 'emoji-active' : ''}`}
+                  title={config.label}
+                >
+                  <span className="emoji-icone">{config.emoji}</span>
+                  <span className="emoji-label">{config.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <button 
+          onClick={() => setAfficherCommentaires(!afficherCommentaires)}
+          className="btn-interaction"
+        >
+          <span className="interaction-icone">💬</span>
+          <span className="interaction-texte">Commenter</span>
+          {commentaires.length > 0 && <span className="interaction-count">{commentaires.length}</span>}
+        </button>
       </div>
 
-      <div className="commentaires-section">
-        <button 
-          onClick={() => setAfficherCommentaires(!afficherCommentaires)} 
-          className="btn-toggle-commentaires"
-        >
-          💬 {commentaires.length} commentaire{commentaires.length > 1 ? 's' : ''}
-        </button>
+      {/* 📊 Résumé des réactions */}
+      {totalReactions > 0 && (
+        <div className="reactions-resume">
+          {Object.entries(REACTIONS_CONFIG).map(([type, config]) => (
+            reactions[type] > 0 && (
+              <span key={type} className="reaction-badge" title={`${reactions[type]} ${config.label}`}>
+                {config.emoji} {reactions[type]}
+              </span>
+            )
+          ))}
+        </div>
+      )}
 
+      <div className="commentaires-section">
         {afficherCommentaires && (
           <>
             <form onSubmit={ajouterCommentaire} className="form-commentaire">
+              <div className="commentaire-input-wrapper">
+                <div className="commentaire-avatar">
+                  {utilisateurConnecte?.photo_profil ? (
+                    <img src={utilisateurConnecte.photo_profil} alt="Vous" />
+                  ) : (
+                    <span>👤</span>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  value={nouveauCommentaire}
+                  onChange={(e) => setNouveauCommentaire(e.target.value)}
+                  placeholder={commentaireEnReponse ? 'Répondre...' : 'Écrivez un commentaire...'}
+                  className="input-commentaire"
+                />
+                <button type="submit" className="btn-commenter-moderne">
+                  ➤
+                </button>
+              </div>
+
               {commentaireEnReponse && (
-                <div className="reponse-a">
-                  En réponse à {commentaireEnReponse.nom_utilisateur}
+                <div className="reponse-a reponse-a-basse">
+                  En réponse à <strong>{commentaireEnReponse.nom_utilisateur}</strong>
                   <button 
                     type="button" 
                     onClick={() => setCommentaireEnReponse(null)}
@@ -250,15 +395,6 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
                   </button>
                 </div>
               )}
-              <textarea
-                value={nouveauCommentaire}
-                onChange={(e) => setNouveauCommentaire(e.target.value)}
-                placeholder={commentaireEnReponse ? 'Répondre...' : 'Ajouter un commentaire...'}
-                rows="2"
-              />
-              <button type="submit" className="btn-commenter">
-                Publier
-              </button>
             </form>
 
             <div className="liste-commentaires">

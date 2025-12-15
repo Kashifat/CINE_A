@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+import requests
+from config import get_db_connection
 from models import (
     ajouter_commentaire,
     get_commentaires_publication,
@@ -10,6 +12,90 @@ from models import (
 )
 
 commentaires_bp = Blueprint("commentaires", __name__)
+
+# ============================================================================
+# Configuration SERVICE NOTIFICATION
+# ============================================================================
+NOTIFICATION_SERVICE_URL = "http://localhost:5010/notifications"
+
+def notifier_commentaire(id_utilisateur_source: int, id_publication: int, 
+                        id_commentaire: int, is_reponse: bool = False, 
+                        id_parent_commentaire: int = None):
+    """
+    Créer une notification quand quelqu'un commente ou répond à un commentaire
+    
+    ⚠️ Cette fonction ne doit pas bloquer la réponse
+    """
+    try:
+        print(f"🔔 [notifier_commentaire] Tentative de notification: source={id_utilisateur_source}, pub={id_publication}, com={id_commentaire}, reponse={is_reponse}, parent={id_parent_commentaire}")
+        
+        conn = get_db_connection()
+        cur = conn.cursor()
+        
+        # Si c'est une réponse, récupérer le propriétaire du commentaire parent
+        if is_reponse and id_parent_commentaire:
+            print(f"🔔 [notifier_commentaire] Réponse détectée, recherche du commentaire parent {id_parent_commentaire}")
+            cur.execute("SELECT id_utilisateur FROM commentaire WHERE id_commentaire = %s", (id_parent_commentaire,))
+            result = cur.fetchone()
+            
+            if not result:
+                print(f"❌ [notifier_commentaire] Commentaire parent {id_parent_commentaire} inexistant")
+                conn.close()
+                return
+            
+            id_utilisateur_cible = result['id_utilisateur']
+            print(f"🔔 [notifier_commentaire] Propriétaire du commentaire parent: {id_utilisateur_cible}")
+        else:
+            # Si c'est un commentaire direct, récupérer le propriétaire de la publication
+            print(f"🔔 [notifier_commentaire] Commentaire direct, recherche du propriétaire de la publication {id_publication}")
+            cur.execute("SELECT id_utilisateur FROM publication WHERE id_publication = %s", (id_publication,))
+            result = cur.fetchone()
+            
+            if not result:
+                print(f"❌ [notifier_commentaire] Publication {id_publication} inexistante")
+                conn.close()
+                return
+            
+            id_utilisateur_cible = result['id_utilisateur']
+            print(f"🔔 [notifier_commentaire] Propriétaire de publication: {id_utilisateur_cible}")
+        
+        conn.close()
+        
+        # Ne pas notifier si c'est un self-commentaire/self-réponse
+        if id_utilisateur_source == id_utilisateur_cible:
+            print(f"⚠️ [notifier_commentaire] Self-action détectée (source={id_utilisateur_source} == cible={id_utilisateur_cible}), pas de notification")
+            return
+        
+        # Déterminer le type de notification
+        type_notification = "reponse_commentaire" if is_reponse else "commentaire_publication"
+        
+        # Appeler SERVICE_NOTIFICATION
+        payload = {
+            "id_utilisateur_cible": id_utilisateur_cible,
+            "id_utilisateur_source": id_utilisateur_source,
+            "type_notification": type_notification,
+            "id_publication": id_publication,
+            "id_commentaire": id_commentaire
+        }
+        
+        print(f"🔔 [notifier_commentaire] Payload: {payload}")
+        
+        response = requests.post(
+            NOTIFICATION_SERVICE_URL + "/",
+            json=payload,
+            timeout=5
+        )
+        
+        print(f"🔔 [notifier_commentaire] Status code: {response.status_code}")
+        
+        if response.status_code == 201:
+            print(f"✅ [notifier_commentaire] Notification créée avec succès!")
+        else:
+            print(f"❌ [notifier_commentaire] Erreur {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"❌ [notifier_commentaire] Exception: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
 
 @commentaires_bp.route("/", methods=["POST"])
@@ -48,6 +134,17 @@ def api_ajouter_commentaire():
             contenu,
             int(id_parent_commentaire) if id_parent_commentaire else None
         )
+        
+        # ✅ Créer une notification
+        is_reponse = id_parent_commentaire is not None
+        notifier_commentaire(
+            int(id_utilisateur),
+            int(id_publication),
+            commentaire.get('id_commentaire') if isinstance(commentaire, dict) else commentaire['id_commentaire'],
+            is_reponse=is_reponse,
+            id_parent_commentaire=int(id_parent_commentaire) if id_parent_commentaire else None
+        )
+        
         return jsonify(commentaire), 201
     except ValueError as e:
         return jsonify({"erreur": str(e)}), 400

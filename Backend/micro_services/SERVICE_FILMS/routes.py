@@ -3,12 +3,14 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from upload_helper import save_uploaded_file
+from auth import require_auth_user
 from models import (
     get_all_films, get_film_by_id, ajouter_film, modifier_film, supprimer_film,
     get_all_series, get_serie_by_id, ajouter_serie, modifier_serie, supprimer_serie,
     ajouter_saison, get_saisons_serie, supprimer_saison,
     ajouter_episode, get_episodes_saison, modifier_episode, supprimer_episode,
-    rechercher_contenus
+    rechercher_contenus,
+    ajouter_favori, supprimer_favori, lister_favoris
 )
 
 films_bp = Blueprint("films", __name__)
@@ -256,3 +258,37 @@ def liste_categories():
         return jsonify({"erreur": f"Erreur: {str(e)}"}), 500
     finally:
         conn.close()
+
+
+# =======================================
+# FAVORIS
+@films_bp.route("/favoris", methods=["POST"])
+@require_auth_user
+def api_ajouter_favori():
+    data = request.get_json() or {}
+    id_utilisateur = data.get("id_utilisateur")
+    id_film = data.get("id_film")
+    id_episode = data.get("id_episode")
+    res = ajouter_favori(id_utilisateur, id_film, id_episode)
+    if isinstance(res, tuple):
+        return jsonify(res[0]), res[1]
+    return jsonify(res)
+
+
+@films_bp.route("/favoris", methods=["DELETE"])
+@require_auth_user
+def api_supprimer_favori():
+    data = request.get_json() or {}
+    id_utilisateur = data.get("id_utilisateur")
+    id_film = data.get("id_film")
+    id_episode = data.get("id_episode")
+    res = supprimer_favori(id_utilisateur, id_film, id_episode)
+    if isinstance(res, tuple):
+        return jsonify(res[0]), res[1]
+    return jsonify(res)
+
+
+@films_bp.route("/favoris/<int:id_utilisateur>", methods=["GET"])
+def api_lister_favoris(id_utilisateur):
+    res = lister_favoris(id_utilisateur)
+    return jsonify(res), 200

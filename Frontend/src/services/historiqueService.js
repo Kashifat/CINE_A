@@ -75,12 +75,13 @@ const historiqueService = {
   mettreAJourPosition: async (historiqueId, position) => {
     try {
       const response = await axios.put(
-        `${API_URL}/historique/${historiqueId}/position`,
+        `${API_URL}/historique/maj/${historiqueId}`,
         { position },
         getConfig()
       );
       return { succes: true, data: response.data };
     } catch (error) {
+      console.error("❌ Erreur position:", error.response?.data || error.message);
       return { succes: false, erreur: 'Erreur lors de la mise à jour' };
     }
   }

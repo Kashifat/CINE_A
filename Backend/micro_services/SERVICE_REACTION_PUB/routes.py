@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+import requests
+from config import get_db_connection
 from models import (
     ajouter_reaction,
     supprimer_reaction,
@@ -8,6 +10,70 @@ from models import (
 )
 
 reactions_bp = Blueprint("reactions", __name__)
+
+# ============================================================================
+# Configuration SERVICE NOTIFICATION
+# ============================================================================
+NOTIFICATION_SERVICE_URL = "http://localhost:5010/notifications"
+
+def notifier_like_publication(id_utilisateur_source: int, id_publication: int):
+    """
+    Créer une notification quand quelqu'un aime une publication
+    
+    ⚠️ Cette fonction est asynchrone et ne doit pas bloquer la réponse
+    Si le service notification est down, on log juste l'erreur
+    """
+    try:
+        print(f"🔔 [notifier_like_publication] Tentative de notification: source={id_utilisateur_source}, pub={id_publication}")
+        
+        # Récupérer les infos du propriétaire de la publication
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT id_utilisateur FROM publication WHERE id_publication = %s", (id_publication,))
+        result = cur.fetchone()
+        conn.close()
+        
+        print(f"🔔 [notifier_like_publication] Résultat BD: {result}")
+        
+        if not result:
+            print(f"❌ [notifier_like_publication] Publication {id_publication} inexistante")
+            return  # Publication inexistante
+        
+        id_utilisateur_cible = result['id_utilisateur']
+        print(f"🔔 [notifier_like_publication] Propriétaire de publication: {id_utilisateur_cible}")
+        
+        # Ne pas notifier si c'est un self-like
+        if id_utilisateur_source == id_utilisateur_cible:
+            print(f"⚠️ [notifier_like_publication] Self-like détecté, pas de notification")
+            return
+        
+        # Appeler SERVICE_NOTIFICATION
+        payload = {
+            "id_utilisateur_cible": id_utilisateur_cible,
+            "id_utilisateur_source": id_utilisateur_source,
+            "type_notification": "like_publication",
+            "id_publication": id_publication
+        }
+        
+        print(f"🔔 [notifier_like_publication] Payload: {payload}")
+        print(f"🔔 [notifier_like_publication] URL: {NOTIFICATION_SERVICE_URL + '/'}")
+        
+        response = requests.post(
+            NOTIFICATION_SERVICE_URL + "/",
+            json=payload,
+            timeout=5
+        )
+        
+        print(f"🔔 [notifier_like_publication] Status code: {response.status_code}")
+        
+        if response.status_code == 201:
+            print(f"✅ [notifier_like_publication] Notification créée avec succès!")
+        else:
+            print(f"❌ [notifier_like_publication] Erreur {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"❌ [notifier_like_publication] Exception: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
 # Ajouter ou modifier une réaction à une publication
 @reactions_bp.route("/", methods=["POST"])
@@ -30,6 +96,8 @@ def api_ajouter_reaction():
     try:
         result = ajouter_reaction(int(utilisateur_id), int(publication_id), type_reaction)
         if result:
+            # ✅ Créer une notification
+            notifier_like_publication(int(utilisateur_id), int(publication_id))
             return jsonify(result), 201
         else:
             return jsonify({"erreur": "Réaction déjà existante avec ce type"}), 409
@@ -84,6 +152,19 @@ def api_verifier_reaction():
     if not utilisateur_id or not publication_id:
         return jsonify({"erreur": "id_utilisateur et id_publication requis"}), 400
     
+    try:
+        type_reaction = verifier_reaction_utilisateur(utilisateur_id, publication_id)
+        return jsonify({
+            "has_reacted": type_reaction is not None,
+            "type": type_reaction
+        }), 200
+    except Exception as e:
+        return jsonify({"erreur": str(e)}), 500
+
+# Route alternative pour vérifier la réaction d'un utilisateur (format RESTful)
+@reactions_bp.route("/utilisateur/<int:utilisateur_id>/publication/<int:publication_id>", methods=["GET"])
+def api_verifier_reaction_utilisateur(utilisateur_id, publication_id):
+    """Vérifier la réaction d'un utilisateur spécifique sur une publication"""
     try:
         type_reaction = verifier_reaction_utilisateur(utilisateur_id, publication_id)
         return jsonify({

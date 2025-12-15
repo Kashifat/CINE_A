@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import filmsService from '../services/filmsService';
 import CarteVideo from '../composants/CarteVideo';
 import './Films.css';
@@ -11,8 +12,9 @@ const Films = () => {
   const [categorieActive, setCategorieActive] = useState('tous');
   const [recherche, setRecherche] = useState('');
   const [chargement, setChargement] = useState(true);
+  const navigate = useNavigate();
 
-  const categories = ['tous', 'action', 'comedie', 'drame', 'horreur', 'science-fiction', 'romance'];
+  const categories = ['tous', 'action', 'comedie', 'drame', 'horreur', 'science-fiction', 'romance', 'serie', 'anime'];
 
   useEffect(() => {
     chargerContenus();
@@ -92,6 +94,7 @@ const Films = () => {
 
   return (
     <div className="page-container films-page">
+      <button onClick={() => navigate('/')} className="btn-retour">← Retour</button>
       <h1 className="section-title">🎬 Films & Séries</h1>
 
       {/* Barre de recherche */}
@@ -128,8 +131,11 @@ const Films = () => {
 
       {contenutAffiches.length > 0 ? (
         <div className="grid-container">
-          {contenutAffiches.map((contenu) => (
-            <CarteVideo key={contenu.id_film || contenu.id_serie} film={contenu} />
+          {contenutAffiches.map((contenu, index) => (
+            <CarteVideo 
+              key={`${contenu.type || 'film'}-${contenu.id_film || contenu.id_serie}-${index}`} 
+              film={contenu} 
+            />
           ))}
         </div>
       ) : (

@@ -1,0 +1,30 @@
+{
+  "enabled_countries": [
+    "ci",
+    "fr",
+    "ca",
+    "us",
+    "sn",
+    "cm",
+    "ng",
+    "gn",
+    "bf",
+    "ga",
+    "bj",
+    "ml"
+  ],
+  "country_names": {
+    "ci": "🇨🇮 Côte d'Ivoire",
+    "fr": "🇫🇷 France",
+    "ca": "🇨🇦 Canada",
+    "us": "🇺🇸 États-Unis",
+    "sn": "🇸🇳 Sénégal",
+    "cm": "🇨🇲 Cameroun",
+    "ng": "🇳🇬 Nigeria",
+    "gn": "🇬🇳 Guinée Conakry",
+    "bf": "🇧🇫 Burkina Faso",
+    "ga": "🇬🇦 Gabon",
+    "bj": "🇧🇯 Bénin",
+    "ml": "🇲🇱 Mali"
+  }
+}

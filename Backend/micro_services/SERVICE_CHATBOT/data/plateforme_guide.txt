@@ -1,0 +1,106 @@
+# Guide de la Plateforme CinéA
+
+## Qu'est-ce que CinéA ?
+
+CinéA est une plateforme de streaming vidéo spécialisée dans le cinéma africain et international. Elle permet aux utilisateurs de découvrir, visionner et partager des films et séries de qualité.
+
+## Inscription et Connexion
+
+Pour utiliser CinéA, vous devez créer un compte :
+1. Cliquez sur "S'inscrire" dans le menu principal
+2. Remplissez le formulaire avec vos informations (nom, email, mot de passe)
+3. Validez votre inscription
+4. Connectez-vous avec votre email et mot de passe
+
+## Navigation sur la Plateforme
+
+### Accueil
+La page d'accueil affiche les films et séries populaires du moment.
+
+### Catalogue
+Accédez au catalogue complet des contenus disponibles :
+- Films par genre (Action, Comédie, Drame, Romance, Thriller, etc.)
+- Séries organisées par saisons
+- Filtres par pays, année, réalisateur
+
+### Recherche
+Utilisez la barre de recherche pour trouver un contenu spécifique :
+- Tapez le titre du film ou de la série
+- Utilisez des mots-clés comme le nom d'un acteur
+- Filtrez par genre ou pays d'origine
+
+### Lecteur Vidéo
+Le lecteur vidéo CinéA offre :
+- Lecture en haute qualité
+- Contrôles de lecture (pause, avance rapide, volume)
+- Mode plein écran
+- Bandes annonces disponibles avant visionnage
+
+## Fonctionnalités Sociales
+
+### Communauté
+CinéA dispose d'un espace communautaire où vous pouvez :
+- Publier des posts sur vos films préférés
+- Ajouter des images à vos publications
+- Réagir aux publications (👍 J'aime, ❤️ Adore, 😢 Triste, etc.)
+- Commenter et répondre aux autres utilisateurs
+- Partager vos découvertes cinématographiques
+
+### Avis et Commentaires
+Partagez votre opinion sur les films :
+- Laissez un avis après avoir visionné un film
+- Notez les films (système d'étoiles)
+- Lisez les avis d'autres cinéphiles
+- Répondez aux commentaires
+
+### Historique de Visionnage
+CinéA enregistre automatiquement :
+- Les films et séries que vous avez regardés
+- Votre progression dans les séries
+- Les contenus que vous avez aimés
+- Vos recommandations personnalisées basées sur votre historique
+
+## Profil Utilisateur
+
+Gérez votre profil depuis votre compte :
+- Modifiez vos informations personnelles
+- Changez votre photo de profil
+- Consultez votre historique de visionnage
+- Accédez à vos publications et commentaires
+
+## Types de Comptes
+
+### Utilisateur Standard
+- Accès au catalogue complet
+- Fonctionnalités sociales (publications, commentaires, réactions)
+- Historique de visionnage
+- Recommandations personnalisées
+
+### Administrateur
+Les administrateurs ont des privilèges supplémentaires :
+- Ajout de nouveaux films et séries
+- Gestion des contenus (modification, suppression)
+- Modération des publications et commentaires
+- Gestion des utilisateurs
+
+## Cinéma Africain
+
+CinéA met en avant le cinéma africain :
+- Large sélection de films ivoiriens, nigérians, sénégalais, etc.
+- Découverte de talents africains (réalisateurs, acteurs)
+- Promotion de la culture cinématographique africaine
+- Sous-titres disponibles en plusieurs langues
+
+## Support et Aide
+
+Si vous rencontrez un problème :
+- Utilisez le chatbot CinéaBot pour une assistance immédiate
+- Consultez la FAQ (Questions Fréquemment Posées)
+- Contactez le support technique via le formulaire de contact
+
+## Bonnes Pratiques
+
+- Respectez les autres utilisateurs dans vos publications et commentaires
+- Évitez les spoilers dans vos avis (utilisez des avertissements)
+- Partagez vos découvertes pour enrichir la communauté
+- Explorez différents genres pour élargir vos horizons cinématographiques

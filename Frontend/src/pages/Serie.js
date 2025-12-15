@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexte/AuthContext';
 import filmsService from '../services/filmsService';
+import historiqueService from '../services/historiqueService';
 import LecteurVideo from '../composants/LecteurVideo';
 import './Serie.css';
 
 const Serie = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { utilisateur } = useAuth();
   const [serie, setSerie] = useState(null);
   const [saisons, setSaisons] = useState([]);
   const [saisonActive, setSaisonActive] = useState(null);
   const [episodes, setEpisodes] = useState([]);
   const [episodeEnLecture, setEpisodeEnLecture] = useState(null);
+  const [historiqueId, setHistoriqueId] = useState(null);
+  const [positionInitiale, setPositionInitiale] = useState(0);
   const [chargement, setChargement] = useState(true);
   const [versionActive, setVersionActive] = useState('vo'); // 'vo' ou 'vf'
 
@@ -24,6 +29,13 @@ const Serie = () => {
       chargerEpisodes(saisonActive);
     }
   }, [saisonActive]);
+
+  // ✅ AJOUTER HISTORIQUE QUAND L'ÉPISODE CHANGE
+  useEffect(() => {
+    if (episodeEnLecture && utilisateur) {
+      ajouterHistoriqueEpisode(episodeEnLecture.id_episode);
+    }
+  }, [episodeEnLecture]);
 
   const chargerSerie = async () => {
     setChargement(true);
@@ -55,6 +67,56 @@ const Serie = () => {
       if (result.data.length > 0) {
         setEpisodeEnLecture(result.data[0]);
       }
+    }
+  };
+
+  // ✅ GÉRER L'HISTORIQUE DE L'ÉPISODE (IDENTIQUE AUX FILMS)
+  const ajouterHistoriqueEpisode = async (episodeId) => {
+    const idUtilisateur = utilisateur?.id_utilisateur || utilisateur?.id_admin;
+    
+    if (!idUtilisateur) {
+      console.log("⚠️ Utilisateur non connecté, historique non sauvegardé");
+      return;
+    }
+    
+    // Récupérer l'historique de l'utilisateur
+    const resultHistoriqueList = await historiqueService.obtenirHistorique(idUtilisateur);
+    console.log("📜 Historique existant:", resultHistoriqueList);
+    
+    // Vérifier si cet épisode existe déjà en historique
+    const episodeExistant = resultHistoriqueList.succes && resultHistoriqueList.data
+      ? resultHistoriqueList.data.find(h => h.id_episode === episodeId)
+      : null;
+    
+    if (episodeExistant) {
+      // ✅ Épisode trouvé en historique → utiliser son ID et sa position
+      console.log("✅ Épisode trouvé en historique:", episodeExistant.id_historique);
+      console.log("   Position sauvegardée:", episodeExistant.position);
+      setHistoriqueId(episodeExistant.id_historique);
+      
+      // ✅ CONVERTIR "HH:MM:SS" → SECONDES pour le player
+      if (episodeExistant.position && episodeExistant.position !== '00:00:00') {
+        const parts = episodeExistant.position.split(':');
+        const seconds = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+        setPositionInitiale(seconds);
+      } else {
+        setPositionInitiale(0);
+      }
+    } else {
+      // ❌ Épisode pas en historique → créer une nouvelle entrée
+      console.log("❌ Épisode pas en historique → créer nouvelle entrée");
+      setPositionInitiale(0);
+      const resultHistorique = await historiqueService.ajouterHistorique(null, episodeId, idUtilisateur);
+      if (resultHistorique.succes) {
+        console.log("✨ Nouvel historique d'épisode créé:", resultHistorique.data.id_historique);
+        setHistoriqueId(resultHistorique.data.id_historique);
+      }
+    }
+  };
+
+  const handleProgressUpdate = async (position) => {
+    if (historiqueId) {
+      await historiqueService.mettreAJourPosition(historiqueId, position);
     }
   };
 
@@ -153,6 +215,8 @@ const Serie = () => {
             {/* Player vidéo */}
             <LecteurVideo 
               videoUrl={versionActive === 'vo' ? episodeEnLecture.lien_vo : episodeEnLecture.lien_vf}
+              onProgressUpdate={handleProgressUpdate}
+              positionInitiale={positionInitiale}
             />
 
             {/* Info épisode */}

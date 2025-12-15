@@ -1,0 +1,130 @@
+# FAQ CinéA - Questions Fréquemment Posées
+
+## Compte et Connexion
+
+**Q : Comment créer un compte sur CinéA ?**
+R : Cliquez sur "S'inscrire", remplissez le formulaire avec votre nom, email et mot de passe, puis validez.
+
+**Q : J'ai oublié mon mot de passe, que faire ?**
+R : Sur la page de connexion, cliquez sur "Mot de passe oublié", entrez votre email et suivez les instructions pour réinitialiser votre mot de passe.
+
+**Q : Puis-je modifier mes informations de profil ?**
+R : Oui, connectez-vous et accédez à "Mon Profil" pour modifier vos informations personnelles et votre photo.
+
+**Q : Comment supprimer mon compte ?**
+R : Contactez le support technique via le formulaire de contact en indiquant votre demande de suppression de compte.
+
+## Visionnage
+
+**Q : Puis-je regarder les films hors ligne ?**
+R : Actuellement, CinéA nécessite une connexion internet pour visionner les contenus. Le téléchargement hors ligne n'est pas encore disponible.
+
+**Q : Quels formats vidéo sont supportés ?**
+R : CinéA utilise des formats vidéo optimisés pour le streaming (MP4, WebM) avec une qualité adaptative selon votre connexion.
+
+**Q : La plateforme fonctionne-t-elle sur mobile ?**
+R : Oui, CinéA est accessible depuis un navigateur web sur smartphone et tablette.
+
+**Q : Pourquoi la vidéo ne se charge pas ?**
+R : Vérifiez votre connexion internet, actualisez la page, ou videz le cache de votre navigateur. Si le problème persiste, contactez le support.
+
+## Catalogue
+
+**Q : Combien de films sont disponibles sur CinéA ?**
+R : Le catalogue CinéA contient plusieurs centaines de films et séries, avec de nouveaux contenus ajoutés régulièrement.
+
+**Q : Proposez-vous des films en plusieurs langues ?**
+R : Oui, CinéA propose des films en français, anglais et plusieurs langues africaines, avec sous-titres disponibles.
+
+**Q : Comment puis-je trouver des films africains ?**
+R : Utilisez les filtres de recherche et sélectionnez des pays comme Côte d'Ivoire, Nigeria, Sénégal, ou cherchez "cinéma africain".
+
+**Q : Les nouveaux films sont-ils ajoutés régulièrement ?**
+R : Oui, l'équipe CinéA enrichit le catalogue chaque mois avec de nouvelles productions africaines et internationales.
+
+## Fonctionnalités Sociales
+
+**Q : Comment publier sur la communauté ?**
+R : Rendez-vous dans l'onglet "Communauté", cliquez sur "Créer une publication", écrivez votre message, ajoutez une image si vous le souhaitez, puis publiez.
+
+**Q : Puis-je supprimer ma publication ?**
+R : Oui, vous pouvez supprimer ou modifier vos propres publications en cliquant sur le bouton de suppression (🗑️) sur votre post.
+
+**Q : Qui peut voir mes publications ?**
+R : Toutes les publications sont visibles par tous les utilisateurs de CinéA. Faites attention au contenu que vous partagez.
+
+**Q : Comment réagir à une publication ?**
+R : Cliquez sur l'une des icônes de réaction sous la publication : 👍 J'aime, ❤️ Adore, 😢 Triste, 😂 Rigole, 😮 Surpris, 😡 En colère.
+
+**Q : Puis-je supprimer le commentaire d'un autre utilisateur ?**
+R : Non, seul l'auteur du commentaire ou un administrateur peut le supprimer. Si un commentaire est inapproprié, signalez-le au support.
+
+**Q : Comment répondre à un commentaire ?**
+R : Cliquez sur "Répondre" sous le commentaire auquel vous souhaitez répondre, puis écrivez votre réponse.
+
+## Avis et Notations
+
+**Q : Comment laisser un avis sur un film ?**
+R : Après avoir visionné un film, allez sur sa page et cliquez sur "Laisser un avis". Écrivez votre commentaire et attribuez une note.
+
+**Q : Puis-je modifier mon avis après l'avoir publié ?**
+R : Oui, retournez sur la page du film et modifiez votre avis existant.
+
+**Q : Les avis sont-ils modérés ?**
+R : Les avis peuvent être modérés si ils contiennent du contenu inapproprié, offensant ou des spoilers non signalés.
+
+## Historique et Recommandations
+
+**Q : Mon historique de visionnage est-il privé ?**
+R : Oui, seul vous pouvez voir votre historique de visionnage depuis votre profil.
+
+**Q : Comment fonctionnent les recommandations ?**
+R : CinéA analyse vos films visionnés, vos réactions et vos préférences pour vous suggérer des contenus similaires.
+
+**Q : Puis-je effacer mon historique ?**
+R : Actuellement, l'historique est conservé pour améliorer les recommandations. Une option de suppression sera disponible prochainement.
+
+## Technique
+
+**Q : Quels navigateurs sont compatibles ?**
+R : CinéA fonctionne sur Chrome, Firefox, Safari, Edge (versions récentes recommandées).
+
+**Q : Pourquoi les notifications ne s'affichent pas ?**
+R : Actualisez la page avec le bouton 🔄 pour charger les nouvelles notifications manuellement.
+
+**Q : La page se recharge automatiquement ?**
+R : Non, CinéA a supprimé le rafraîchissement automatique. Utilisez les boutons de rafraîchissement manuel (🔄) pour mettre à jour le contenu.
+
+## Problèmes Courants
+
+**Q : Pourquoi mon like ne s'affiche pas ?**
+R : Assurez-vous d'être connecté. Si le problème persiste, actualisez la page. Le compteur affiche maintenant le nombre exact de réactions.
+
+**Q : Je vois "undefined" sur certains éléments**
+R : C'est un problème temporaire de chargement des données. Actualisez la page ou reconnectez-vous.
+
+**Q : Comment signaler un bug ?**
+R : Contactez le support en décrivant le problème rencontré (page concernée, actions effectuées, message d'erreur).
+
+## Chatbot CinéaBot
+
+**Q : Comment utiliser le chatbot ?**
+R : Cliquez sur l'icône de chat en bas à droite de l'écran et posez votre question en langage naturel.
+
+**Q : Quelles questions puis-je poser au chatbot ?**
+R : Vous pouvez demander :
+- Des recommandations de films ("Recommande-moi un film d'action africain")
+- Des recherches ("Trouve-moi des comédies romantiques")
+- Des informations sur la plateforme ("Comment publier dans la communauté ?")
+- De l'aide générale sur l'utilisation de CinéA
+
+**Q : Le chatbot peut-il accéder à mon compte ?**
+R : Non, le chatbot ne modifie jamais votre compte. Il fournit uniquement des informations et des suggestions.
+
+## Contact
+
+**Q : Comment contacter l'équipe CinéA ?**
+R : Utilisez le formulaire de contact dans "Support" ou envoyez un email à support@cinea.com
+
+**Q : Les administrateurs répondent-ils rapidement ?**
+R : L'équipe CinéA s'efforce de répondre sous 24-48h ouvrées.

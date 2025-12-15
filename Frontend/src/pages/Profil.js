@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexte/AuthContext';
+import { useFavoris } from '../contexte/FavorisContext';
 import authService from '../services/authService';
 import historiqueService from '../services/historiqueService';
 import paiementService from '../services/paiementService';
 import publicationService from '../services/publicationService';
+import favorisService from '../services/favorisService';
+import notificationService from '../services/notificationService';
 import PhotoUpload from '../composants/PhotoUpload';
+import CarteVideo from '../composants/CarteVideo';
 import './Profil.css';
 
 const Profil = () => {
-  const { utilisateur, estConnecte, deconnexion, setUtilisateur } = useAuth();
+  const { utilisateur, estConnecte, deconnexion, mettreAJourUtilisateur } = useAuth();
+  const { favoris: favorisContext } = useFavoris();
   const navigate = useNavigate();
   const [ongletActif, setOngletActif] = useState('infos');
   const [donneesProfil, setDonneesProfil] = useState(null);
   const [historique, setHistorique] = useState([]);
   const [paiements, setPaiements] = useState([]);
   const [publications, setPublications] = useState([]);
+  const [favoris, setFavoris] = useState({ films: [], episodes: [] });
   const [chargement, setChargement] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
-  const [erreur, setErreur] = useState('');
-  const [messageSucces, setMessageSucces] = useState('');
   const [formEdition, setFormEdition] = useState({
     nom: '',
     courriel: '',
@@ -36,14 +40,34 @@ const Profil = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ongletActif]);
 
+  // Recharger les favoris quand le contexte change (après ajout/retrait)
+  useEffect(() => {
+    if (ongletActif === 'favoris' && utilisateur?.id_utilisateur) {
+      chargerFavorisAffichables();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [favorisContext, ongletActif]);
+
+  const chargerFavorisAffichables = async () => {
+    try {
+      const res = await favorisService.lister(utilisateur.id_utilisateur);
+      if (res.succes) {
+        setFavoris(res.data || { films: [], episodes: [] });
+      } else {
+        setFavoris({ films: [], episodes: [] });
+      }
+    } catch (error) {
+      console.error('Erreur chargement favoris:', error);
+    }
+  };
+
   const chargerDonnees = async () => {
     setChargement(true);
-    setErreur('');
 
     // Toujours charger les données de profil
     if (!donneesProfil && utilisateur?.id_utilisateur) {
       try {
-        const response = await authService.obtenirProfil(utilisateur.id_utilisateur);
+        const response = await authService.obtenirProfilComplet(utilisateur.id_utilisateur);
         if (response.data) {
           setDonneesProfil(response.data);
           setFormEdition({
@@ -54,26 +78,53 @@ const Profil = () => {
           });
         }
       } catch (error) {
-        setErreur('Erreur lors du chargement du profil');
+        notificationService.showError('Erreur lors du chargement du profil');
       }
     }
 
     // Charger les données spécifiques à l'onglet
-    if (ongletActif === 'historique') {
-      const result = await historiqueService.obtenirHistorique(utilisateur.id_utilisateur);
-      if (result.succes) {
-        setHistorique(result.data);
+    try {
+      if (ongletActif === 'historique') {
+        const result = await historiqueService.obtenirHistorique(utilisateur.id_utilisateur);
+        if (result.succes && result.data) {
+          // Dédupliquer l'historique : garder seulement le dernier visionnage par film/série
+          const deduplicatedMap = new Map();
+          result.data.forEach(item => {
+            // Créer une clé unique basée sur le type et l'ID
+            let key;
+            if (item.type === 'film' && item.id_film) {
+              key = `film-${item.id_film}`;
+            } else if (item.type === 'episode' && item.id_serie) {
+              key = `serie-${item.id_serie}`;
+            } else {
+              // Fallback avec id_historique si les IDs ne sont pas disponibles
+              key = `historique-${item.id_historique}`;
+            }
+            
+            // Garder seulement si c'est la première occurrence (l'array est déjà trié par date DESC)
+            if (!deduplicatedMap.has(key)) {
+              deduplicatedMap.set(key, item);
+            }
+          });
+          const deduplicatedHistorique = Array.from(deduplicatedMap.values());
+          setHistorique(deduplicatedHistorique);
+        }
+      } else if (ongletActif === 'paiements') {
+        const result = await paiementService.obtenirPaiements(utilisateur.id_utilisateur);
+        if (result.succes) {
+          setPaiements(result.data);
+        }
+      } else if (ongletActif === 'publications') {
+        const result = await publicationService.obtenirPublicationsUtilisateur(utilisateur.id_utilisateur);
+        if (result.succes) {
+          setPublications(result.data);
+        }
+      } else if (ongletActif === 'favoris') {
+        // Utiliser la fonction dédiée qui sera appelée aussi quand le contexte change
+        chargerFavorisAffichables();
       }
-    } else if (ongletActif === 'paiements') {
-      const result = await paiementService.obtenirPaiements(utilisateur.id_utilisateur);
-      if (result.succes) {
-        setPaiements(result.data);
-      }
-    } else if (ongletActif === 'publications') {
-      const result = await publicationService.obtenirPublicationsUtilisateur(utilisateur.id_utilisateur);
-      if (result.succes) {
-        setPublications(result.data);
-      }
+    } catch (error) {
+      console.warn('⚠️ Erreur lors du chargement des données spécifiques:', error.message);
     }
 
     setChargement(false);
@@ -81,14 +132,15 @@ const Profil = () => {
 
   const gererPhotoUpdate = (nouvellePhoto) => {
     // Mettre à jour le contexte
-    const utilisateurMaj = { ...utilisateur, photo_profil: nouvellePhoto };
-    setUtilisateur(utilisateurMaj);
-    localStorage.setItem('utilisateur', JSON.stringify(utilisateurMaj));
+    mettreAJourUtilisateur({ photo_profil: nouvellePhoto });
 
     // Mettre à jour les données du profil
     if (donneesProfil) {
       setDonneesProfil({ ...donneesProfil, photo_profil: nouvellePhoto });
     }
+
+    // Afficher message de confirmation
+    notificationService.showSuccess('Photo de profil mise à jour avec succès ✅');
   };
 
   const gererChangementForm = (e) => {
@@ -100,12 +152,10 @@ const Profil = () => {
 
   const gererSoumissionProfil = async (e) => {
     e.preventDefault();
-    setErreur('');
-    setMessageSucces('');
 
     // Validation
     if (formEdition.mot_de_passe && formEdition.mot_de_passe !== formEdition.confirmation_mot_de_passe) {
-      setErreur('Les mots de passe ne correspondent pas');
+      notificationService.showError('Les mots de passe ne correspondent pas');
       return;
     }
 
@@ -122,22 +172,19 @@ const Profil = () => {
       const response = await authService.modifierProfil(utilisateur.id_utilisateur, donneesModif);
       
       if (response.data) {
-        setMessageSucces('Profil mis à jour avec succès');
+        notificationService.showSuccess('Profil mis à jour avec succès ✅');
         setModeEdition(false);
         
         // Mettre à jour le contexte si nom ou email changé
-        const utilisateurMaj = {
-          ...utilisateur,
+        mettreAJourUtilisateur({
           nom: donneesModif.nom,
           courriel: donneesModif.courriel
-        };
-        setUtilisateur(utilisateurMaj);
-        localStorage.setItem('utilisateur', JSON.stringify(utilisateurMaj));
+        });
         
         setDonneesProfil(response.data);
       }
     } catch (error) {
-      setErreur('Erreur lors de la mise à jour du profil');
+      notificationService.showError('Erreur lors de la mise à jour du profil');
     }
   };
 
@@ -147,12 +194,12 @@ const Profil = () => {
         const response = await publicationService.supprimerPublication(idPublication);
         if (response.succes) {
           setPublications(publications.filter(p => p.id_publication !== idPublication));
-          setMessageSucces('Publication supprimée avec succès');
+          notificationService.showSuccess('Publication supprimée avec succès');
         } else {
-          setErreur('Erreur lors de la suppression de la publication');
+          notificationService.showError('Erreur lors de la suppression de la publication');
         }
       } catch (error) {
-        setErreur('Erreur lors de la suppression');
+        notificationService.showError('Erreur lors de la suppression');
       }
     }
   };
@@ -163,18 +210,21 @@ const Profil = () => {
   };
 
   const photoProfilUrl = donneesProfil?.photo_profil || utilisateur?.photo_profil;
+  const photoProfilSrc = photoProfilUrl 
+    ? (photoProfilUrl.startsWith('http') ? photoProfilUrl : `http://localhost:5002/media/${photoProfilUrl}`)
+    : null;
 
   return (
     <div className="page-container profil-page">
+      <button onClick={() => navigate('/')} className="btn-retour">← Retour</button>
       <h1 className="section-title">👤 Mon Profil</h1>
 
       <div className="profil-header">
         <div className="profil-avatar">
-          {photoProfilUrl ? (
-            <img src={photoProfilUrl} alt={utilisateur?.nom} />
-          ) : (
-            <span>👤</span>
-          )}
+          {photoProfilSrc ? (
+            <img src={photoProfilSrc} alt={utilisateur?.nom} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+          ) : null}
+          <span style={{display: photoProfilSrc ? 'none' : 'flex'}}>👤</span>
         </div>
         <div className="profil-info">
           <h2>{utilisateur?.nom}</h2>
@@ -190,37 +240,46 @@ const Profil = () => {
           onClick={() => setOngletActif('infos')}
           className={`onglet ${ongletActif === 'infos' ? 'active' : ''}`}
         >
-          📋 Informations
+          Informations
+        </button>
+        <button
+          onClick={() => setOngletActif('statistiques')}
+          className={`onglet ${ongletActif === 'statistiques' ? 'active' : ''}`}
+        >
+          Statistiques
         </button>
         <button
           onClick={() => setOngletActif('historique')}
           className={`onglet ${ongletActif === 'historique' ? 'active' : ''}`}
         >
-          📺 Historique
+          Historique
         </button>
         <button
           onClick={() => setOngletActif('paiements')}
           className={`onglet ${ongletActif === 'paiements' ? 'active' : ''}`}
         >
-          💳 Paiements
+          Paiements
         </button>
         <button
           onClick={() => setOngletActif('publications')}
           className={`onglet ${ongletActif === 'publications' ? 'active' : ''}`}
         >
-          📰 Publications
+          Publications
+        </button>
+        <button
+          onClick={() => setOngletActif('favoris')}
+          className={`onglet ${ongletActif === 'favoris' ? 'active' : ''}`}
+        >
+          Favoris
         </button>
       </div>
 
       <div className="profil-contenu">
         {ongletActif === 'infos' && (
           <div className="infos-section">
-            {erreur && <div className="message message-error">{erreur}</div>}
-            {messageSucces && <div className="message message-success">{messageSucces}</div>}
-
             {/* Section Photo de Profil */}
             <div className="profil-photo-section">
-              <h3>📸 Photo de Profil</h3>
+              <h3>Photo de Profil</h3>
               <PhotoUpload 
                 userId={utilisateur?.id_utilisateur}
                 currentPhoto={photoProfilUrl}
@@ -237,7 +296,7 @@ const Profil = () => {
                     onClick={() => setModeEdition(true)} 
                     className="btn-edit"
                   >
-                    ✏️ Modifier
+                    Modifier
                   </button>
                 )}
               </div>
@@ -309,19 +368,150 @@ const Profil = () => {
 
                   <div className="form-actions">
                     <button type="submit" className="btn-save">
-                      ✅ Enregistrer
+                      Enregistrer
                     </button>
                     <button 
                       type="button" 
                       onClick={() => setModeEdition(false)} 
                       className="btn-cancel"
                     >
-                      ❌ Annuler
+                      Annuler
                     </button>
                   </div>
                 </form>
               )}
             </div>
+          </div>
+        )}
+
+        {ongletActif === 'statistiques' && (
+          <div className="statistiques-section">
+            <h3>Mes Statistiques</h3>
+            
+            {/* Statistiques de Contenu */}
+            <div className="stats-category">
+              <h4>Contenu Visionné</h4>
+              <div className="stats-grid-profil">
+                <div className="stat-card stat-primary">
+                  <div className="stat-icon-large">Visionnages</div>
+                  <div className="stat-info">
+                    <div className="stat-number">{donneesProfil?.total_visionnages || 0}</div>
+                    <div className="stat-title">Visionnages</div>
+                  </div>
+                </div>
+                <div className="stat-card stat-success">
+                  <div className="stat-icon-large">Favoris</div>
+                  <div className="stat-info">
+                    <div className="stat-number">{donneesProfil?.total_favoris || 0}</div>
+                    <div className="stat-title">Favoris</div>
+                  </div>
+                </div>
+                <div className="stat-card stat-warning">
+                  <div className="stat-icon-large">Avis</div>
+                  <div className="stat-info">
+                    <div className="stat-number">{donneesProfil?.total_avis || 0}</div>
+                    <div className="stat-title">Avis Donnés</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Statistiques Sociales */}
+            <div className="stats-category">
+              <h4>Activité Sociale</h4>
+              <div className="stats-grid-profil">
+                <div className="stat-card stat-info">
+                  <div className="stat-icon-large">Publications</div>
+                  <div className="stat-info">
+                    <div className="stat-number">{donneesProfil?.total_publications || 0}</div>
+                    <div className="stat-title">Publications</div>
+                  </div>
+                </div>
+                <div className="stat-card stat-like">
+                  <div className="stat-icon-large">👍</div>
+                  <div className="stat-info">
+                    <div className="stat-number">{donneesProfil?.total_likes || 0}</div>
+                    <div className="stat-title">Likes Reçus</div>
+                  </div>
+                </div>
+                <div className="stat-card stat-comment">
+                  <div className="stat-icon-large">💬</div>
+                  <div className="stat-info">
+                    <div className="stat-number">{donneesProfil?.total_commentaires || 0}</div>
+                    <div className="stat-title">Commentaires Reçus</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Résumé général */}
+            <div className="stats-summary">
+              <h4>Résumé</h4>
+              <div className="summary-grid">
+                <div className="summary-item">
+                  <span className="summary-label">Total d'activités</span>
+                  <span className="summary-value">
+                    {(donneesProfil?.total_visionnages || 0) + 
+                     (donneesProfil?.total_favoris || 0) + 
+                     (donneesProfil?.total_avis || 0) + 
+                     (donneesProfil?.total_publications || 0)}
+                  </span>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Engagement social</span>
+                  <span className="summary-value">
+                    {(donneesProfil?.total_likes || 0) + (donneesProfil?.total_commentaires || 0)}
+                  </span>
+                </div>
+                <div className="summary-item">
+                  <span className="summary-label">Membre depuis</span>
+                  <span className="summary-value">
+                    {donneesProfil?.date_inscription 
+                      ? new Date(donneesProfil.date_inscription).toLocaleDateString('fr-FR', { 
+                          month: 'long', 
+                          year: 'numeric' 
+                        })
+                      : 'N/A'
+                    }
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {ongletActif === 'favoris' && (
+          <div className="favoris-section">
+            <h3>Mes Favoris</h3>
+            {chargement ? (
+              <div className="loading"><div className="spinner"></div></div>
+            ) : (
+              <>
+                <h4>Films & Séries</h4>
+                {favoris.films && favoris.films.length > 0 ? (
+                  <div className="grid-films">
+                    {favoris.films.map((f) => (
+                      <CarteVideo key={`fav-film-${f.id_film}`} film={{ ...f, type: 'Film', est_favori: true }} estFavoriInitial={true} />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="empty-message">Aucun favori film pour le moment</p>
+                )}
+
+                {favoris.episodes && favoris.episodes.length > 0 && (
+                  <div className="favoris-episodes">
+                    <h4>Épisodes</h4>
+                    <ul>
+                      {favoris.episodes.map((ep) => (
+                        <li key={`fav-ep-${ep.id_episode}`}>
+                          {ep.serie} — S{ep.numero_saison}E{ep.numero_episode} — {ep.titre}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         )}
 
@@ -333,18 +523,27 @@ const Profil = () => {
             ) : historique.length > 0 ? (
               <div className="historique-list">
                 {historique.map((item) => (
-                  <div key={item.id_historique} className="historique-item">
+                  <div key={`${item.type}-${item.id_film || item.id_serie}`} className="historique-item">
+                    {item.affiche && (
+                      <div className="historique-affiche">
+                        <img src={item.affiche} alt={item.titre} />
+                      </div>
+                    )}
                     <div className="historique-info">
                       <h4>{item.titre}</h4>
                       <p className="historique-date">
-                        {new Date(item.date_visionnage).toLocaleDateString('fr-FR')}
+                        {new Date(item.date_visionnage).toLocaleDateString('fr-FR', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        })}
                       </p>
                       <p className="historique-type">
-                        {item.type === 'film' ? '🎬 Film' : '📺 Épisode'}
+                        {item.type === 'film' ? 'Film' : 'Épisode'}
                       </p>
-                    </div>
-                    <div className="historique-progress">
-                      <span className="position">Position: {item.position}</span>
+                      <p className="historique-position">
+                        ⏱️ Position: <strong>{item.position}</strong>
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -420,7 +619,7 @@ const Profil = () => {
                         className="btn-delete-publication"
                         onClick={() => supprimerPublication(publication.id_publication)}
                       >
-                        🗑️ Supprimer
+                        Supprimer
                       </button>
                     </div>
                   </div>

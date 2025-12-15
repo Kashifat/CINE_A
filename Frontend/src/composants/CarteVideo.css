@@ -2,7 +2,6 @@
   background-color: var(--background-light);
   border-radius: var(--border-radius);
   overflow: hidden;
-  cursor: pointer;
   transition: var(--transition);
   height: 100%;
   display: flex;
@@ -77,6 +76,24 @@
 
 .btn-play:hover {
   background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+.btn-bande-annonce {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: var(--transition);
+}
+
+.btn-bande-annonce:hover {
+  background-color: #ff5252;
   transform: scale(1.05);
 }
 

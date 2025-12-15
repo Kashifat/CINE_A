@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Live.css';
 
 const Live = () => {
+  const navigate = useNavigate();
   const [chaineActive, setChaineActive] = useState(null);
 
   const chaines = [
@@ -41,6 +43,7 @@ const Live = () => {
 
   return (
     <div className="page-container live-page">
+      <button onClick={() => navigate('/')} className="btn-retour">← Retour</button>
       <h1 className="section-title">📺 TV en Direct</h1>
       <p className="page-description">
         Regardez vos chaînes préférées en direct

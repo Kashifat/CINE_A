@@ -500,3 +500,123 @@ def rechercher_contenus(mot_cle):
         "series": series,
         "episodes": episodes
     }
+
+
+#  ####################################
+# FAVORIS
+def ajouter_favori(id_utilisateur: int, id_film: int = None, id_episode: int = None):
+    """Ajouter un favori pour un utilisateur (film ou épisode)."""
+    if not id_utilisateur or (not id_film and not id_episode) or (id_film and id_episode):
+        return {"erreur": "Paramètres invalides"}, 400
+
+    conn = get_db_connection()
+    if conn is None:
+        return {"erreur": "Connexion base de données indisponible"}, 500
+
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO favoris (id_utilisateur, id_film, id_episode)
+            VALUES (%s, %s, %s)
+            """,
+            (id_utilisateur, id_film, id_episode),
+        )
+        conn.commit()
+        return {"message": "Ajouté aux favoris ✅"}, 201
+    except pymysql.err.IntegrityError as e:
+        # Conflit d'unicité -> déjà en favoris
+        if "Duplicate" in str(e):
+            return {"message": "Déjà dans vos favoris"}, 200
+        return {"erreur": f"Erreur: {str(e)}"}, 400
+    except Exception as e:
+        return {"erreur": f"Erreur: {str(e)}"}, 500
+    finally:
+        conn.close()
+
+
+def supprimer_favori(id_utilisateur: int, id_film: int = None, id_episode: int = None):
+    """Supprimer un favori (film ou épisode)."""
+    if not id_utilisateur or (not id_film and not id_episode) or (id_film and id_episode):
+        return {"erreur": "Paramètres invalides"}, 400
+
+    conn = get_db_connection()
+    if conn is None:
+        return {"erreur": "Connexion base de données indisponible"}, 500
+
+    try:
+        cur = conn.cursor()
+        if id_film:
+            cur.execute(
+                "DELETE FROM favoris WHERE id_utilisateur=%s AND id_film=%s",
+                (id_utilisateur, id_film),
+            )
+        else:
+            cur.execute(
+                "DELETE FROM favoris WHERE id_utilisateur=%s AND id_episode=%s",
+                (id_utilisateur, id_episode),
+            )
+        conn.commit()
+        return {"message": "Retiré des favoris ✅"}, 200
+    except Exception as e:
+        return {"erreur": f"Erreur: {str(e)}"}, 500
+    finally:
+        conn.close()
+
+
+def lister_favoris(id_utilisateur: int):
+    """Lister les favoris d'un utilisateur, avec détails de films/épisodes."""
+    if not id_utilisateur:
+        return []
+
+    conn = get_db_connection()
+    if conn is None:
+        return []
+
+    try:
+        cur = conn.cursor()
+        # Récupérer favoris films
+        cur.execute(
+            """
+            SELECT 'Film' AS type, f.id_film, f.titre, f.description, f.affiche, f.bande_annonce,
+                   f.date_sortie, f.duree, f.pays, c.nom AS categorie
+            FROM favoris fav
+            JOIN films f ON fav.id_film = f.id_film
+            LEFT JOIN categories c ON f.id_categorie = c.id_categorie
+            WHERE fav.id_utilisateur = %s
+            """,
+            (id_utilisateur,),
+        )
+        favoris_films = list(cur.fetchall())
+
+        # Récupérer favoris épisodes (avec info série/saison)
+        cur.execute(
+            """
+            SELECT 'Épisode' AS type, e.id_episode, e.titre, e.description, e.bande_annonce,
+                   e.duree, e.numero_episode, s.numero_saison, se.id_serie, se.titre AS serie,
+                   se.affiche
+            FROM favoris fav
+            JOIN episodes e ON fav.id_episode = e.id_episode
+            JOIN saisons s ON e.id_saison = s.id_saison
+            JOIN series se ON s.id_serie = se.id_serie
+            WHERE fav.id_utilisateur = %s
+            """,
+            (id_utilisateur,),
+        )
+        favoris_episodes = list(cur.fetchall())
+
+        # Normaliser URLs
+        for film in favoris_films:
+            film["affiche"] = construire_url_media(film.get("affiche"))
+            film["bande_annonce"] = construire_url_media(film.get("bande_annonce"))
+
+        for ep in favoris_episodes:
+            ep["bande_annonce"] = construire_url_media(ep.get("bande_annonce"))
+            ep["affiche"] = construire_url_media(ep.get("affiche"))
+
+        return {
+            "films": favoris_films,
+            "episodes": favoris_episodes,
+        }
+    finally:
+        conn.close()

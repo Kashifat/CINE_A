@@ -79,7 +79,31 @@ const publicationService = {
       );
       return { succes: true, data: response.data };
     } catch (error) {
+      // Si erreur 409, c'est que la réaction existe déjà (retourner succès silencieux)
+      if (error.response?.status === 409) {
+        return { succes: true, data: { message: 'Réaction déjà existante' } };
+      }
       return { succes: false, erreur: 'Erreur lors de l\'ajout de la réaction' };
+    }
+  },
+
+  // Supprimer une réaction
+  supprimerReaction: async (publicationId) => {
+    try {
+      const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+      const response = await axios.delete(
+        'http://localhost:5008/reactions/',
+        {
+          ...getConfig(),
+          data: {
+            id_utilisateur: utilisateur.id_utilisateur,
+            id_publication: publicationId
+          }
+        }
+      );
+      return { succes: true, data: response.data };
+    } catch (error) {
+      return { succes: false, erreur: 'Erreur lors de la suppression' };
     }
   },
 
@@ -90,6 +114,22 @@ const publicationService = {
       return { succes: true, data: response.data };
     } catch (error) {
       return { succes: false, erreur: 'Erreur lors de la récupération des stats' };
+    }
+  },
+
+  // Vérifier la réaction de l'utilisateur connecté
+  verifierReactionUtilisateur: async (publicationId) => {
+    try {
+      const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
+      if (!utilisateur) return { succes: false };
+      
+      const response = await axios.get(
+        `http://localhost:5008/reactions/utilisateur/${utilisateur.id_utilisateur}/publication/${publicationId}`,
+        getConfig()
+      );
+      return { succes: true, data: response.data };
+    } catch (error) {
+      return { succes: false, data: null };
     }
   }
 };

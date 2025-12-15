@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexte/AuthContext';
 import publicationService from '../services/publicationService';
+import notificationService from '../services/notificationService';
 import CreerPublication from '../composants/CreerPublication';
 import Publication from '../composants/Publication';
 import './Communaute.css';
@@ -18,6 +19,7 @@ const Communaute = () => {
       return;
     }
     chargerPublications();
+    // ✅ Pas de polling automatique - rafraîchissement uniquement après actions
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -38,7 +40,10 @@ const Communaute = () => {
     if (window.confirm('Supprimer cette publication ?')) {
       const result = await publicationService.supprimerPublication(id);
       if (result.succes) {
+        notificationService.showSuccess('Publication supprimée avec succès 🗑️');
         chargerPublications();
+      } else {
+        notificationService.showError(result.erreur || 'Erreur lors de la suppression');
       }
     }
   };
@@ -53,13 +58,20 @@ const Communaute = () => {
 
   return (
     <div className="page-container communaute-page">
-      <h1 className="section-title">👥 Communauté</h1>
-      <p className="page-description">
-        Partagez vos pensées et réagissez aux publications
-      </p>
+      <div className="communaute-header-actions">
+        <button onClick={() => navigate('/')} className="btn-retour">← Retour</button>
+        <h1 className="section-title">👥 Fil d'actualité</h1>
+        <button 
+          onClick={chargerPublications} 
+          className="btn-refresh-feed"
+          title="Rafraîchir le fil"
+        >
+          🔄
+        </button>
+      </div>
 
       <div className="communaute-layout">
-        {/* Colonne principale */}
+        {/* Feed principal centré */}
         <div className="feed-principal">
           <CreerPublication onPublicationCreee={handlePublicationCreee} />
 
@@ -81,27 +93,6 @@ const Communaute = () => {
             </div>
           )}
         </div>
-
-        {/* Barre latérale */}
-        <aside className="sidebar-communaute">
-          <div className="sidebar-card">
-            <h3>💡 Conseils</h3>
-            <ul className="tips-list">
-              <li>Soyez respectueux envers les autres</li>
-              <li>Partagez vos avis sur les films</li>
-              <li>Utilisez les réactions pour interagir</li>
-              <li>Vos publications sont modérées</li>
-            </ul>
-          </div>
-
-          <div className="sidebar-card">
-            <h3>📊 Statistiques</h3>
-            <div className="stat-item">
-              <span className="stat-label">Publications</span>
-              <span className="stat-value">{publications.length}</span>
-            </div>
-          </div>
-        </aside>
       </div>
     </div>
   );

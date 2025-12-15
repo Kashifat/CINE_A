@@ -1,57 +1,69 @@
 """
-Script pour démarrer tous les microservices CineA en arrière-plan
+Script pour démarrer tous les microservices CineA
 """
 import subprocess
 import time
+import os
 import sys
 
-services = [
-    {"name": "Service Admin", "port": 5004, "path": "SERVICE_AUTHENTIFICATION/service_admin/app.py"},
-    {"name": "Service Utilisateur", "port": 5001, "path": "SERVICE_AUTHENTIFICATION/service_utilisateur/app.py"},
-    {"name": "Service Films", "port": 5002, "path": "SERVICE_FILMS/app.py"},
-    {"name": "Service Paiement", "port": 5003, "path": "service_paiement/app.py"},
-    {"name": "Service Historique", "port": 5005, "path": "service_historique/app.py"},
-    {"name": "Service Avis", "port": 5006, "path": "service_avis/app.py"},
-    {"name": "Service Publication", "port": 5007, "path": "SERVICE_PUBLICATION/app.py"},
-    {"name": "Service Réactions", "port": 5008, "path": "service_reaction_pub/app.py"},
+# Liste des services avec leurs ports
+SERVICES = [
+    ("SERVICE_AUTHENTIFICATION/service_utilisateur", 5001, "Service Utilisateur"),
+    ("SERVICE_FILMS", 5002, "Service Films & Séries"),
+    ("SERVICE_HISTORIQUE", 5003, "Service Historique"),
+    ("SERVICE_COMMENTAIRE", 5004, "Service Commentaires"),
+    ("SERVICE_AVIS_FILM", 5005, "Service Avis"),
+    ("SERVICE_PAIEMENT", 5006, "Service Paiement"),
+    ("SERVICE_PUBLICATION", 5007, "Service Publications"),
+    ("SERVICE_REACTION_PUB", 5008, "Service Réactions"),
+    ("SERVICE_NOTIFICATION", 5009, "Service Notifications"),
+    ("SERVICE_TV", 5010, "Service TV"),
+    ("SERVICE_CHATBOT", 5012, "Service Chatbot"),
 ]
 
-print("=" * 70)
-print("🚀 DÉMARRAGE DE TOUS LES MICROSERVICES CINEA")
-print("=" * 70)
-
-processes = []
-
-for service in services:
-    print(f"\n▶️  Démarrage de {service['name']} (port {service['port']})...")
+def demarrer_service(chemin_service, port, nom):
+    """Démarre un service dans un nouveau terminal"""
+    chemin_complet = os.path.join(os.path.dirname(__file__), chemin_service)
+    app_path = os.path.join(chemin_complet, "app.py")
+    
+    if not os.path.exists(app_path):
+        print(f"⚠️  {nom} - app.py introuvable dans {chemin_complet}")
+        return None
+    
     try:
-        # Démarrer le service en arrière-plan
-        process = subprocess.Popen(
-            ["python", service["path"]],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            creationflags=subprocess.CREATE_NEW_CONSOLE if sys.platform == "win32" else 0
-        )
-        processes.append({"name": service["name"], "port": service["port"], "process": process})
-        time.sleep(2)  # Attendre que le service démarre
-        print(f"   ✅ {service['name']} démarré")
+        # Démarrer dans un nouveau terminal PowerShell
+        cmd = f'Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd \'{chemin_complet}\'; python app.py"'
+        subprocess.Popen(["powershell", "-Command", cmd], shell=True)
+        print(f"✅ {nom} (Port {port}) - Démarré")
+        return True
     except Exception as e:
-        print(f"   ❌ Erreur lors du démarrage de {service['name']}: {e}")
+        print(f"❌ {nom} - Erreur: {e}")
+        return None
 
-print("\n" + "=" * 70)
-print("✅ TOUS LES SERVICES SONT DÉMARRÉS")
-print("=" * 70)
+def main():
+    print("=" * 60)
+    print("🚀 DÉMARRAGE DES MICROSERVICES CINEA")
+    print("=" * 60)
+    print()
+    
+    services_demarres = 0
+    
+    for chemin, port, nom in SERVICES:
+        result = demarrer_service(chemin, port, nom)
+        if result:
+            services_demarres += 1
+        time.sleep(1)  # Pause entre chaque démarrage
+    
+    print()
+    print("=" * 60)
+    print(f"✅ {services_demarres}/{len(SERVICES)} services démarrés")
+    print("=" * 60)
+    print()
+    print("💡 Conseil: Attendez 5-10 secondes que tous les services soient prêts")
+    print("💡 Vérifiez les fenêtres PowerShell pour les logs de chaque service")
+    print()
+    print("Pour arrêter les services: Fermez les fenêtres PowerShell")
+    print()
 
-print("\n📋 Services actifs:")
-for p in processes:
-    print(f"   • {p['name']:25} → http://localhost:{p['port']}")
-
-print("\n" + "=" * 70)
-print("⚠️  Pour arrêter tous les services, fermez toutes les fenêtres console")
-print("   ou appuyez sur Ctrl+C dans chaque fenêtre")
-print("=" * 70)
-
-print("\n💡 Vous pouvez maintenant lancer les tests avec:")
-print("   python test_all_services.py")
-
-input("\nAppuyez sur ENTRÉE pour quitter ce script...")
+if __name__ == "__main__":
+    main()

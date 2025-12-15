@@ -29,7 +29,7 @@ function Dashboard() {
     setErreur('');
 
     try {
-      const response = await authService.obtenirProfil(utilisateur.id_utilisateur);
+      const response = await authService.obtenirProfilComplet(utilisateur.id_utilisateur);
       if (response.data) {
         setDonneesProfil(response.data);
         setFormEdition({
@@ -280,29 +280,46 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Statistiques */}
+        {/* Statistiques - Contenu */}
         <div className="carte carte-statistiques">
-          <h2>Mes Statistiques</h2>
+          <h2>Statistiques de Contenu</h2>
           <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-icon">📺</div>
+            <div className="stat-item stat-primary">
+              <div className="stat-icon">Visionnages</div>
               <div className="stat-valeur">{donneesProfil.total_visionnages || 0}</div>
               <div className="stat-label">Visionnages</div>
             </div>
-            <div className="stat-item">
+            <div className="stat-item stat-success">
               <div className="stat-icon">❤️</div>
               <div className="stat-valeur">{donneesProfil.total_favoris || 0}</div>
               <div className="stat-label">Favoris</div>
             </div>
-            <div className="stat-item">
-              <div className="stat-icon">⭐</div>
+            <div className="stat-item stat-warning">
+              <div className="stat-icon">Avis</div>
               <div className="stat-valeur">{donneesProfil.total_avis || 0}</div>
-              <div className="stat-label">Avis</div>
+              <div className="stat-label">Avis Donnés</div>
             </div>
-            <div className="stat-item">
-              <div className="stat-icon">📝</div>
+          </div>
+        </div>
+
+        {/* Statistiques - Social */}
+        <div className="carte carte-statistiques">
+          <h2>Statistiques Sociales</h2>
+          <div className="stats-grid">
+            <div className="stat-item stat-info">
+              <div className="stat-icon">Publications</div>
               <div className="stat-valeur">{donneesProfil.total_publications || 0}</div>
               <div className="stat-label">Publications</div>
+            </div>
+            <div className="stat-item stat-like">
+              <div className="stat-icon">👍</div>
+              <div className="stat-valeur">{donneesProfil.total_likes || 0}</div>
+              <div className="stat-label">Likes Reçus</div>
+            </div>
+            <div className="stat-item stat-comment">
+              <div className="stat-icon">Commentaires</div>
+              <div className="stat-valeur">{donneesProfil.total_commentaires || 0}</div>
+              <div className="stat-label">Commentaires Reçus</div>
             </div>
           </div>
         </div>
@@ -358,7 +375,7 @@ function Dashboard() {
                       <span className="publication-date">{formaterDate(pub.date_publication)}</span>
                       <div className="publication-stats">
                         <span>❤️ {pub.nb_reactions || 0}</span>
-                        <span>💬 {pub.nb_commentaires || 0}</span>
+                        <span>Commentaires: {pub.nb_commentaires || 0}</span>
                       </div>
                     </div>
                   </div>

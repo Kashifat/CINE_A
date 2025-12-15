@@ -38,6 +38,11 @@ const paiementService = {
       const response = await axios.get(`${API_URL}/paiements/utilisateur/${userId}`, getConfig());
       return { succes: true, data: response.data };
     } catch (error) {
+      // Mode silencieux si le service n'est pas disponible
+      if (error.code === 'ERR_NETWORK' || error.code === 'ECONNREFUSED') {
+        console.warn('⚠️ Service paiement non disponible');
+        return { succes: true, data: [] }; // Retourner tableau vide au lieu d'erreur
+      }
       return { succes: false, erreur: 'Erreur lors de la récupération des paiements' };
     }
   },

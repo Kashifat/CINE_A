@@ -13,6 +13,7 @@ const Lecture = () => {
   const { estConnecte, utilisateur } = useAuth();
   const [film, setFilm] = useState(null);
   const [historiqueId, setHistoriqueId] = useState(null);
+  const [positionInitiale, setPositionInitiale] = useState(0);
   const [chargement, setChargement] = useState(true);
   const [avis, setAvis] = useState([]);
   const [monAvis, setMonAvis] = useState(null);
@@ -40,14 +41,39 @@ const Lecture = () => {
       console.log("   lien_vf:", result.data.lien_vf);
       setFilm(result.data);
       
-      // Créer un historique pour ce visionnage
-      // Gérer les deux cas : utilisateur normal (id_utilisateur) et admin (id_admin)
-      const idUtilisateur = utilisateur?.id_utilisateur || utilisateur?.id_admin;
+      // Gérer l'historique : vérifier si le film existe déjà
+      const idUtilisateur = utilisateur?.id_utilisateur;
       console.log("👤 ID Utilisateur:", idUtilisateur, "Utilisateur:", utilisateur);
       
-      const resultHistorique = await historiqueService.ajouterHistorique(id, null, idUtilisateur);
-      if (resultHistorique.succes) {
-        setHistoriqueId(resultHistorique.data.id_historique);
+      // Récupérer l'historique de l'utilisateur
+      const resultHistoriqueList = await historiqueService.obtenirHistorique(idUtilisateur);
+      console.log("📜 Historique existant:", resultHistoriqueList);
+      
+      // Vérifier si ce film existe déjà en historique
+      const filmExistant = resultHistoriqueList.succes && resultHistoriqueList.data
+        ? resultHistoriqueList.data.find(h => h.id_film === parseInt(id))
+        : null;
+      
+      if (filmExistant) {
+        // ✅ Film trouvé en historique → utiliser son ID et sa position
+        console.log("✅ Film trouvé en historique:", filmExistant.id_historique);
+        console.log("   Position sauvegardée:", filmExistant.position);
+        setHistoriqueId(filmExistant.id_historique);
+        
+        // ✅ CONVERTIR "HH:MM:SS" → SECONDES pour le player
+        if (filmExistant.position && filmExistant.position !== '00:00:00') {
+          const parts = filmExistant.position.split(':');
+          const seconds = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+          setPositionInitiale(seconds);
+        }
+      } else {
+        // ❌ Film pas en historique → créer une nouvelle entrée
+        console.log("❌ Film pas en historique → créer nouvelle entrée");
+        const resultHistorique = await historiqueService.ajouterHistorique(id, null, idUtilisateur);
+        if (resultHistorique.succes) {
+          console.log("✨ Nouvel historique créé:", resultHistorique.data.id_historique);
+          setHistoriqueId(resultHistorique.data.id_historique);
+        }
       }
       
       // Charger les avis du film
@@ -149,49 +175,34 @@ const Lecture = () => {
 
   return (
     <div className="lecture-page">
+      <button onClick={() => navigate(-1)} className="btn-retour">← Retour</button>
+      
       <div className="lecteur-container">
+        <h2 className="lecteur-titre">{film.titre}</h2>
+        
         {/* Sélecteur de version VO/VF */}
         {film.lien_vo && film.lien_vf && (
-          <div className="version-selector" style={{ marginBottom: '1rem', textAlign: 'center' }}>
+          <div className="version-selector">
             <button
               className={`btn-version ${versionActive === 'vo' ? 'active' : ''}`}
               onClick={() => setVersionActive('vo')}
-              style={{
-                padding: '0.5rem 1rem',
-                marginRight: '0.5rem',
-                backgroundColor: versionActive === 'vo' ? '#00d4ff' : '#333',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
             >
               🌍 Version Originale
             </button>
             <button
               className={`btn-version ${versionActive === 'vf' ? 'active' : ''}`}
               onClick={() => setVersionActive('vf')}
-              style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: versionActive === 'vf' ? '#00d4ff' : '#333',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
             >
               🇫🇷 Version Française
             </button>
           </div>
         )}
         
+        {/* Player vidéo */}
         <LecteurVideo 
-          videoUrl={
-            versionActive === 'vo' 
-              ? (film.lien_vo || film.lien_vf || 'https://www.w3schools.com/html/mov_bbb.mp4')
-              : (film.lien_vf || film.lien_vo || 'https://www.w3schools.com/html/mov_bbb.mp4')
-          } 
+          videoUrl={versionActive === 'vo' ? film.lien_vo : film.lien_vf}
           onProgressUpdate={handleProgressUpdate}
+          positionInitiale={positionInitiale}
         />
       </div>
 

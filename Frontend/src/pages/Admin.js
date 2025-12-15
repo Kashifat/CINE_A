@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexte/AuthContext';
 import uploadService from '../services/uploadService';
-import './Admin.css';
+import './Admin-Modern.css';
 
 const Admin = () => {
   const { estAdmin } = useAuth();
@@ -101,7 +101,7 @@ const Admin = () => {
     return (
       <div className="admin-page">
         <div className="access-denied">
-          <h2>🚫 Accès refusé</h2>
+          <h2>Accès refusé</h2>
           <p>Vous n'avez pas les permissions pour accéder à cette page</p>
           <button onClick={() => navigate('/')} className="btn btn-primary">
             Retour à l'accueil
@@ -737,7 +737,8 @@ const Admin = () => {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h1>⚙️ Tableau de Bord Administration</h1>
+        <h1>Tableau de Bord Administration</h1>
+        <p className="admin-subtitle">Gérez films, séries, utilisateurs et paiements</p>
       </div>
 
       {message.text && (
@@ -752,31 +753,31 @@ const Admin = () => {
           className={`tab ${activeTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => { setActiveTab('dashboard'); }}
         >
-          📊 Tableau de Bord
+          Tableau de Bord
         </button>
         <button
           className={`tab ${activeTab === 'films' ? 'active' : ''}`}
           onClick={() => { setActiveTab('films'); chargerFilms(); }}
         >
-          🎬 Films & Séries
+          Films & Séries
         </button>
         <button
           className={`tab ${activeTab === 'users' ? 'active' : ''}`}
           onClick={() => { setActiveTab('users'); chargerUtilisateurs(); }}
         >
-          👥 Utilisateurs
+          Utilisateurs
         </button>
         <button
           className={`tab ${activeTab === 'payments' ? 'active' : ''}`}
           onClick={() => { setActiveTab('payments'); chargerPaiements(); }}
         >
-          💳 Paiements
+          Paiements
         </button>
         <button
           className={`tab ${activeTab === 'publications' ? 'active' : ''}`}
           onClick={() => { setActiveTab('publications'); chargerPublications(); }}
         >
-          📰 Publications
+          Publications
         </button>
       </div>
 
@@ -786,7 +787,7 @@ const Admin = () => {
         {/* Dashboard */}
         {activeTab === 'dashboard' && (
           <div className="tab-content">
-            <h2>📊 Vue d'ensemble</h2>
+            <h2 className="section-header-modern">Vue d'ensemble des statistiques</h2>
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon">👥</div>
@@ -798,7 +799,7 @@ const Admin = () => {
               <div className="stat-card">
                 <div className="stat-icon">🎬</div>
                 <div className="stat-info">
-                  <div className="stat-value">{films.length}</div>
+                  <div className="stat-value">{films.length + series.length}</div>
                   <div className="stat-label">Films & Séries</div>
                 </div>
               </div>
@@ -809,6 +810,13 @@ const Admin = () => {
                   <div className="stat-label">Paiements</div>
                 </div>
               </div>
+              <div className="stat-card">
+                <div className="stat-icon">📰</div>
+                <div className="stat-info">
+                  <div className="stat-value">{publications.length}</div>
+                  <div className="stat-label">Publications en attente</div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -816,7 +824,7 @@ const Admin = () => {
         {/* Films & Séries */}
         {activeTab === 'films' && (
           <div className="tab-content">
-            <h2>🎬 Gestion des Films & Séries</h2>
+            <h2>Gestion des Films & Séries</h2>
             
             {/* Onglets Films/Séries */}
             <div className="content-type-tabs">
@@ -838,153 +846,217 @@ const Admin = () => {
             {contentType === 'films' && (
               <>
                 <div className="admin-form">
-                  <h3>➕ Ajouter un nouveau film</h3>
+                  <h3 className="section-title">Ajouter un nouveau film</h3>
                   <form onSubmit={ajouterFilm}>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Titre *</label>
-                        <input
-                          type="text"
-                          name="titre"
-                          value={formFilm.titre}
+                    <div className="form-section">
+                      <h4 className="section-title">Informations générales</h4>
+                      <div className="form-grid">
+                        <div className="form-group-modern full-width">
+                          <label>
+                            <span className="label-text">Titre du film</span>
+                            <span className="label-required">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="titre"
+                            value={formFilm.titre}
+                            onChange={gererChangementFilm}
+                            required
+                            className="input-modern"
+                            placeholder="Entrez le titre du film"
+                          />
+                        </div>
+                        <div className="form-group-modern">
+                          <label>
+                            <span className="label-text">Catégorie</span>
+                            <span className="label-required">*</span>
+                          </label>
+                          <select
+                            name="categorie"
+                            value={formFilm.categorie}
+                            onChange={gererChangementFilm}
+                            required
+                            className="input-modern"
+                          >
+                            <option value="">Sélectionner une catégorie</option>
+                            {categories.map(cat => (
+                              <option key={cat.id_categorie} value={cat.id_categorie}>
+                                {cat.nom}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group-modern">
+                          <label>
+                            <span className="label-text">Durée (minutes)</span>
+                          </label>
+                          <input
+                            type="number"
+                            name="duree"
+                            value={formFilm.duree}
+                            onChange={gererChangementFilm}
+                            className="input-modern"
+                            placeholder="120"
+                          />
+                        </div>
+                        <div className="form-group-modern">
+                          <label>
+                            <span className="label-text">Date de sortie</span>
+                          </label>
+                          <input
+                            type="date"
+                            name="date_sortie"
+                            value={formFilm.date_sortie}
+                            onChange={gererChangementFilm}
+                            className="input-modern"
+                          />
+                        </div>
+                        <div className="form-group-modern">
+                          <label>
+                            <span className="label-text">Pays</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="pays"
+                            value={formFilm.pays}
+                            onChange={gererChangementFilm}
+                            className="input-modern"
+                            placeholder="ex: France"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group-modern full-width">
+                        <label>
+                          <span className="label-text">Description</span>
+                        </label>
+                        <textarea
+                          name="description"
+                          value={formFilm.description}
                           onChange={gererChangementFilm}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Catégorie *</label>
-                        <select
-                          name="categorie"
-                          value={formFilm.categorie}
-                          onChange={gererChangementFilm}
-                          required
-                        >
-                          <option value="">Sélectionner une catégorie</option>
-                          {categories.map(cat => (
-                            <option key={cat.id_categorie} value={cat.id_categorie}>
-                              {cat.nom}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Durée (minutes)</label>
-                        <input
-                          type="number"
-                          name="duree"
-                          value={formFilm.duree}
-                          onChange={gererChangementFilm}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Date de sortie</label>
-                        <input
-                          type="date"
-                          name="date_sortie"
-                          value={formFilm.date_sortie}
-                          onChange={gererChangementFilm}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Pays</label>
-                        <input
-                          type="text"
-                          name="pays"
-                          value={formFilm.pays}
-                          onChange={gererChangementFilm}
-                          placeholder="ex: France"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-group full">
-                      <label>Description</label>
-                      <textarea
-                        name="description"
-                        value={formFilm.description}
-                        onChange={gererChangementFilm}
-                        rows="4"
-                      />
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Affiche (Image)</label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => gererSelectionFichierFilm(e, 'affiche')}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Bande Annonce (Vidéo)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierFilm(e, 'bande_annonce')}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Vidéo VO (Version Originale)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierFilm(e, 'video_vo')}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Vidéo VF (Version Française)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierFilm(e, 'video_vf')}
+                          rows="4"
+                          className="input-modern"
+                          placeholder="Décrivez le film..."
                         />
                       </div>
                     </div>
 
-                    <button type="submit" className="btn btn-success">
-                      ✓ Ajouter le film
-                    </button>
+                    <div className="form-section">
+                      <h4 className="section-title">Fichiers médias</h4>
+                      <div className="form-grid">
+                        <div className="form-group-modern">
+                          <label className="file-input-label">
+                            <span className="label-text">Affiche (Image)</span>
+                            <div className="file-input-wrapper">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => gererSelectionFichierFilm(e, 'affiche')}
+                              />
+                              <div className="file-input-placeholder">
+                                <span>📁 Cliquez pour sélectionner</span>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                        <div className="form-group-modern">
+                          <label className="file-input-label">
+                            <span className="label-text">Bande Annonce (Vidéo)</span>
+                            <div className="file-input-wrapper">
+                              <input
+                                type="file"
+                                accept="video/*"
+                                onChange={(e) => gererSelectionFichierFilm(e, 'bande_annonce')}
+                              />
+                              <div className="file-input-placeholder">
+                                <span>📁 Cliquez pour sélectionner</span>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                        <div className="form-group-modern full-width">
+                          <label className="file-input-label">
+                            <span className="label-text">Vidéo VO (Version Originale)</span>
+                            <div className="file-input-wrapper">
+                              <input
+                                type="file"
+                                accept="video/*"
+                                onChange={(e) => gererSelectionFichierFilm(e, 'video_vo')}
+                              />
+                              <div className="file-input-placeholder">
+                                <span>📁 Cliquez pour sélectionner</span>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                        <div className="form-group-modern full-width">
+                          <label className="file-input-label">
+                            <span className="label-text">Vidéo VF (Version Française)</span>
+                            <div className="file-input-wrapper">
+                              <input
+                                type="file"
+                                accept="video/*"
+                                onChange={(e) => gererSelectionFichierFilm(e, 'video_vf')}
+                              />
+                              <div className="file-input-placeholder">
+                                <span>📁 Cliquez pour sélectionner</span>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-actions-modern">
+                      <button type="submit" className="btn btn-success-modern">
+                        ✓ Ajouter le film
+                      </button>
+                      <button type="reset" className="btn btn-secondary-modern">
+                        ↻ Réinitialiser
+                      </button>
+                    </div>
                   </form>
                 </div>
 
                 {/* Liste films */}
                 <div className="admin-list">
-                  <h3>📋 Films existants</h3>
+                  <h3 className="section-title">Films existants</h3>
                   {loadingFilms ? (
-                    <p>Chargement...</p>
+                    <div className="loading-spinner"></div>
                   ) : films.length === 0 ? (
-                    <p className="empty">Aucun film trouvé</p>
+                    <div className="empty-state">
+                      <div className="empty-icon">🎬</div>
+                      <p>Aucun film n'a été ajouté pour le moment</p>
+                    </div>
                   ) : (
-                    <div className="films-table">
+                    <div className="content-grid-modern">
                       {films.map(film => (
-                        <div key={film.id_film} className="film-row">
-                          <div className="film-info">
-                            <h4>{film.titre}</h4>
-                            <p>{film.description?.substring(0, 100)}...</p>
-                            <span className="badge">{film.categorie || 'Sans catégorie'}</span>
-                            <span className="badge">{film.pays || 'Pays'}</span>
-                            <span className="badge">{film.duree} min</span>
+                        <div key={film.id_film} className="content-card-modern">
+                          <div className="card-image">
+                            <img src={film.affiche || '/placeholder.jpg'} alt={film.titre} />
+                            <div className="overlay-actions">
+                              <button 
+                                className="btn-icon-action"
+                                onClick={() => ouvrirModalModifierFilm(film)}
+                                title="Modifier"
+                              >
+                                ✎
+                              </button>
+                              <button
+                                className="btn-icon-action btn-delete"
+                                onClick={() => supprimerFilm(film.id_film)}
+                                title="Supprimer"
+                              >
+                                🗑️
+                              </button>
+                            </div>
                           </div>
-                          <div className="film-actions">
-                            <button 
-                              className="btn btn-edit"
-                              onClick={() => ouvrirModalModifierFilm(film)}
-                            >
-                              ✎ Modifier
-                            </button>
-                            <button
-                              className="btn btn-delete"
-                              onClick={() => supprimerFilm(film.id_film)}
-                            >
-                              🗑️ Supprimer
-                            </button>
+                          <div className="card-content">
+                            <h4 className="card-title">{film.titre}</h4>
+                            <p className="card-description">{film.description?.substring(0, 80)}...</p>
+                            <div className="card-meta">
+                              <span className="badge">{film.categorie || 'Sans catégorie'}</span>
+                              <span className="badge">{film.duree} min</span>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -998,97 +1070,138 @@ const Admin = () => {
             {contentType === 'series' && (
               <>
                 <div className="admin-form">
-                  <h3>➕ Ajouter une nouvelle série</h3>
+                  <h3 className="section-title">Ajouter une nouvelle série</h3>
                   <form onSubmit={ajouterSerie}>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Titre *</label>
-                        <input
-                          type="text"
-                          name="titre"
-                          value={formSerie.titre}
+                    <div className="form-section">
+                      <h4 className="section-title">Informations générales</h4>
+                      <div className="form-grid">
+                        <div className="form-group-modern full-width">
+                          <label>
+                            <span className="label-text">Titre de la série</span>
+                            <span className="label-required">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="titre"
+                            value={formSerie.titre}
+                            onChange={gererChangementSerie}
+                            required
+                            className="input-modern"
+                            placeholder="Entrez le titre de la série"
+                          />
+                        </div>
+                        <div className="form-group-modern">
+                          <label>
+                            <span className="label-text">Catégorie</span>
+                            <span className="label-required">*</span>
+                          </label>
+                          <select
+                            name="categorie"
+                            value={formSerie.categorie}
+                            onChange={gererChangementSerie}
+                            required
+                            className="input-modern"
+                          >
+                            <option value="">Sélectionner une catégorie</option>
+                            {categories.map(cat => (
+                              <option key={cat.id_categorie} value={cat.id_categorie}>
+                                {cat.nom}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group-modern">
+                          <label>
+                            <span className="label-text">Pays</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="pays"
+                            value={formSerie.pays}
+                            onChange={gererChangementSerie}
+                            className="input-modern"
+                            placeholder="ex: France"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group-modern full-width">
+                        <label>
+                          <span className="label-text">Description</span>
+                        </label>
+                        <textarea
+                          name="description"
+                          value={formSerie.description}
                           onChange={gererChangementSerie}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Catégorie *</label>
-                        <select
-                          name="categorie"
-                          value={formSerie.categorie}
-                          onChange={gererChangementSerie}
-                          required
-                        >
-                          <option value="">Sélectionner une catégorie</option>
-                          {categories.map(cat => (
-                            <option key={cat.id_categorie} value={cat.id_categorie}>
-                              {cat.nom}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Pays</label>
-                        <input
-                          type="text"
-                          name="pays"
-                          value={formSerie.pays}
-                          onChange={gererChangementSerie}
-                          placeholder="ex: France"
+                          rows="4"
+                          className="input-modern"
+                          placeholder="Décrivez la série..."
                         />
                       </div>
                     </div>
 
-                    <div className="form-group full">
-                      <label>Description</label>
-                      <textarea
-                        name="description"
-                        value={formSerie.description}
-                        onChange={gererChangementSerie}
-                        rows="4"
-                      />
+                    <div className="form-section">
+                      <h4 className="section-title">Fichiers médias</h4>
+                      <div className="form-grid">
+                        <div className="form-group-modern full-width">
+                          <label className="file-input-label">
+                            <span className="label-text">Affiche (Image)</span>
+                            <div className="file-input-wrapper">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => gererSelectionFichierSerie(e, 'affiche')}
+                              />
+                              <div className="file-input-placeholder">
+                                <span>📁 Cliquez pour sélectionner</span>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                        <div className="form-group-modern full-width">
+                          <label className="file-input-label">
+                            <span className="label-text">Bande Annonce (Vidéo)</span>
+                            <div className="file-input-wrapper">
+                              <input
+                                type="file"
+                                accept="video/*"
+                                onChange={(e) => gererSelectionFichierSerie(e, 'bande_annonce')}
+                              />
+                              <div className="file-input-placeholder">
+                                <span>📁 Cliquez pour sélectionner</span>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Affiche (Image)</label>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => gererSelectionFichierSerie(e, 'affiche')}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Bande Annonce (Vidéo)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierSerie(e, 'bande_annonce')}
-                        />
-                      </div>
+                    <div className="form-actions-modern">
+                      <button type="submit" className="btn btn-success-modern">
+                        ✓ Ajouter la série
+                      </button>
+                      <button type="reset" className="btn btn-secondary-modern">
+                        ↻ Réinitialiser
+                      </button>
                     </div>
-
-                    <button type="submit" className="btn btn-success">
-                      ✓ Ajouter la série
-                    </button>
                   </form>
                 </div>
 
                 {/* Gestion Saisons et Épisodes */}
                 <div className="admin-form">
-                  <h3>➕ Ajouter une saison</h3>
+                  <h3 className="section-title">Ajouter une saison</h3>
                   <form onSubmit={ajouterSaison}>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Série *</label>
+                    <div className="form-grid">
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Série</span>
+                          <span className="label-required">*</span>
+                        </label>
                         <select
                           name="id_serie"
                           value={formSaison.id_serie}
                           onChange={gererChangementSaison}
                           required
+                          className="input-modern"
                         >
                           <option value="">Sélectionner une série</option>
                           {series.map(s => (
@@ -1098,53 +1211,71 @@ const Admin = () => {
                           ))}
                         </select>
                       </div>
-                      <div className="form-group">
-                        <label>Numéro de saison *</label>
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Numéro de saison</span>
+                          <span className="label-required">*</span>
+                        </label>
                         <input
                           type="number"
                           name="numero_saison"
                           value={formSaison.numero_saison}
                           onChange={gererChangementSaison}
                           required
+                          className="input-modern"
                         />
                       </div>
-                      <div className="form-group">
-                        <label>Titre de la saison</label>
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Titre de la saison</span>
+                        </label>
                         <input
                           type="text"
                           name="titre"
                           value={formSaison.titre}
                           onChange={gererChangementSaison}
+                          className="input-modern"
+                          placeholder="Titre optionnel"
                         />
                       </div>
-                      <div className="form-group">
-                        <label>Année</label>
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Année</span>
+                        </label>
                         <input
                           type="text"
                           name="annee"
                           value={formSaison.annee}
                           onChange={gererChangementSaison}
+                          className="input-modern"
+                          placeholder="ex: 2024"
                         />
                       </div>
                     </div>
-                    <button type="submit" className="btn btn-success">
-                      ✓ Ajouter la saison
-                    </button>
+                    <div className="form-actions-modern">
+                      <button type="submit" className="btn btn-success-modern">
+                        ✓ Ajouter la saison
+                      </button>
+                    </div>
                   </form>
                 </div>
 
                 {/* Gestion Épisodes */}
                 <div className="admin-form">
-                  <h3>➕ Ajouter un épisode</h3>
+                  <h3 className="section-title">Ajouter un épisode</h3>
                   <form onSubmit={ajouterEpisode}>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Saison *</label>
+                    <div className="form-grid">
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Saison</span>
+                          <span className="label-required">*</span>
+                        </label>
                         <select
                           name="id_saison"
                           value={formEpisode.id_saison}
                           onChange={gererChangementEpisode}
                           required
+                          className="input-modern"
                         >
                           <option value="">Sélectionner une saison</option>
                           {saisons.map(s => (
@@ -1154,113 +1285,160 @@ const Admin = () => {
                           ))}
                         </select>
                       </div>
-                      <div className="form-group">
-                        <label>Numéro d'épisode *</label>
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Numéro d'épisode</span>
+                          <span className="label-required">*</span>
+                        </label>
                         <input
                           type="number"
                           name="numero_episode"
                           value={formEpisode.numero_episode}
                           onChange={gererChangementEpisode}
                           required
+                          className="input-modern"
                         />
                       </div>
-                      <div className="form-group">
-                        <label>Titre de l'épisode *</label>
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Titre de l'épisode</span>
+                          <span className="label-required">*</span>
+                        </label>
                         <input
                           type="text"
                           name="titre"
                           value={formEpisode.titre}
                           onChange={gererChangementEpisode}
                           required
+                          className="input-modern"
+                          placeholder="Titre de l'épisode"
                         />
                       </div>
-                      <div className="form-group">
-                        <label>Durée (minutes)</label>
+                      <div className="form-group-modern">
+                        <label>
+                          <span className="label-text">Durée (minutes)</span>
+                        </label>
                         <input
                           type="number"
                           name="duree"
                           value={formEpisode.duree}
                           onChange={gererChangementEpisode}
+                          className="input-modern"
+                          placeholder="45"
                         />
                       </div>
                     </div>
 
-                    <div className="form-group full">
-                      <label>Description</label>
+                    <div className="form-group-modern full-width">
+                      <label>
+                        <span className="label-text">Description</span>
+                      </label>
                       <textarea
                         name="description"
                         value={formEpisode.description}
                         onChange={gererChangementEpisode}
                         rows="3"
+                        className="input-modern"
+                        placeholder="Décrivez l'épisode..."
                       />
                     </div>
 
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Vidéo VO (Version Originale)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierEpisode(e, 'video_vo')}
-                        />
+                    <div className="form-grid">
+                      <div className="form-group-modern full-width">
+                        <label className="file-input-label">
+                          <span className="label-text">Vidéo VO (Version Originale)</span>
+                          <div className="file-input-wrapper">
+                            <input
+                              type="file"
+                              accept="video/*"
+                              onChange={(e) => gererSelectionFichierEpisode(e, 'video_vo')}
+                            />
+                            <div className="file-input-placeholder">
+                              <span>📁 Cliquez pour sélectionner</span>
+                            </div>
+                          </div>
+                        </label>
                       </div>
-                      <div className="form-group">
-                        <label>Vidéo VF (Version Française)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierEpisode(e, 'video_vf')}
-                        />
+                      <div className="form-group-modern full-width">
+                        <label className="file-input-label">
+                          <span className="label-text">Vidéo VF (Version Française)</span>
+                          <div className="file-input-wrapper">
+                            <input
+                              type="file"
+                              accept="video/*"
+                              onChange={(e) => gererSelectionFichierEpisode(e, 'video_vf')}
+                            />
+                            <div className="file-input-placeholder">
+                              <span>📁 Cliquez pour sélectionner</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                      <div className="form-group-modern full-width">
+                        <label className="file-input-label">
+                          <span className="label-text">Bande Annonce (Vidéo)</span>
+                          <div className="file-input-wrapper">
+                            <input
+                              type="file"
+                              accept="video/*"
+                              onChange={(e) => gererSelectionFichierEpisode(e, 'bande_annonce')}
+                            />
+                            <div className="file-input-placeholder">
+                              <span>📁 Cliquez pour sélectionner</span>
+                            </div>
+                          </div>
+                        </label>
                       </div>
                     </div>
 
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Bande Annonce (Vidéo)</label>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={(e) => gererSelectionFichierEpisode(e, 'bande_annonce')}
-                        />
-                      </div>
+                    <div className="form-actions-modern">
+                      <button type="submit" className="btn btn-success-modern">
+                        ✓ Ajouter l'épisode
+                      </button>
                     </div>
-
-                    <button type="submit" className="btn btn-success">
-                      ✓ Ajouter l'épisode
-                    </button>
                   </form>
                 </div>
 
                 {/* Liste séries */}
                 <div className="admin-list">
-                  <h3>📺 Séries existantes</h3>
+                  <h3 className="section-title">Séries existantes</h3>
                   {loadingSeries ? (
-                    <p>Chargement...</p>
+                    <div className="loading-spinner"></div>
                   ) : series.length === 0 ? (
-                    <p className="empty">Aucune série trouvée</p>
+                    <div className="empty-state">
+                      <div className="empty-icon">📺</div>
+                      <p>Aucune série n'a été ajoutée pour le moment</p>
+                    </div>
                   ) : (
-                    <div className="series-table">
+                    <div className="content-grid-modern">
                       {series.map(serie => (
-                        <div key={serie.id_serie} className="serie-row">
-                          <div className="serie-info">
-                            <h4>{serie.titre}</h4>
-                            <p>{serie.description?.substring(0, 100)}...</p>
-                            <span className="badge">{serie.categorie || 'Sans catégorie'}</span>
-                            <span className="badge">{serie.pays || 'Pays'}</span>
+                        <div key={serie.id_serie} className="content-card-modern">
+                          <div className="card-image">
+                            <img src={serie.affiche || '/placeholder.jpg'} alt={serie.titre} />
+                            <div className="overlay-actions">
+                              <button 
+                                className="btn-icon-action"
+                                onClick={() => ouvrirModalModifierSerie(serie)}
+                                title="Modifier"
+                              >
+                                ✎
+                              </button>
+                              <button
+                                className="btn-icon-action btn-delete"
+                                onClick={() => supprimerSerie(serie.id_serie)}
+                                title="Supprimer"
+                              >
+                                🗑️
+                              </button>
+                            </div>
                           </div>
-                          <div className="serie-actions">
-                            <button 
-                              className="btn btn-edit"
-                              onClick={() => ouvrirModalModifierSerie(serie)}
-                            >
-                              ✎ Modifier
-                            </button>
-                            <button
-                              className="btn btn-delete"
-                              onClick={() => supprimerSerie(serie.id_serie)}
-                            >
-                              🗑️ Supprimer
-                            </button>
+                          <div className="card-content">
+                            <h4 className="card-title">{serie.titre}</h4>
+                            <p className="card-description">{serie.description?.substring(0, 80)}...</p>
+                            <div className="card-meta">
+                              <span className="badge">{serie.categorie || 'Sans catégorie'}</span>
+                              <span className="badge">{serie.pays || 'Pays'}</span>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -1275,9 +1453,9 @@ const Admin = () => {
         {/* Utilisateurs */}
         {activeTab === 'users' && (
           <div className="tab-content">
-            <h2>👥 Gestion des Utilisateurs</h2>
+            <h2 className="section-header-modern">Gestion des Utilisateurs</h2>
             
-            <div className="search-bar">
+            <div className="search-bar-modern">
               <input
                 type="text"
                 placeholder="Rechercher par nom ou email..."
@@ -1287,12 +1465,15 @@ const Admin = () => {
             </div>
 
             {loadingUsers ? (
-              <p>Chargement...</p>
+              <div className="loading-spinner"></div>
             ) : filtrerUtilisateurs.length === 0 ? (
-              <p className="empty">Aucun utilisateur trouvé</p>
+              <div className="empty-state">
+                <div className="empty-icon">👥</div>
+                <p>Aucun utilisateur trouvé</p>
+              </div>
             ) : (
-              <div className="users-table">
-                <table>
+              <div className="table-container-modern">
+                <table className="data-table-modern">
                   <thead>
                     <tr>
                       <th>Nom</th>
@@ -1304,22 +1485,29 @@ const Admin = () => {
                   <tbody>
                     {filtrerUtilisateurs.map(user => (
                       <tr key={user.id_utilisateur}>
-                        <td>{user.nom}</td>
+                        <td>
+                          <div className="user-avatar">{user.nom.charAt(0).toUpperCase()}</div>
+                          {user.nom}
+                        </td>
                         <td>{user.courriel}</td>
                         <td>{new Date(user.date_inscription).toLocaleDateString('fr-FR')}</td>
                         <td>
-                          <button 
-                            className="btn btn-edit"
-                            onClick={() => ouvrirModalModifierUtilisateur(user)}
-                          >
-                            ✎ Modifier
-                          </button>
-                          <button
-                            className="btn btn-delete"
-                            onClick={() => supprimerUtilisateur(user.id_utilisateur)}
-                          >
-                            🗑️ Supprimer
-                          </button>
+                          <div className="action-buttons">
+                            <button 
+                              className="btn-icon-small"
+                              onClick={() => ouvrirModalModifierUtilisateur(user)}
+                              title="Modifier"
+                            >
+                              ✎
+                            </button>
+                            <button
+                              className="btn-icon-small btn-delete"
+                              onClick={() => supprimerUtilisateur(user.id_utilisateur)}
+                              title="Supprimer"
+                            >
+                              🗑️
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -1333,15 +1521,18 @@ const Admin = () => {
         {/* Paiements */}
         {activeTab === 'payments' && (
           <div className="tab-content">
-            <h2>💳 Gestion des Paiements</h2>
+            <h2 className="section-header-modern">Gestion des Paiements</h2>
             
             {loadingPayments ? (
-              <p>Chargement...</p>
+              <div className="loading-spinner"></div>
             ) : payments.length === 0 ? (
-              <p className="empty">Aucun paiement trouvé</p>
+              <div className="empty-state">
+                <div className="empty-icon">💳</div>
+                <p>Aucun paiement trouvé</p>
+              </div>
             ) : (
-              <div className="payments-table">
-                <table>
+              <div className="table-container-modern">
+                <table className="data-table-modern">
                   <thead>
                     <tr>
                       <th>ID</th>
@@ -1355,12 +1546,12 @@ const Admin = () => {
                   <tbody>
                     {payments.map(payment => (
                       <tr key={payment.id_paiement}>
-                        <td>#{payment.id_paiement}</td>
+                        <td><span className="id-badge">#{payment.id_paiement}</span></td>
                         <td>{payment.id_utilisateur}</td>
-                        <td>${payment.montant}</td>
+                        <td><span className="amount-badge">${payment.montant}</span></td>
                         <td>{payment.methode}</td>
                         <td>
-                          <span className={`badge-status ${payment.statut.toLowerCase()}`}>
+                          <span className={`status-badge status-${payment.statut.toLowerCase()}`}>
                             {payment.statut}
                           </span>
                         </td>
@@ -1377,31 +1568,35 @@ const Admin = () => {
         {/* Publications */}
         {activeTab === 'publications' && (
           <div className="tab-content">
-            <h2>📰 Modération des Publications</h2>
+            <h2 className="section-header-modern">Modération des Publications</h2>
             {loadingPublications ? (
-              <p>Chargement...</p>
+              <div className="loading-spinner"></div>
             ) : publications.length === 0 ? (
-              <p className="empty">Aucune publication en attente</p>
+              <div className="empty-state">
+                <div className="empty-icon">📰</div>
+                <p>Aucune publication en attente de modération</p>
+              </div>
             ) : (
-              <div className="publications-list">
+              <div className="publications-grid-modern">
                 {publications.map(pub => (
-                  <div key={pub.id_publication} className="publication-card">
+                  <div key={pub.id_publication} className="publication-card-modern">
                     <div className="publication-header">
-                      <div>
-                        <h4>#{pub.id_publication} • {pub.auteur || 'Auteur inconnu'}</h4>
-                        <span className="badge">{new Date(pub.date_ajout).toLocaleString('fr-FR')}</span>
-                      </div>
-                      <div className="pub-actions">
-                        <button className="btn btn-success" onClick={() => validerPublication(pub.id_publication)}>✓ Valider</button>
-                        <button className="btn btn-delete" onClick={() => supprimerPublication(pub.id_publication)}>🗑️ Supprimer</button>
+                      <div className="publication-meta">
+                        <h4 className="publication-id">Publication #{pub.id_publication}</h4>
+                        <span className="publication-author">{pub.auteur || 'Auteur inconnu'}</span>
+                        <span className="publication-date">{new Date(pub.date_ajout).toLocaleString('fr-FR')}</span>
                       </div>
                     </div>
                     {pub.image && (
                       <div className="publication-image">
-                        <img src={pub.image} alt="publication" />
+                        <img src={pub.image} alt="Publication" />
                       </div>
                     )}
                     <p className="publication-content">{pub.contenu}</p>
+                    <div className="pub-actions-modern">
+                      <button className="btn btn-approve" onClick={() => validerPublication(pub.id_publication)}>✓ Valider</button>
+                      <button className="btn btn-reject" onClick={() => supprimerPublication(pub.id_publication)}>✕ Rejeter</button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1416,25 +1611,33 @@ const Admin = () => {
         <div className="modal-overlay" onClick={() => setShowModalModifierFilm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>✎ Modifier le film</h3>
+              <h3>Modifier le film</h3>
               <button className="modal-close" onClick={() => setShowModalModifierFilm(false)}>✕</button>
             </div>
             <form onSubmit={modifierFilm} className="modal-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Titre *</label>
+              <div className="form-grid">
+                <div className="form-group-modern full-width">
+                  <label>
+                    <span className="label-text">Titre</span>
+                    <span className="label-required">*</span>
+                  </label>
                   <input
                     type="text"
                     value={formModifierFilm.titre}
                     onChange={(e) => setFormModifierFilm({ ...formModifierFilm, titre: e.target.value })}
                     required
+                    className="input-modern"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Catégorie *</label>
+                <div className="form-group-modern">
+                  <label>
+                    <span className="label-text">Catégorie</span>
+                    <span className="label-required">*</span>
+                  </label>
                   <select
                     value={formModifierFilm.categorie}
                     onChange={(e) => setFormModifierFilm({ ...formModifierFilm, categorie: e.target.value })}
+                    className="input-modern"
                   >
                     <option value="">Sélectionner</option>
                     {categories.map(cat => (
@@ -1444,44 +1647,54 @@ const Admin = () => {
                     ))}
                   </select>
                 </div>
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Durée (minutes)</label>
+                <div className="form-group-modern">
+                  <label>
+                    <span className="label-text">Durée (min)</span>
+                  </label>
                   <input
                     type="number"
                     value={formModifierFilm.duree}
                     onChange={(e) => setFormModifierFilm({ ...formModifierFilm, duree: e.target.value })}
+                    className="input-modern"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Date de sortie</label>
+                <div className="form-group-modern">
+                  <label>
+                    <span className="label-text">Date de sortie</span>
+                  </label>
                   <input
                     type="date"
                     value={formModifierFilm.date_sortie}
                     onChange={(e) => setFormModifierFilm({ ...formModifierFilm, date_sortie: e.target.value })}
+                    className="input-modern"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Pays</label>
+                <div className="form-group-modern">
+                  <label>
+                    <span className="label-text">Pays</span>
+                  </label>
                   <input
                     type="text"
                     value={formModifierFilm.pays}
                     onChange={(e) => setFormModifierFilm({ ...formModifierFilm, pays: e.target.value })}
+                    className="input-modern"
                   />
                 </div>
               </div>
-              <div className="form-group full">
-                <label>Description</label>
+              <div className="form-group-modern full-width">
+                <label>
+                  <span className="label-text">Description</span>
+                </label>
                 <textarea
                   value={formModifierFilm.description}
                   onChange={(e) => setFormModifierFilm({ ...formModifierFilm, description: e.target.value })}
                   rows="4"
+                  className="input-modern"
                 />
               </div>
               <div className="modal-actions">
-                <button type="submit" className="btn btn-success">✓ Enregistrer</button>
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModalModifierFilm(false)}>✕ Annuler</button>
+                <button type="submit" className="btn btn-success-modern">✓ Enregistrer</button>
+                <button type="button" className="btn btn-secondary-modern" onClick={() => setShowModalModifierFilm(false)}>✕ Annuler</button>
               </div>
             </form>
           </div>
@@ -1493,25 +1706,33 @@ const Admin = () => {
         <div className="modal-overlay" onClick={() => setShowModalModifierSerie(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>✎ Modifier la série</h3>
+              <h3>Modifier la série</h3>
               <button className="modal-close" onClick={() => setShowModalModifierSerie(false)}>✕</button>
             </div>
             <form onSubmit={modifierSerie} className="modal-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Titre *</label>
+              <div className="form-grid">
+                <div className="form-group-modern full-width">
+                  <label>
+                    <span className="label-text">Titre</span>
+                    <span className="label-required">*</span>
+                  </label>
                   <input
                     type="text"
                     value={formModifierSerie.titre}
                     onChange={(e) => setFormModifierSerie({ ...formModifierSerie, titre: e.target.value })}
                     required
+                    className="input-modern"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Catégorie *</label>
+                <div className="form-group-modern">
+                  <label>
+                    <span className="label-text">Catégorie</span>
+                    <span className="label-required">*</span>
+                  </label>
                   <select
                     value={formModifierSerie.categorie}
                     onChange={(e) => setFormModifierSerie({ ...formModifierSerie, categorie: e.target.value })}
+                    className="input-modern"
                   >
                     <option value="">Sélectionner</option>
                     {categories.map(cat => (
@@ -1521,26 +1742,32 @@ const Admin = () => {
                     ))}
                   </select>
                 </div>
-                <div className="form-group">
-                  <label>Pays</label>
+                <div className="form-group-modern">
+                  <label>
+                    <span className="label-text">Pays</span>
+                  </label>
                   <input
                     type="text"
                     value={formModifierSerie.pays}
                     onChange={(e) => setFormModifierSerie({ ...formModifierSerie, pays: e.target.value })}
+                    className="input-modern"
                   />
                 </div>
               </div>
-              <div className="form-group full">
-                <label>Description</label>
+              <div className="form-group-modern full-width">
+                <label>
+                  <span className="label-text">Description</span>
+                </label>
                 <textarea
                   value={formModifierSerie.description}
                   onChange={(e) => setFormModifierSerie({ ...formModifierSerie, description: e.target.value })}
                   rows="4"
+                  className="input-modern"
                 />
               </div>
               <div className="modal-actions">
-                <button type="submit" className="btn btn-success">✓ Enregistrer</button>
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModalModifierSerie(false)}>✕ Annuler</button>
+                <button type="submit" className="btn btn-success-modern">✓ Enregistrer</button>
+                <button type="button" className="btn btn-secondary-modern" onClick={() => setShowModalModifierSerie(false)}>✕ Annuler</button>
               </div>
             </form>
           </div>
@@ -1552,31 +1779,39 @@ const Admin = () => {
         <div className="modal-overlay" onClick={() => setShowModalModifierUtilisateur(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>✎ Modifier l'utilisateur</h3>
+              <h3>Modifier l'utilisateur</h3>
               <button className="modal-close" onClick={() => setShowModalModifierUtilisateur(false)}>✕</button>
             </div>
             <form onSubmit={modifierUtilisateur} className="modal-form">
-              <div className="form-group">
-                <label>Nom *</label>
+              <div className="form-group-modern">
+                <label>
+                  <span className="label-text">Nom</span>
+                  <span className="label-required">*</span>
+                </label>
                 <input
                   type="text"
                   value={formModifierUtilisateur.nom}
                   onChange={(e) => setFormModifierUtilisateur({ ...formModifierUtilisateur, nom: e.target.value })}
                   required
+                  className="input-modern"
                 />
               </div>
-              <div className="form-group">
-                <label>Email *</label>
+              <div className="form-group-modern">
+                <label>
+                  <span className="label-text">Email</span>
+                  <span className="label-required">*</span>
+                </label>
                 <input
                   type="email"
                   value={formModifierUtilisateur.courriel}
                   onChange={(e) => setFormModifierUtilisateur({ ...formModifierUtilisateur, courriel: e.target.value })}
                   required
+                  className="input-modern"
                 />
               </div>
               <div className="modal-actions">
-                <button type="submit" className="btn btn-success">✓ Enregistrer</button>
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModalModifierUtilisateur(false)}>✕ Annuler</button>
+                <button type="submit" className="btn btn-success-modern">✓ Enregistrer</button>
+                <button type="button" className="btn btn-secondary-modern" onClick={() => setShowModalModifierUtilisateur(false)}>✕ Annuler</button>
               </div>
             </form>
           </div>

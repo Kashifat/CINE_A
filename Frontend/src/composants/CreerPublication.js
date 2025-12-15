@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import publicationService from '../services/publicationService';
 import uploadService from '../services/uploadService';
+import notificationService from '../services/notificationService';
 import './CreerPublication.css';
 
 const CreerPublication = ({ onPublicationCreee }) => {
-  const [titre, setTitre] = useState('');
   const [contenu, setContenu] = useState('');
   const [image, setImage] = useState('');
   const [apercu, setApercu] = useState(null);
   const [fichierSelectionne, setFichierSelectionne] = useState(null);
   const [chargement, setChargement] = useState(false);
   const [uploadEnCours, setUploadEnCours] = useState(false);
-  const [message, setMessage] = useState({ texte: '', type: '' });
 
   const handleImageChange = async (e) => {
     const fichier = e.target.files?.[0];
@@ -29,7 +28,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
 
   const handleUploadImage = async () => {
     if (!fichierSelectionne) {
-      setMessage({ texte: 'Sélectionnez une image', type: 'error' });
+      notificationService.showWarning('Sélectionnez une image');
       return;
     }
 
@@ -39,9 +38,9 @@ const CreerPublication = ({ onPublicationCreee }) => {
 
     if (resultat.succes) {
       setImage(resultat.data.url);
-      setMessage({ texte: 'Image uploadée ✅', type: 'success' });
+      notificationService.showSuccess('Image uploadée avec succès ! 🖼️');
     } else {
-      setMessage({ texte: resultat.erreur, type: 'error' });
+      notificationService.showError(resultat.erreur || 'Erreur lors de l\'upload');
     }
   };
 
@@ -55,17 +54,15 @@ const CreerPublication = ({ onPublicationCreee }) => {
     e.preventDefault();
 
     if (!contenu.trim()) {
-      setMessage({ texte: 'Le contenu est requis', type: 'error' });
+      notificationService.showWarning('Le contenu est requis');
       return;
     }
 
     setChargement(true);
-    setMessage({ texte: '', type: '' });
 
     const utilisateur = JSON.parse(localStorage.getItem('utilisateur'));
     const donnees = {
       id_utilisateur: utilisateur.id_utilisateur || utilisateur.id,
-      titre: titre.trim() || null,
       contenu: contenu.trim(),
       image: image || null
     };
@@ -73,11 +70,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
     const result = await publicationService.creerPublication(donnees);
 
     if (result.succes) {
-      setMessage({ 
-        texte: 'Publication créée ! En attente de modération.', 
-        type: 'success' 
-      });
-      setTitre('');
+      notificationService.showSuccess('Publication créée avec succès ! 🎉');
       setContenu('');
       setImage('');
       setApercu(null);
@@ -87,7 +80,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
         onPublicationCreee();
       }
     } else {
-      setMessage({ texte: result.erreur, type: 'error' });
+      notificationService.showError(result.erreur || 'Erreur lors de la création');
     }
 
     setChargement(false);
@@ -97,23 +90,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
     <div className="creer-publication">
       <h2>Créer une publication</h2>
       
-      {message.texte && (
-        <div className={`message message-${message.type}`}>
-          {message.texte}
-        </div>
-      )}
-
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <input
-            type="text"
-            placeholder="Titre (optionnel)"
-            value={titre}
-            onChange={(e) => setTitre(e.target.value)}
-            className="form-input"
-          />
-        </div>
-
         <div className="form-group">
           <textarea
             placeholder="Qu'avez-vous en tête ?"

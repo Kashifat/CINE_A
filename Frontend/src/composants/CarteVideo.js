@@ -1,24 +1,67 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CarteVideo.css';
+import { useAuth } from '../contexte/AuthContext';
+import { useFavoris } from '../contexte/FavorisContext';
 
-const CarteVideo = ({ film }) => {
+const CarteVideo = ({ film, estFavoriInitial = false }) => {
   const navigate = useNavigate();
+  const { utilisateur } = useAuth();
+  const { estFavori, ajouter, retirer } = useFavoris();
+  const [enCours, setEnCours] = useState(false);
 
-  // Détecter si c'est un film ou une série
-  const isFilm = film.id_film || !film.id_serie;
-  const isSerie = film.id_serie && !film.id_film;
+  // Détecter si c'est un film ou une série basé sur la propriété 'type' ou les IDs
+  const isFilm = film.type === 'Film' || (film.id_film && !film.id_serie);
+  const isSerie = film.type === 'Serie' || (film.id_serie && !film.id_film);
+
+  // Vérifier si c'est un favori en utilisant le contexte
+  const isFavorited = useMemo(() => {
+    if (isFilm && film.id_film) {
+      return estFavori(film.id_film, null);
+    }
+    // Pour les séries, on ne stocke pas de favoris pour le moment
+    return false;
+  }, [estFavori, film, isFilm]);
 
   const handleClick = () => {
-    if (isFilm) {
+    if (isFilm && film.id_film) {
       navigate(`/lecture/${film.id_film}`);
-    } else if (isSerie) {
+    } else if (isSerie && film.id_serie) {
       navigate(`/serie/${film.id_serie}`);
     }
   };
 
+  const handleBandeAnnonce = (e) => {
+    e.stopPropagation(); // Empêcher la propagation au parent
+    if (isFilm && film.id_film) {
+      navigate(`/bande-annonce/film/${film.id_film}`);
+    } else if (isSerie && film.id_serie) {
+      navigate(`/bande-annonce/serie/${film.id_serie}`);
+    }
+  };
+
+  const handleToggleFavori = async (e) => {
+    e.stopPropagation();
+    if (!utilisateur) return;
+    if (!isFilm) return; // Seuls les films peuvent être favoris pour l'instant
+    try {
+      setEnCours(true);
+      const id_utilisateur = utilisateur.id_utilisateur || utilisateur.id;
+      
+      if (isFavorited) {
+        // Retirer du favori
+        await retirer(id_utilisateur, film.id_film, null);
+      } else {
+        // Ajouter au favori
+        await ajouter(id_utilisateur, film.id_film, null);
+      }
+    } finally {
+      setEnCours(false);
+    }
+  };
+
   return (
-    <div className="carte-video" onClick={handleClick}>
+    <div className="carte-video">
       <div className="carte-image">
         {film.affiche ? (
           <img src={film.affiche} alt={film.titre} />
@@ -28,7 +71,20 @@ const CarteVideo = ({ film }) => {
           </div>
         )}
         <div className="carte-overlay">
-          <button className="btn-play">▶ {isSerie ? 'Regarder' : 'Lecture'}</button>
+          <button className="btn-play" onClick={handleClick}>▶ {isSerie ? 'Regarder' : 'Lecture'}</button>
+          {film.bande_annonce && (
+            <button 
+              className="btn-bande-annonce" 
+              onClick={handleBandeAnnonce}
+            >
+              🎬 Bande Annonce
+            </button>
+          )}
+          {utilisateur && isFilm && (
+            <button className="btn-favori" onClick={handleToggleFavori} disabled={enCours}>
+              {enCours ? '…' : isFavorited ? '♥ Retirer' : '♡ Favori'}
+            </button>
+          )}
           <div className="carte-info">
             <p className="note">⭐ {film.note || 'N/A'}</p>
             <p className="duree">{film.duree || 'N/A'} {isSerie ? 'saisons' : 'min'}</p>

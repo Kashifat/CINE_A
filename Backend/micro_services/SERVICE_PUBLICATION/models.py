@@ -71,7 +71,8 @@ def lister_publications(utilisateur_id: Optional[int] = None) -> List[Dict]:
                     p.date_ajout, 
                     p.statut,
                     COALESCE(u.nom, a.nom, 'Utilisateur') as utilisateur_nom,
-                    u.courriel as utilisateur_email
+                    u.courriel as utilisateur_email,
+                    u.photo_profil as utilisateur_photo
                 FROM publication p
                 LEFT JOIN utilisateurs u ON p.id_utilisateur = u.id_utilisateur
                 LEFT JOIN administrateurs a ON p.id_utilisateur = a.id_admin
@@ -88,7 +89,8 @@ def lister_publications(utilisateur_id: Optional[int] = None) -> List[Dict]:
                     p.date_ajout, 
                     p.statut,
                     COALESCE(u.nom, a.nom, 'Utilisateur') as utilisateur_nom,
-                    u.courriel as utilisateur_email
+                    u.courriel as utilisateur_email,
+                    u.photo_profil as utilisateur_photo
                 FROM publication p
                 LEFT JOIN utilisateurs u ON p.id_utilisateur = u.id_utilisateur
                 LEFT JOIN administrateurs a ON p.id_utilisateur = a.id_admin

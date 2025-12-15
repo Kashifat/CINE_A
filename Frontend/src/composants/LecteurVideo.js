@@ -1,7 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './LecteurVideo.css';
 
-const LecteurVideo = ({ videoUrl, onProgressUpdate }) => {
+// ✅ CONVERTIR "HH:MM:SS" → SECONDES
+const timeStringToSeconds = (timeString) => {
+  if (!timeString || timeString === '00:00:00') return 0;
+  const parts = timeString.split(':');
+  const hours = parseInt(parts[0]) || 0;
+  const minutes = parseInt(parts[1]) || 0;
+  const seconds = parseInt(parts[2]) || 0;
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+// ✅ CONVERTIR SECONDES → "HH:MM:SS"
+const secondsToTimeString = (seconds) => {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
+
+const LecteurVideo = ({ videoUrl, onProgressUpdate, positionInitiale = 0 }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -9,17 +27,32 @@ const LecteurVideo = ({ videoUrl, onProgressUpdate }) => {
   const [volume, setVolume] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Mettre à jour la progression toutes les 30 secondes
+  // ✅ SAUVEGARDER LA POSITION TOUTES LES 30 SECONDES
   useEffect(() => {
     const interval = setInterval(() => {
-      if (isPlaying && onProgressUpdate) {
-        const time = formatTime(currentTime);
+      if (onProgressUpdate && videoRef.current) {
+        const time = secondsToTimeString(videoRef.current.currentTime);
+        console.log(`📍 Position sauvegardée: ${time}`);
         onProgressUpdate(time);
       }
     }, 30000); // 30 secondes
 
     return () => clearInterval(interval);
-  }, [isPlaying, currentTime, onProgressUpdate]);
+  }, [onProgressUpdate]);
+
+  // ✅ SAUVEGARDER LA POSITION QUAND L'USER QUITTE LA PAGE
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (onProgressUpdate && videoRef.current) {
+        const time = secondsToTimeString(videoRef.current.currentTime);
+        console.log(`📍 Position finale sauvegardée: ${time}`);
+        onProgressUpdate(time);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [onProgressUpdate]);
 
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
@@ -48,6 +81,12 @@ const LecteurVideo = ({ videoUrl, onProgressUpdate }) => {
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
+      
+      // ✅ REPRENDRE À LA POSITION SAUVEGARDÉE
+      if (positionInitiale > 0) {
+        videoRef.current.currentTime = positionInitiale;
+        console.log(`▶️ Reprise à: ${secondsToTimeString(positionInitiale)}`);
+      }
     }
   };
 

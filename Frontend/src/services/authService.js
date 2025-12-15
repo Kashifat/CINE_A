@@ -80,6 +80,19 @@ const authService = {
     }
   },
 
+  // Obtenir profil complet avec statistiques
+  obtenirProfilComplet: async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/utilisateurs/${userId}/profil`, getConfig());
+      return { succes: true, data: response.data };
+    } catch (error) {
+      return { 
+        succes: false, 
+        erreur: error.response?.data?.erreur || 'Erreur lors de la récupération du profil complet' 
+      };
+    }
+  },
+
   // Mettre à jour profil
   mettreAJourProfil: async (userId, donnees) => {
     try {

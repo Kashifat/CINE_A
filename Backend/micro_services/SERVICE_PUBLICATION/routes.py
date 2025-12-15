@@ -6,64 +6,19 @@ from models import (
     creer_publication,
     lister_publications,
 )
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from upload_helper import save_uploaded_file
 
 publications_bp = Blueprint("publications", __name__)
-
-
-@publications_bp.route("/upload-image/", methods=["POST"])
-def upload_image():
-    """Upload une image pour une publication"""
-    if 'image' not in request.files:
-        return jsonify({"erreur": "Aucun fichier fourni"}), 400
-    
-    file = request.files['image']
-    if not file.filename:
-        return jsonify({"erreur": "Nom de fichier vide"}), 400
-    
-    result = save_uploaded_file(file, subfolder='images', file_type='image', prefix='publication')
-    
-    if not result.get("succes"):
-        return jsonify({"erreur": result.get("erreur")}), 400
-    
-    # Retourner l'URL construite
-    image_url = f"http://localhost:5002/media/{result['chemin_relatif']}"
-    return jsonify({
-        "succes": True,
-        "url": image_url,
-        "chemin_relatif": result['chemin_relatif']
-    }), 201
 
 
 @publications_bp.route("/", methods=["POST"])
 def api_creer_publication():
     """Créer une publication avec ou sans image"""
     
-    # Vérifier si c'est du multipart/form-data (avec fichier) ou du JSON
-    if request.content_type and 'multipart/form-data' in request.content_type:
-        # Récupérer les données du form
-        utilisateur_id = request.form.get("id_utilisateur")
-        contenu = request.form.get("contenu", "")
-        
-        image_url = None
-        if 'image' in request.files:
-            file = request.files['image']
-            if file.filename:
-                # Sauvegarder l'image
-                result = save_uploaded_file(file, subfolder='images', file_type='image', prefix='publication')
-                if result.get("succes"):
-                    image_url = f"http://localhost:5002/media/{result['chemin_relatif']}"
-                else:
-                    return jsonify({"erreur": result.get("erreur")}), 400
-    else:
-        # JSON classique
-        data = request.get_json(silent=True) or {}
-        utilisateur_id = data.get("id_utilisateur")
-        contenu = data.get("contenu", "")
-        image_url = data.get("image")  # URL déjà existante
+    # Récupérer les données (JSON uniquement maintenant, upload séparé)
+    data = request.get_json(silent=True) or {}
+    utilisateur_id = data.get("id_utilisateur")
+    contenu = data.get("contenu", "")
+    image_url = data.get("image")  # URL déjà uploadée via /upload-image
 
     try:
         pub = creer_publication(int(utilisateur_id), contenu, image_url)

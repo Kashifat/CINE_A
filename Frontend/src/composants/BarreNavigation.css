@@ -83,7 +83,15 @@
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+}
+
+.btn-dashboard .nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
 }
 
 .btn-dashboard:hover {
@@ -163,6 +171,17 @@
   color: var(--primary-color);
 }
 
+.admin-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -170,5 +189,10 @@
   
   .nav-container {
     flex-wrap: wrap;
+  }
+
+  .admin-badge {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 }

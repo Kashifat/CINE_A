@@ -22,27 +22,36 @@ const Accueil = () => {
   const chargerDonnees = async () => {
     setChargement(true);
 
-    // Charger les films tendances
-    const resultFilms = await filmsService.obtenirTendances();
-    if (resultFilms.succes) {
-      setFilmsTendances(resultFilms.data.slice(0, 6));
-    }
-
-    // Charger les séries tendances
-    const resultSeries = await filmsService.obtenirToutesSeries();
-    if (resultSeries.succes) {
-      setSeriesTendances(resultSeries.data.slice(0, 6));
-    }
-
-    // Charger l'historique si connecté
-    if (estConnecte() && utilisateur) {
-      const resultHistorique = await historiqueService.obtenirHistorique(utilisateur.id_utilisateur);
-      if (resultHistorique.succes) {
-        setHistorique(resultHistorique.data.slice(0, 6));
+    try {
+      // Charger les films tendances
+      const resultFilms = await filmsService.obtenirTendances();
+      if (resultFilms.succes) {
+        setFilmsTendances(resultFilms.data.slice(0, 6));
       }
-    }
 
-    setChargement(false);
+      // Charger les séries tendances
+      const resultSeries = await filmsService.obtenirToutesSeries();
+      if (resultSeries.succes) {
+        setSeriesTendances(resultSeries.data.slice(0, 6));
+      }
+
+      // Charger l'historique si connecté (avec gestion d'erreur)
+      if (estConnecte() && utilisateur) {
+        try {
+          const resultHistorique = await historiqueService.obtenirHistorique(utilisateur.id_utilisateur);
+          if (resultHistorique.succes) {
+            setHistorique(resultHistorique.data.slice(0, 6));
+          }
+        } catch (error) {
+          console.warn('⚠️ Service historique indisponible, continuant sans historique');
+          setHistorique([]);
+        }
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des données:', error);
+    } finally {
+      setChargement(false);
+    }
   };
 
   if (chargement) {

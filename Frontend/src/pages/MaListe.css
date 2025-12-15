@@ -1,0 +1,250 @@
+.ma-liste-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.ma-liste-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.ma-liste-subtitle {
+  font-size: 1.2rem;
+  color: #a0a0a0;
+  margin-top: 0.5rem;
+}
+
+/* État vide */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  max-width: 500px;
+  margin: 3rem auto;
+}
+
+.empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.empty-state h2 {
+  color: #fff;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #a0a0a0;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* Contenu de la liste */
+.ma-liste-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.favoris-section {
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-title .count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* Grille de films */
+.grid-films {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+/* Liste d'épisodes */
+.episodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.episode-card {
+  display: flex;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.episode-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 107, 107, 0.5);
+  transform: translateX(5px);
+}
+
+.episode-thumbnail {
+  flex-shrink: 0;
+  width: 180px;
+  height: 120px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.episode-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.episode-info {
+  flex: 1;
+}
+
+.episode-serie {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.episode-numero {
+  font-size: 0.95rem;
+  color: #ff6b6b;
+  margin-bottom: 0.5rem;
+}
+
+.episode-titre {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.episode-description {
+  color: #a0a0a0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Chargement */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ff6b6b;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  color: #a0a0a0;
+  font-size: 1.1rem;
+}
+
+/* Bouton retour */
+.btn-retour {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.btn-retour:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-3px);
+}
+
+/* Bouton principal */
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ma-liste-page {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .grid-films {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .episode-card {
+    flex-direction: column;
+  }
+
+  .episode-thumbnail {
+    width: 100%;
+    height: 150px;
+  }
+}
