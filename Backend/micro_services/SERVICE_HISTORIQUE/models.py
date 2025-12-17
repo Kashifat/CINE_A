@@ -159,7 +159,11 @@ def get_historique_utilisateur(uid):
                    COALESCE(f.titre, e.titre) as titre,
                    h.position, h.date_visionnage,
                    CASE WHEN h.id_film IS NOT NULL THEN 'film' ELSE 'episode' END as type,
-                   CASE WHEN h.id_film IS NOT NULL THEN f.affiche ELSE NULL END as affiche,
+                   CASE 
+                       WHEN h.id_film IS NOT NULL THEN f.affiche 
+                       WHEN h.id_episode IS NOT NULL THEN s.affiche
+                       ELSE NULL 
+                   END as affiche,
                    h.id_film,
                    CASE WHEN h.id_episode IS NOT NULL THEN s.id_serie ELSE NULL END as id_serie
             FROM historiques h

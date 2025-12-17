@@ -11,7 +11,7 @@ PERSIST_DIR = "storage"    # Stockage de l'index vectoriel
 # Configuration modèle IA
 DEFAULT_MODEL_TYPE = "openai"  # 'openai' ou 'ollama'
 # IMPORTANT : Si vous changez de modèle, SUPPRIMEZ le dossier `storage/` avant redémarrage.
-DEFAULT_MODEL_NAME = "gpt-5"  # Pour OpenAI: gpt-3.5-turbo, gpt-4, gpt-4-turbo, gpt-4o
+DEFAULT_MODEL_NAME = "gpt-4o"  # Pour OpenAI: gpt-3.5-turbo, gpt-4, gpt-4-turbo, gpt-4o (gpt-5 n'existe pas!)
 
 
 # Nombre de passages similaires à récupérer dans le RAG

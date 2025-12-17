@@ -38,7 +38,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
 
     if (resultat.succes) {
       setImage(resultat.data.url);
-      notificationService.showSuccess('Image uploadée avec succès ! 🖼️');
+      notificationService.showSuccess('Image uploadée avec succès ! ');
     } else {
       notificationService.showError(resultat.erreur || 'Erreur lors de l\'upload');
     }
@@ -70,7 +70,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
     const result = await publicationService.creerPublication(donnees);
 
     if (result.succes) {
-      notificationService.showSuccess('Publication créée avec succès ! 🎉');
+      notificationService.showSuccess('Publication créée avec succès ! ');
       setContenu('');
       setImage('');
       setApercu(null);
@@ -103,7 +103,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
         </div>
 
         <div className="form-group">
-          <label className="label-image">📸 Ajouter une image</label>
+          <label className="label-image"> Ajouter une image</label>
           <input
             type="file"
             accept="image/*"
@@ -121,7 +121,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
                   disabled={uploadEnCours}
                   className="btn-upload"
                 >
-                  {uploadEnCours ? '⏳ Upload...' : '⬆️ Uploader'}
+                  {uploadEnCours ? ' Upload...' : '⬆ Tèleverser'}
                 </button>
                 {image && (
                   <button
@@ -138,7 +138,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
           
           {image && !apercu && (
             <div className="image-confirmee">
-              ✅ Image uploadée
+               Image uploadée
               <button
                 type="button"
                 onClick={handleRemoveImage}
@@ -155,7 +155,7 @@ const CreerPublication = ({ onPublicationCreee }) => {
           className="btn-publier"
           disabled={chargement}
         >
-          {chargement ? 'Publication...' : '📤 Publier'}
+          {chargement ? 'Publication...' : ' Publier'}
         </button>
       </form>
     </div>

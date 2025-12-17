@@ -93,7 +93,7 @@ const TV = () => {
   return (
     <div className="tv-page">
       <div className="tv-header">
-        <h1>📺 Chaînes TV</h1>
+        <h1> Chaînes TV</h1>
         <p>{filteredChannels.length} chaînes disponibles</p>
       </div>
 

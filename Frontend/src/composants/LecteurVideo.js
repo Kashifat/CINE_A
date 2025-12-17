@@ -32,7 +32,7 @@ const LecteurVideo = ({ videoUrl, onProgressUpdate, positionInitiale = 0 }) => {
     const interval = setInterval(() => {
       if (onProgressUpdate && videoRef.current) {
         const time = secondsToTimeString(videoRef.current.currentTime);
-        console.log(`📍 Position sauvegardée: ${time}`);
+        console.log(` Position sauvegardée: ${time}`);
         onProgressUpdate(time);
       }
     }, 30000); // 30 secondes
@@ -45,7 +45,7 @@ const LecteurVideo = ({ videoUrl, onProgressUpdate, positionInitiale = 0 }) => {
     const handleBeforeUnload = () => {
       if (onProgressUpdate && videoRef.current) {
         const time = secondsToTimeString(videoRef.current.currentTime);
-        console.log(`📍 Position finale sauvegardée: ${time}`);
+        console.log(` Position finale sauvegardée: ${time}`);
         onProgressUpdate(time);
       }
     };
@@ -129,6 +129,7 @@ const LecteurVideo = ({ videoUrl, onProgressUpdate, positionInitiale = 0 }) => {
   return (
     <div className="lecteur-video">
       <video
+       controlsList="nodownload"
         ref={videoRef}
         src={videoUrl}
         onTimeUpdate={handleTimeUpdate}

@@ -40,7 +40,7 @@ const Communaute = () => {
     if (window.confirm('Supprimer cette publication ?')) {
       const result = await publicationService.supprimerPublication(id);
       if (result.succes) {
-        notificationService.showSuccess('Publication supprimée avec succès 🗑️');
+        notificationService.showSuccess('Publication supprimée avec succès ');
         chargerPublications();
       } else {
         notificationService.showError(result.erreur || 'Erreur lors de la suppression');
@@ -60,7 +60,7 @@ const Communaute = () => {
     <div className="page-container communaute-page">
       <div className="communaute-header-actions">
         <button onClick={() => navigate('/')} className="btn-retour">← Retour</button>
-        <h1 className="section-title">👥 Fil d'actualité</h1>
+        <h1 className="section-title"> Fil d'actualité</h1>
         <button 
           onClick={chargerPublications} 
           className="btn-refresh-feed"

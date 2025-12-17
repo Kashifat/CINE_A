@@ -2142,3 +2142,71 @@
     width: 100%;
   }
 }
+/* ============================
+   ADMIN — SCOPE ANTI-CONFLITS
+   (évite de casser les autres pages)
+============================ */
+
+/* Boutons génériques: limités à la page admin */
+.admin-page .btn,
+.admin-page .btn-primary,
+.admin-page .btn-secondary,
+.admin-page .btn-success,
+.admin-page .btn-edit,
+.admin-page .btn-delete,
+.admin-page .btn-retour-admin {
+  font-family: inherit;
+}
+
+/* IMPORTANT: on scope les "btn-primary" etc. */
+.admin-page .btn-primary { background: #e50914; color: #fff; }
+.admin-page .btn-primary:hover { background: #c40812; transform: translateY(-2px); }
+
+.admin-page .btn-secondary {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+}
+.admin-page .btn-secondary:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.25);
+}
+
+.admin-page .btn-success { background:#28a745; color:#fff; }
+.admin-page .btn-success:hover { background:#218838; transform: translateY(-2px); }
+
+.admin-page .btn-edit { background:#007bff; color:#fff; }
+.admin-page .btn-edit:hover { background:#0056b3; }
+
+.admin-page .btn-delete { background:#ff4444; color:#fff; }
+.admin-page .btn-delete:hover { background:#dd0000; }
+
+/* Spinner: scope */
+.admin-page .spinner{
+  border: 4px solid rgba(255,255,255,0.12);
+  border-top-color: #e50914;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 0.9s linear infinite;
+}
+
+/* Search-bar générique: scope */
+.admin-page .search-bar,
+.admin-page .search-bar input,
+.admin-page .search-bar-modern,
+.admin-page .search-bar-modern input {
+  max-width: 100%;
+}
+
+/* Section-title générique: scope */
+.admin-page .section-title{
+  color: #fff;
+}
+
+/* Tables: scope */
+.admin-page .users-table table,
+.admin-page .payments-table table {
+  width: 100%;
+  border-collapse: collapse;
+}

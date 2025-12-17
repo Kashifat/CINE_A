@@ -1,237 +1,311 @@
-.bande-annonce-page {
-  padding-top: 80px;
+/* =========================
+   BANDE ANNONCE — CINEA PRO
+   (Scoped pour éviter conflits)
+========================= */
+.bande-annonce-page{
+  padding-top: 90px;
   position: relative;
   min-height: 100vh;
+  background:
+    radial-gradient(1000px 500px at 15% 10%, rgba(255,127,0,0.10), transparent 55%),
+    linear-gradient(180deg, rgba(26,26,26,0.60), rgba(10,10,10,0.96));
 }
 
-.btn-retour {
+/* Bouton retour (scopé) */
+.bande-annonce-page .btn-retour{
   position: fixed;
-  top: 80px;
+  top: 90px;
   left: 20px;
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+
+  background: rgba(255,255,255,0.06);
+  color: rgba(245,245,245,0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  padding: 10px 14px;
+  border-radius: 14px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 850;
+
   z-index: 100;
-  transition: background-color 0.3s;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-.btn-retour:hover {
-  background-color: #ff5252;
+.bande-annonce-page .btn-retour:hover{
+  transform: translateY(-1px);
+  background: rgba(255,127,0,0.10);
+  border-color: rgba(255,127,0,0.30);
+  color: var(--primary2);
 }
 
-.bande-annonce-container {
+/* Container */
+.bande-annonce-container{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.8rem 1.2rem;
 }
 
-.bande-annonce-header {
+/* Header */
+.bande-annonce-header{
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.8rem;
 }
 
-.bande-annonce-titre {
-  font-size: 2.5rem;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+.bande-annonce-titre{
+  font-size: 2.6rem;
+  margin-bottom: 0.9rem;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.bande-annonce-description {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  max-width: 800px;
+.bande-annonce-description{
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 850px;
   margin: 0 auto;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-.video-wrapper {
+/* Video wrapper (cinema) */
+.video-wrapper{
   position: relative;
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto 2rem;
-  background-color: #000;
-  border-radius: 12px;
+  max-width: 1050px;
+  margin: 0 auto 1.8rem;
+
+  background: #000;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.55);
 }
 
-.bande-annonce-video {
+/* légère “lueur” premium */
+.video-wrapper::before{
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  background: radial-gradient(800px 220px at 50% 0%, rgba(255,127,0,0.18), transparent 55%);
+  opacity: 0.8;
+}
+
+.bande-annonce-video{
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 12px;
+  aspect-ratio: 16/9;
+  object-fit: contain;
 }
 
-.no-bande-annonce {
+/* Etat vide */
+.no-bande-annonce{
   text-align: center;
-  padding: 4rem 2rem;
-  background-color: var(--background-light);
-  border-radius: 12px;
-  margin: 2rem auto;
-  max-width: 600px;
+  padding: 3rem 1.6rem;
+
+  background: linear-gradient(180deg, rgba(26,26,26,0.85), rgba(10,10,10,0.80));
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+
+  margin: 1.8rem auto;
+  max-width: 680px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
 }
 
-.no-bande-annonce p {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
+.no-bande-annonce p{
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
-.bande-annonce-actions {
+/* Actions */
+.bande-annonce-actions{
   display: flex;
-  gap: 1rem;
+  gap: 12px;
   justify-content: center;
-  margin: 2rem 0;
+  margin: 1.6rem 0 2rem;
   flex-wrap: wrap;
 }
 
-.btn-voir-film {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
+.btn-voir-film{
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #0a0a0a;
+  border: 1px solid rgba(255,127,0,0.55);
+
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 950;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+
+  box-shadow: 0 14px 28px rgba(255,127,0,0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
-.btn-voir-film:hover {
-  background-color: var(--secondary-color);
+.btn-voir-film:hover{
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(229, 9, 20, 0.4);
+  box-shadow: 0 18px 35px rgba(255,127,0,0.25);
+  border-color: rgba(255,165,0,0.75);
 }
 
-.btn-secondary {
-  background-color: #555;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
+.btn-secondary{
+  background: rgba(255,255,255,0.06);
+  color: rgba(245,245,245,0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 900;
   cursor: pointer;
-  transition: all 0.3s;
+
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
-.btn-secondary:hover {
-  background-color: #666;
+.btn-secondary:hover{
   transform: translateY(-2px);
+  background: rgba(255,127,0,0.10);
+  border-color: rgba(255,127,0,0.30);
 }
 
-.bande-annonce-info {
+/* Infos */
+.bande-annonce-info{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 2rem;
-  padding: 2rem;
-  background-color: var(--background-light);
-  border-radius: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 1.8rem;
+
+  padding: 18px;
+  background: linear-gradient(180deg, rgba(26,26,26,0.85), rgba(10,10,10,0.78));
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
 }
 
-.info-card {
+.info-card{
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  gap: 6px;
+  padding: 14px;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+
   text-align: center;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
-.info-label {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.info-value {
-  font-size: 1.2rem;
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.error-message {
-  text-align: center;
-  padding: 4rem 2rem;
-  background-color: var(--background-light);
-  border-radius: 12px;
-  margin: 2rem auto;
-  max-width: 600px;
-}
-
-.error-message h2 {
-  color: var(--text-primary);
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn-primary:hover {
-  background-color: var(--secondary-color);
+.info-card:hover{
   transform: translateY(-2px);
+  border-color: rgba(255,127,0,0.25);
+  background: rgba(255,127,0,0.06);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .bande-annonce-titre {
-    font-size: 1.8rem;
-  }
-
-  .bande-annonce-description {
-    font-size: 1rem;
-  }
-
-  .bande-annonce-actions {
-    flex-direction: column;
-  }
-
-  .btn-voir-film,
-  .btn-secondary {
-    width: 100%;
-  }
-
-  .bande-annonce-info {
-    grid-template-columns: 1fr;
-  }
+.info-label{
+  font-size: 0.78rem;
+  color: rgba(245,245,245,0.65);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 900;
 }
 
-/* Loading spinner */
-.loading {
+.info-value{
+  font-size: 1.1rem;
+  color: rgba(245,245,245,0.95);
+  font-weight: 950;
+}
+
+/* Error */
+.error-message{
+  text-align: center;
+  padding: 3rem 1.6rem;
+
+  background: linear-gradient(180deg, rgba(26,26,26,0.85), rgba(10,10,10,0.80));
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+
+  margin: 1.8rem auto;
+  max-width: 680px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+}
+
+.error-message h2{
+  color: rgba(245,245,245,0.95);
+  margin-bottom: 1.2rem;
+  font-size: 1.5rem;
+  font-weight: 950;
+}
+
+.btn-primary{
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #0a0a0a;
+  border: 1px solid rgba(255,127,0,0.55);
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 950;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(255,127,0,0.18);
+  border-color: rgba(255,165,0,0.75);
+}
+
+/* Loading (scopé) */
+.bande-annonce-page .loading{
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
 
-.spinner {
-  border: 4px solid rgba(255, 255, 255, 0.1);
+.bande-annonce-page .spinner{
+  border: 4px solid rgba(255,255,255,0.12);
   border-radius: 50%;
-  border-top: 4px solid var(--primary-color);
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
+  border-top: 4px solid var(--primary);
+  width: 52px;
+  height: 52px;
+  animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes spin{
+  0%{ transform: rotate(0deg); }
+  100%{ transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px){
+  .bande-annonce-container{ padding: 1.2rem 0.9rem; }
+
+  .bande-annonce-titre{ font-size: 1.9rem; }
+
+  .bande-annonce-actions{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-voir-film,
+  .btn-secondary{
+    width: 100%;
+  }
+
+  .bande-annonce-info{
+    grid-template-columns: 1fr;
+  }
+
+  .bande-annonce-page .btn-retour{
+    left: 10px;
+    top: 85px;
+  }
 }

@@ -24,6 +24,7 @@ import MaListe from './pages/MaListe';
 
 // Composants
 import BarreNavigation from './composants/BarreNavigation';
+import Footer from './composants/Footer';
 import ToastContainer from './composants/ToastContainer';
 
 // Composant pour protéger les routes usagers (non-admin)
@@ -106,6 +107,7 @@ function AppRoutes() {
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <Footer />
     </div>
   );
 }

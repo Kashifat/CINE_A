@@ -797,21 +797,21 @@ const Admin = () => {
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">🎬</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <div className="stat-value">{films.length + series.length}</div>
                   <div className="stat-label">Films & Séries</div>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">💳</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <div className="stat-value">{payments.length}</div>
                   <div className="stat-label">Paiements</div>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">📰</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <div className="stat-value">{publications.length}</div>
                   <div className="stat-label">Publications en attente</div>
@@ -832,13 +832,13 @@ const Admin = () => {
                 className={`type-tab ${contentType === 'films' ? 'active' : ''}`}
                 onClick={() => { setContentType('films'); chargerFilms(); }}
               >
-                🎥 Films
+                 Films
               </button>
               <button
                 className={`type-tab ${contentType === 'series' ? 'active' : ''}`}
                 onClick={() => { setContentType('series'); chargerSeries(); }}
               >
-                📺 Séries
+                 Séries
               </button>
             </div>
 
@@ -953,7 +953,7 @@ const Admin = () => {
                                 onChange={(e) => gererSelectionFichierFilm(e, 'affiche')}
                               />
                               <div className="file-input-placeholder">
-                                <span>📁 Cliquez pour sélectionner</span>
+                                <span> Cliquez pour sélectionner</span>
                               </div>
                             </div>
                           </label>
@@ -968,7 +968,7 @@ const Admin = () => {
                                 onChange={(e) => gererSelectionFichierFilm(e, 'bande_annonce')}
                               />
                               <div className="file-input-placeholder">
-                                <span>📁 Cliquez pour sélectionner</span>
+                                <span> Cliquez pour sélectionner</span>
                               </div>
                             </div>
                           </label>
@@ -983,7 +983,7 @@ const Admin = () => {
                                 onChange={(e) => gererSelectionFichierFilm(e, 'video_vo')}
                               />
                               <div className="file-input-placeholder">
-                                <span>📁 Cliquez pour sélectionner</span>
+                                <span> Cliquez pour sélectionner</span>
                               </div>
                             </div>
                           </label>
@@ -998,7 +998,7 @@ const Admin = () => {
                                 onChange={(e) => gererSelectionFichierFilm(e, 'video_vf')}
                               />
                               <div className="file-input-placeholder">
-                                <span>📁 Cliquez pour sélectionner</span>
+                                <span> Cliquez pour sélectionner</span>
                               </div>
                             </div>
                           </label>
@@ -1024,7 +1024,7 @@ const Admin = () => {
                     <div className="loading-spinner"></div>
                   ) : films.length === 0 ? (
                     <div className="empty-state">
-                      <div className="empty-icon">🎬</div>
+                      <div className="empty-icon"></div>
                       <p>Aucun film n'a été ajouté pour le moment</p>
                     </div>
                   ) : (
@@ -1152,7 +1152,7 @@ const Admin = () => {
                                 onChange={(e) => gererSelectionFichierSerie(e, 'affiche')}
                               />
                               <div className="file-input-placeholder">
-                                <span>📁 Cliquez pour sélectionner</span>
+                                <span> Cliquez pour sélectionner</span>
                               </div>
                             </div>
                           </label>
@@ -1167,7 +1167,7 @@ const Admin = () => {
                                 onChange={(e) => gererSelectionFichierSerie(e, 'bande_annonce')}
                               />
                               <div className="file-input-placeholder">
-                                <span>📁 Cliquez pour sélectionner</span>
+                                <span> Cliquez pour sélectionner</span>
                               </div>
                             </div>
                           </label>
@@ -1354,7 +1354,7 @@ const Admin = () => {
                               onChange={(e) => gererSelectionFichierEpisode(e, 'video_vo')}
                             />
                             <div className="file-input-placeholder">
-                              <span>📁 Cliquez pour sélectionner</span>
+                              <span> Cliquez pour sélectionner</span>
                             </div>
                           </div>
                         </label>
@@ -1369,7 +1369,7 @@ const Admin = () => {
                               onChange={(e) => gererSelectionFichierEpisode(e, 'video_vf')}
                             />
                             <div className="file-input-placeholder">
-                              <span>📁 Cliquez pour sélectionner</span>
+                              <span> Cliquez pour sélectionner</span>
                             </div>
                           </div>
                         </label>
@@ -1384,7 +1384,7 @@ const Admin = () => {
                               onChange={(e) => gererSelectionFichierEpisode(e, 'bande_annonce')}
                             />
                             <div className="file-input-placeholder">
-                              <span>📁 Cliquez pour sélectionner</span>
+                              <span> Cliquez pour sélectionner</span>
                             </div>
                           </div>
                         </label>
@@ -1406,7 +1406,7 @@ const Admin = () => {
                     <div className="loading-spinner"></div>
                   ) : series.length === 0 ? (
                     <div className="empty-state">
-                      <div className="empty-icon">📺</div>
+                      <div className="empty-icon"></div>
                       <p>Aucune série n'a été ajoutée pour le moment</p>
                     </div>
                   ) : (
@@ -1527,7 +1527,7 @@ const Admin = () => {
               <div className="loading-spinner"></div>
             ) : payments.length === 0 ? (
               <div className="empty-state">
-                <div className="empty-icon">💳</div>
+                <div className="empty-icon"></div>
                 <p>Aucun paiement trouvé</p>
               </div>
             ) : (
@@ -1573,7 +1573,7 @@ const Admin = () => {
               <div className="loading-spinner"></div>
             ) : publications.length === 0 ? (
               <div className="empty-state">
-                <div className="empty-icon">📰</div>
+                <div className="empty-icon"></div>
                 <p>Aucune publication en attente de modération</p>
               </div>
             ) : (

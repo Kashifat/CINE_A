@@ -1,4 +1,4 @@
-
+import os
 import bcrypt
 
 import pymysql
@@ -7,12 +7,12 @@ import pymysql.cursors
 # ----------------------------------------------
 # PARAMÈTRES DE CONNEXION
 # ----------------------------------------------
-DB_HOST = "localhost"
-DB_PORT = 3306
-DB_USER = "root"
-DB_PASSWORD = ""  # ⚠️ Mets ton mot de passe ici !
-DB_NAME = "cinea"
-DB_CHARSET = "utf8mb4"
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", "3306"))
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_NAME = os.getenv("DB_NAME", "cinea")
+DB_CHARSET = os.getenv("DB_CHARSET", "utf8mb4")
 
 
 # ----------------------------------------------
@@ -48,6 +48,7 @@ def hasher_mot_de_passe(mot_de_passe: str) -> str:
     """Hash un mot de passe avec bcrypt"""
     sel = bcrypt.gensalt()
     hash_mdp = bcrypt.hashpw(mot_de_passe.encode('utf-8'), sel)
+    return hash_mdp.decode('utf-8')
 
 
 # =======================================
@@ -82,7 +83,7 @@ def verify_jwt_token(token):
         return None  # Token expiré
     except jwt.InvalidTokenError:
         return None  # Token invalide
-    return hash_mdp.decode('utf-8')
+    
 
 
 def verifier_mot_de_passe(mot_de_passe: str, hash_enregistre: str) -> bool:

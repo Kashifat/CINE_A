@@ -10,14 +10,15 @@ import sys
 SERVICES = [
     ("SERVICE_AUTHENTIFICATION/service_utilisateur", 5001, "Service Utilisateur"),
     ("SERVICE_FILMS", 5002, "Service Films & Séries"),
-    ("SERVICE_HISTORIQUE", 5003, "Service Historique"),
-    ("SERVICE_COMMENTAIRE", 5004, "Service Commentaires"),
-    ("SERVICE_AVIS_FILM", 5005, "Service Avis"),
-    ("SERVICE_PAIEMENT", 5006, "Service Paiement"),
+    ("SERVICE_PAIEMENT", 5003, "Service Paiement"),
+    ("SERVICE_AUTHENTIFICATION/service_admin", 5004, "Service Admin"),
+    ("SERVICE_HISTORIQUE", 5005, "Service Historique"),
+    ("SERVICE_AVIS_FILM", 5006, "Service Avis"),
     ("SERVICE_PUBLICATION", 5007, "Service Publications"),
     ("SERVICE_REACTION_PUB", 5008, "Service Réactions"),
-    ("SERVICE_NOTIFICATION", 5009, "Service Notifications"),
-    ("SERVICE_TV", 5010, "Service TV"),
+    ("SERVICE_COMMENTAIRE", 5009, "Service Commentaires"),
+    ("SERVICE_NOTIFICATION", 5010, "Service Notifications"),
+    ("SERVICE_TV", 5011, "Service TV"),
     ("SERVICE_CHATBOT", 5012, "Service Chatbot"),
 ]
 

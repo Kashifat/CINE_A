@@ -1,0 +1,36 @@
+// Liste complète de tous les jeux disponibles
+export const games = [
+  { name: "Candy Crush", path: "/01-Candy-Crush-Game/index.html", image: "/image/1.png" },
+  { name: "Archery", path: "/02-Archery-Game/index.html", image: "/image/3.png" },
+  { name: "Speed Typing", path: "/03-Speed-Typing-Game/index.html" , image: "/image/4.png"},
+  { name: "Breakout", path: "/04-Breakout-Game/index.html", image: "/image/2.png" },
+  { name: "Minesweeper", path: "/05-Minesweeper-Game/index.html" },
+  { name: "Tower Blocks", path: "/06-Tower-Blocks/index.html" },
+  { name: "Ping Pong", path: "/07-Ping-Pong-Game/index.html" },
+  { name: "Tetris", path: "/08-Tetris-Game/index.html" },
+  { name: "Tilting Maze", path: "/09-Tilting-Maze-Game/index.html" },
+  { name: "Memory Card", path: "/10-Memory-Card-Game/index.html" },
+  { name: "Rock Paper Scissors", path: "/11-Rock-Paper-Scissors/index.html" },
+  { name: "Number Guessing", path: "/12-Type-Number-Guessing-Game/index.html" },
+  { name: "Tic Tac Toe", path: "/13-Tic-Tac-Toe/index.html" },
+  { name: "Snake", path: "/14-Snake-Game/index.html" },
+  { name: "Connect Four", path: "/15-Connect-Four-Game/index.html" },
+  { name: "Insect Catch", path: "/16-Insect-Catch-Game/index.html" },
+  { name: "Typing Challenge", path: "/17-Typing-Game/index.html" },
+  { name: "Hangman", path: "/18-Hangman-Game/index.html" },
+  { name: "Flappy Bird", path: "/19-Flappy-Bird-Game/index.html" },
+  { name: "Crossy Road", path: "/20-Crossy-Road-Game/index.html" },
+  { name: "2048", path: "/21-2048-Game/index.html" },
+  { name: "Dice Roll", path: "/22-Dice-Roll-Simulator/index.html" },
+  { name: "Shape Clicker", path: "/23-Shape-Clicker-Game/index.html" },
+  { name: "Typing Game", path: "/24-Typing-Game/index.html" },
+  { name: "Voice Guessing", path: "/25-Speak-Number-Guessing-Game/index.html" },
+  { name: "Fruit Slicer", path: "/26-Fruit-Slicer-Game/index.html" },
+  { name: "Quiz Game", path: "/27-Quiz-Game/index.html" },
+  { name: "Emoji Catcher", path: "/28-Emoji-Catcher-Game/index.html" },
+  { name: "Whack A Mole", path: "/29-Whack-A-Mole-Game/index.html" },
+  { name: "Simon Says", path: "/30-Simon-Says-Game/index.html" },
+];
+
+// Astuce: pour limiter le nombre de jeux affichés, définis REACT_APP_JEUX_LIMIT dans ton .env
+// Exemple: REACT_APP_JEUX_LIMIT=10 n'affichera que les 10 premiers jeux

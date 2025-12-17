@@ -30,6 +30,7 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
   const [commentaireEnReponse, setCommentaireEnReponse] = useState(null);
   const [modeEdition, setModeEdition] = useState(false);
   const [contenuEdite, setContenuEdite] = useState(publication.contenu || '');
+  const [repliesOpen, setRepliesOpen] = useState({});
   
   const utilisateurConnecte = JSON.parse(localStorage.getItem('utilisateur'));
   const estProprietaire = utilisateurConnecte && 
@@ -52,6 +53,17 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     // ✅ Pas de polling automatique - rafraîchissement uniquement après actions
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publication.id_publication, afficherCommentaires]);
+
+  // Fermer le sélecteur avec Echap
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') setAfficherSelecteurReactions(false);
+    };
+    if (afficherSelecteurReactions) {
+      window.addEventListener('keydown', onKey);
+    }
+    return () => window.removeEventListener('keydown', onKey);
+  }, [afficherSelecteurReactions]);
 
   const chargerReactions = async () => {
     const result = await publicationService.obtenirStatistiquesReactions(publication.id_publication);
@@ -110,6 +122,10 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
     }
   };
 
+  const toggleReplies = (id) => {
+    setRepliesOpen((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   const afficherCommentairesRecursifs = (commentaires, niveau = 0) => {
     return commentaires.map(comm => (
       <div key={comm.id_commentaire} className={`commentaire niveau-${niveau}`}>
@@ -153,9 +169,32 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
           )}
         </div>
         {comm.reponses && comm.reponses.length > 0 && (
-          <div className="reponses">
-            {afficherCommentairesRecursifs(comm.reponses, niveau + 1)}
-          </div>
+          <>
+            <button
+              type="button"
+              className="btn-toggle-reponses"
+              onClick={() => toggleReplies(comm.id_commentaire)}
+              aria-expanded={!!repliesOpen[comm.id_commentaire]}
+              aria-controls={`replies-${comm.id_commentaire}`}
+            >
+              <svg
+                className={`chevron ${repliesOpen[comm.id_commentaire] ? 'open' : ''}`}
+                xmlns="http://www.w3.org/2000/svg"
+                width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+              {repliesOpen[comm.id_commentaire] ? 'Masquer' : 'Afficher'} {comm.reponses.length} réponse{comm.reponses.length > 1 ? 's' : ''}
+            </button>
+            {repliesOpen[comm.id_commentaire] && (
+              <div id={`replies-${comm.id_commentaire}`} className="reponses">
+                {afficherCommentairesRecursifs(comm.reponses, niveau + 1)}
+              </div>
+            )}
+          </>
         )}
       </div>
     ));
@@ -292,14 +331,7 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
       <div className="interactions-barre">
         <div className="reaction-container">
           <button 
-            onClick={() => {
-              if (reactionActive) {
-                handleReaction(reactionActive); // Toggle si déjà réagi
-              } else {
-                setAfficherSelecteurReactions(!afficherSelecteurReactions);
-              }
-            }}
-            onMouseEnter={() => setAfficherSelecteurReactions(true)}
+            onClick={() => setAfficherSelecteurReactions((v) => !v)}
             className={`btn-interaction ${reactionActive ? 'active-reaction' : ''}`}
           >
             <span className="interaction-icone">
@@ -317,10 +349,12 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
           
           {/* 🎭 Sélecteur d'emojis */}
           {afficherSelecteurReactions && (
-            <div 
-              className="selecteur-reactions"
-              onMouseLeave={() => setAfficherSelecteurReactions(false)}
-            >
+            <>
+              {/* Backdrop pour cliquer à l'extérieur et fermer */}
+              <div className="reaction-backdrop" onClick={() => setAfficherSelecteurReactions(false)} />
+              <div 
+                className="selecteur-reactions"
+              >
               {Object.entries(REACTIONS_CONFIG).map(([type, config]) => (
                 <button
                   key={type}
@@ -332,7 +366,8 @@ const Publication = ({ publication, onDelete, onUpdate }) => {
                   <span className="emoji-label">{config.label}</span>
                 </button>
               ))}
-            </div>
+              </div>
+            </>
           )}
         </div>
         

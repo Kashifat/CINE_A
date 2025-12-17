@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import filmsService from '../services/filmsService';
+import categoriesService from '../services/categoriesService';
 import CarteVideo from '../composants/CarteVideo';
 import './Films.css';
 
@@ -9,21 +10,37 @@ const Films = () => {
   const [series, setSeries] = useState([]);
   const [tousLesContenus, setTousLesContenus] = useState([]);
   const [contenutAffiches, setContenuAffiches] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [categorieActive, setCategorieActive] = useState('tous');
   const [recherche, setRecherche] = useState('');
   const [chargement, setChargement] = useState(true);
   const navigate = useNavigate();
 
-  const categories = ['tous', 'action', 'comedie', 'drame', 'horreur', 'science-fiction', 'romance', 'serie', 'anime'];
-
   useEffect(() => {
     chargerContenus();
+    chargerCategories();
   }, []);
 
   useEffect(() => {
     filtrerContenus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorieActive, recherche, tousLesContenus]);
+
+  const chargerCategories = async () => {
+    const result = await categoriesService.obtenirCategories();
+    if (result.succes && result.data.length > 0) {
+      setCategories(result.data);
+    } else {
+      console.error('Erreur chargement catégories:', result.erreur);
+      // Fallback: garder une liste basique
+      const fallback = [
+        { id_categorie: 1, nom: 'Action' },
+        { id_categorie: 2, nom: 'Drame' },
+        { id_categorie: 3, nom: 'Comédie' }
+      ];
+      setCategories(fallback);
+    }
+  };
 
   const chargerContenus = async () => {
     setChargement(true);
@@ -55,9 +72,10 @@ const Films = () => {
     let contenusFiltres = [...tousLesContenus];
 
     // Filtrer par catégorie
-    if (categorieActive !== 'tous') {
+    if (categorieActive && categorieActive !== 'tous') {
       contenusFiltres = contenusFiltres.filter(contenu => 
-        (contenu.categorie || contenu.genre)?.toLowerCase().includes(categorieActive)
+        (contenu.categorie || '').toLowerCase() === categorieActive.toLowerCase() ||
+        (contenu.genre || '').toLowerCase() === categorieActive.toLowerCase()
       );
     }
 
@@ -95,7 +113,7 @@ const Films = () => {
   return (
     <div className="page-container films-page">
       <button onClick={() => navigate('/')} className="btn-retour">← Retour</button>
-      <h1 className="section-title">🎬 Films & Séries</h1>
+      <h1 className="section-title"> Films & Séries</h1>
 
       {/* Barre de recherche */}
       <form onSubmit={handleRecherche} className="search-bar">
@@ -107,26 +125,27 @@ const Films = () => {
           className="search-input"
         />
         <button type="submit" className="btn-search">
-          🔍 Rechercher
+           Rechercher
         </button>
       </form>
 
       {/* Filtres par catégorie */}
       <div className="categories-filter">
+        <button
+          onClick={() => setCategorieActive('tous')}
+          className={`btn-categorie ${categorieActive === 'tous' ? 'active' : ''}`}
+        >
+          Tous
+        </button>
         {categories.map((categorie) => (
           <button
-            key={categorie}
-            onClick={() => setCategorieActive(categorie)}
-            className={`btn-categorie ${categorieActive === categorie ? 'active' : ''}`}
+            key={categorie.id_categorie}
+            onClick={() => setCategorieActive(categorie.nom)}
+            className={`btn-categorie ${categorieActive === categorie.nom ? 'active' : ''}`}
           >
-            {categorie.charAt(0).toUpperCase() + categorie.slice(1)}
+            {categorie.nom}
           </button>
         ))}
-      </div>
-
-      {/* Résultats */}
-      <div className="resultats-info">
-        <p>{contenutAffiches.length} résultat{contenutAffiches.length > 1 ? 's' : ''}</p>
       </div>
 
       {contenutAffiches.length > 0 ? (

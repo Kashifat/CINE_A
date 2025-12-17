@@ -620,3 +620,24 @@ def lister_favoris(id_utilisateur: int):
         }
     finally:
         conn.close()
+
+
+# #################################
+# CATEGORIES
+def get_all_categories():
+    """Récupérer toutes les catégories"""
+    conn = get_db_connection()
+    if conn is None:
+        return []
+    
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT id_categorie, nom
+            FROM categories
+            ORDER BY nom ASC
+        """)
+        categories = list(cur.fetchall())
+        return categories
+    finally:
+        conn.close()

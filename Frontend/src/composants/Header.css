@@ -1,0 +1,574 @@
+/* ======================
+   HEADER HERO — Upgrade Pro
+====================== */
+
+/* ✅ Fallback si pas d’imageFond */
+.page-header{
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(900px 450px at 30% 15%, rgba(255,127,0,0.10), transparent 55%),
+    radial-gradient(700px 360px at 70% 25%, rgba(255,165,0,0.06), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, #070707 100%);  width: 100%;
+}
+
+/* Hauteurs selon la taille */
+.header-small {
+  min-height: 400px;
+  aspect-ratio: 16 / 5;
+}
+
+.header-medium {
+  min-height: 550px;
+  aspect-ratio: 16 / 4;
+}
+
+.header-large {
+  min-height: 750px;
+  aspect-ratio: 16 / 3;
+}
+
+/* ✅ Vidéo de fond en plein écran */
+.header-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+/* ✅ Image de fond si pas de vidéo */
+.header-background{
+  will-change: transform;
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+/* ✅ Overlay gradient sombre pour lisibilité */
+.header-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,0,0.5) 0%,
+    rgba(0,0,0,0.3) 50%,
+    rgba(0,0,0,0.6) 100%
+  );
+  z-index: 1;
+}
+
+/* ✅ Un léger "grain" cinéma (super subtil) */
+.page-header::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.10;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.07) 1px, transparent 0);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+}
+
+/* ✅ Contenu passe au-dessus du grain et overlay */
+.header-content{
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(40px, 8vw, 80px);
+}
+
+.header-text{
+  width: 100%;
+  max-width: 700px;
+}
+
+/* ✅ Badge "Film en vedette" */
+.header-badge{
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255,127,0,0.25);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  color: var(--primary2);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(8px);
+}
+
+/* ✅ Bouton avec "shine" au hover */
+.header-btn{
+  position: relative;
+  overflow: hidden;
+  padding: 14px 32px;
+  background: var(--primary);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(255,127,0,0.35);
+  text-decoration: none;
+}
+
+.header-btn:hover {
+  background: var(--primary2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255,127,0,0.45);
+}
+
+.header-btn:active {
+  transform: translateY(0);
+}
+
+.header-btn::before{
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,0.28) 45%,
+    transparent 70%
+  );
+  transform: rotate(18deg);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.header-btn:hover::before{
+  opacity: 1;
+  animation: btnShine 0.9s ease forwards;
+}
+
+@keyframes btnShine{
+  from{ left: -60%; }
+  to{ left: 120%; }
+}
+
+/* ✅ Contrôles vidéo (volume) */
+.header-video-controls {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 12px 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.video-control-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 127, 0, 0.2);
+  color: var(--primary2);
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.video-control-btn:hover {
+  background: rgba(255, 127, 0, 0.4);
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+.video-volume-slider {
+  width: 120px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right, var(--primary), var(--primary2));
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.video-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--primary2);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 127, 0, 0.5);
+  transition: all var(--transition);
+}
+
+.video-volume-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--primary2);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 127, 0, 0.5);
+  transition: all var(--transition);
+}
+
+.video-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  box-shadow: 0 4px 12px rgba(255, 127, 0, 0.7);
+}
+
+.video-volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.3);
+  box-shadow: 0 4px 12px rgba(255, 127, 0, 0.7);
+}
+
+/* ✅ Titre grand et lisible */
+.header-titre{
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--text);
+  margin: 0 0 16px;
+  text-wrap: balance;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+/* ✅ Description */
+.header-description{
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(245,245,245,0.85);
+  margin: 0 0 24px;
+  max-width: 500px;
+  text-wrap: pretty;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .header-small {
+    min-height: 250px;
+    aspect-ratio: 16 / 7;
+  }
+
+  .header-medium {
+    min-height: 350px;
+    aspect-ratio: 16 / 6;
+  }
+
+  .header-large {
+    min-height: 450px;
+    aspect-ratio: 16 / 5;
+  }
+
+  .header-content {
+    padding: 24px;
+  }
+
+  .header-titre {
+    font-size: 32px;
+  }
+
+  .header-description {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .header-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-small {
+    min-height: 200px;
+    aspect-ratio: 16 / 8;
+  }
+
+  .header-medium {
+    min-height: 280px;
+    aspect-ratio: 16 / 7;
+  }
+
+  .header-large {
+    min-height: 350px;
+    aspect-ratio: 16 / 6;
+  }
+
+  .header-content {
+    padding: 16px;
+  }
+
+  .header-titre {
+    font-size: 24px;
+  }
+
+  .header-description {
+    font-size: 13px;
+    max-width: none;
+  }
+
+  .header-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+/* ✅ Responsive pour les contrôles vidéo */
+@media (max-width: 768px) {
+  .header-video-controls {
+    bottom: 16px;
+    right: 16px;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .video-control-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .video-volume-slider {
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-video-controls {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .video-control-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .video-volume-slider {
+    width: 60px;
+  }
+}
+
+/* ================================================================
+   CARROUSEL DE FILMS/SÉRIES
+================================================================ */
+.header-carousel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 40px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0,0,0,0.5) 50%,
+    rgba(0,0,0,0.8) 100%
+  );
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.carousel-container {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 12px;
+  transition: transform 0.35s cubic-bezier(0.33, 0.66, 0.66, 1);
+  width: 100%;
+}
+
+.carousel-item {
+  flex: 0 0 clamp(100px, 15vw, 150px);
+  cursor: pointer;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 2/3;
+}
+
+.carousel-item:hover {
+  transform: scale(1.08);
+  filter: brightness(1.2);
+}
+
+.carousel-item:hover .carousel-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.carousel-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+
+/* Badge "Série" */
+.carousel-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 127, 0, 0.9);
+  color: #0a0a0a;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  z-index: 2;
+}
+
+.carousel-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0,0,0,0.8) 80%
+  );
+  padding: 12px 8px;
+  color: white;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.carousel-titre {
+  margin: 0;
+  font-size: clamp(0.65rem, 1vw, 0.8rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Boutons de navigation */
+.carousel-btn {
+  flex: 0 0 auto;
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
+  background: rgba(255, 127, 0, 0.25);
+  border: 2px solid rgba(255, 127, 0, 0.5);
+  color: #FFA500;
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 300;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.carousel-btn:hover {
+  background: rgba(255, 127, 0, 0.45);
+  border-color: rgba(255, 127, 0, 0.8);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 127, 0, 0.4);
+}
+
+.carousel-btn:active {
+  transform: scale(0.95);
+}
+
+/* Responsive carrousel */
+@media (max-width: 768px) {
+  .header-carousel {
+    padding: 24px;
+    gap: 12px;
+  }
+
+  .carousel-item {
+    flex: 0 0 clamp(80px, 12vw, 120px);
+  }
+}
+
+@media (max-width: 480px) {
+  .header-carousel {
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  .carousel-item {
+    flex: 0 0 clamp(60px, 10vw, 100px);
+  }
+
+  .carousel-info {
+    padding: 8px 6px;
+  }
+
+  .carousel-titre {
+    font-size: 0.65rem;
+  }
+}
+
+/* ✅ Accessibilité: réduire les animations si l'utilisateur le demande */
+@media (prefers-reduced-motion: reduce){
+  .header-content{
+    animation: none;
+  }
+  .header-background{
+    transition: none;
+  }
+  .header-btn::before{
+    animation: none;
+  }
+  .header-btn:hover {
+    transform: none;
+  }
+  .carousel-track {
+    transition: none;
+  }
+  .carousel-item:hover {
+    transform: none;
+  }
+}

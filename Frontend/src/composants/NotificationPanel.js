@@ -28,6 +28,15 @@ function NotificationPanel() {
     loadNotifications();
     // ✅ Pas de polling automatique - rafraîchissement manuel via bouton
   }, [utilisateur]);
+  useEffect(() => {
+  const onClickOutside = (e) => {
+    if (!e.target.closest(".notification-panel-container")) {
+      setIsOpen(false);
+    }
+  };
+  document.addEventListener("mousedown", onClickOutside);
+  return () => document.removeEventListener("mousedown", onClickOutside);
+}, []);
 
   const loadNotifications = async () => {
     if (!utilisateur?.id_utilisateur) return;

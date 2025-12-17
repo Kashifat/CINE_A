@@ -1,50 +1,57 @@
-* {
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+body{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #141414;
-  color: #ffffff;
+
+  background: #0A0A0A;
+  color: #F5F5F5;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* ✅ THEME GLOBAL CineA (unifié) */
+:root{
+  /* thème CineA premium */
+  --bg: #0A0A0A;
+  --bg2: #1A1A1A;
+  --text: #F5F5F5;
+  --muted: #B3B3B3;
+
+  --primary: #FF7F00;
+  --primary2: #FFA500;
+
+  --border-radius: 18px;
+  --transition: 0.18s ease;
+
+  /* ✅ compat avec ton code existant */
+  --primary-color: var(--primary);
+  --secondary-color: var(--primary2);
+  --background-dark: var(--bg);
+  --background-light: var(--bg2);
+  --text-primary: var(--text);
+  --text-secondary: var(--muted);
 }
 
-/* Variables globales CineA */
-:root {
-  --primary-color: #e50914;
-  --secondary-color: #831010;
-  --background-dark: #141414;
-  --background-light: #1f1f1f;
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --border-radius: 8px;
-  --transition: all 0.3s ease;
+code{
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-/* Scrollbar personnalisée */
-::-webkit-scrollbar {
+/* Scrollbar (plus clean) */
+::-webkit-scrollbar{
   width: 10px;
 }
-
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track{
   background: var(--background-dark);
 }
-
-::-webkit-scrollbar-thumb {
-  background: var(--text-secondary);
-  border-radius: 5px;
+::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.18);
+  border-radius: 10px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-color);
+::-webkit-scrollbar-thumb:hover{
+  background: rgba(255,127,0,0.45);
 }

@@ -1,4 +1,5 @@
 
+import os
 import bcrypt
 
 import pymysql
@@ -7,12 +8,12 @@ import pymysql.cursors
 # ----------------------------------------------
 # PARAMÈTRES DE CONNEXION
 # ----------------------------------------------
-DB_HOST = "localhost"
-DB_PORT = 3306
-DB_USER = "root"
-DB_PASSWORD = ""  # ⚠️ Mets ton mot de passe ici !
-DB_NAME = "cinea"
-DB_CHARSET = "utf8mb4"
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", "3306"))
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_NAME = os.getenv("DB_NAME", "cinea")
+DB_CHARSET = os.getenv("DB_CHARSET", "utf8mb4")
 
 
 # ----------------------------------------------

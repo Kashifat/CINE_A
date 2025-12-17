@@ -88,6 +88,35 @@ const filmsService = {
     } catch (error) {
       return { succes: false, erreur: 'Erreur lors de la récupération des tendances' };
     }
+  },
+
+  // Obtenir un film en vedette (aléatoire ou tendance)
+  obtenirFilmVedette: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/contenus/films/vedette`);
+      // L'endpoint retourne {succes: true, data: film}
+      if (response.data?.succes && response.data?.data) {
+        return { succes: true, data: response.data.data };
+      }
+      // Fallback si structure différente
+      return { succes: true, data: response.data };
+    } catch (error) {
+      console.warn('Film vedette endpoint indisponible, utilisation du fallback:', error.message);
+      // Fallback: retourner un film aléatoire depuis les films
+      try {
+        const response = await axios.get(`${API_URL}/contenus/films`);
+        const films = response.data?.films || response.data;
+        if (films && films.length > 0) {
+          const random = Math.floor(Math.random() * films.length);
+          console.log('Film vedette (fallback):', films[random].titre);
+          return { succes: true, data: films[random] };
+        }
+        return { succes: false, erreur: 'Aucun film disponible' };
+      } catch (fallbackError) {
+        console.error('Erreur fallback:', fallbackError.message);
+        return { succes: false, erreur: 'Erreur lors de la récupération du film vedette' };
+      }
+    }
   }
 };
 

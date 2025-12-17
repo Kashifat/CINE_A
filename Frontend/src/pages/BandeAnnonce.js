@@ -74,7 +74,7 @@ const BandeAnnonce = () => {
       <div className="page-container bande-annonce-page">
         <button onClick={handleRetour} className="btn-retour">← Retour</button>
         <div className="error-message">
-          <h2>😔 {erreur || 'Contenu introuvable'}</h2>
+          <h2> {erreur || 'Contenu introuvable'}</h2>
           <button onClick={handleRetour} className="btn-primary">
             Retour
           </button>
@@ -90,7 +90,7 @@ const BandeAnnonce = () => {
       <div className="bande-annonce-container">
         <div className="bande-annonce-header">
           <h1 className="bande-annonce-titre">
-            🎬 Bande Annonce - {contenu.titre}
+             Bande Annonce - {contenu.titre}
           </h1>
           <p className="bande-annonce-description">{contenu.description}</p>
         </div>
@@ -110,7 +110,7 @@ const BandeAnnonce = () => {
           </div>
         ) : (
           <div className="no-bande-annonce">
-            <p>😔 Aucune bande annonce disponible pour ce contenu</p>
+            <p> Aucune bande annonce disponible pour ce contenu</p>
           </div>
         )}
 
@@ -136,13 +136,13 @@ const BandeAnnonce = () => {
           {type === 'film' && contenu.duree && (
             <div className="info-card">
               <span className="info-label">Durée:</span>
-              <span className="info-value">⏱️ {contenu.duree} min</span>
+              <span className="info-value">⏱ {contenu.duree} min</span>
             </div>
           )}
           {contenu.annee_sortie && (
             <div className="info-card">
               <span className="info-label">Année:</span>
-              <span className="info-value">📅 {contenu.annee_sortie}</span>
+              <span className="info-value"> {contenu.annee_sortie}</span>
             </div>
           )}
         </div>

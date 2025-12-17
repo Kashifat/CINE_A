@@ -7,9 +7,11 @@ Une nouvelle page **"Information"** a été ajoutée au tableau de bord administ
 ## Fonctionnalités
 
 ### 1. Ajouter un fichier d'information
+
 L'administrateur peut uploader des fichiers `.txt` contenant des informations que le chatbot pourra utiliser pour répondre aux questions des utilisateurs.
 
 **Cas d'usage :**
+
 - Règles d'utilisation de la plateforme
 - FAQ détaillée
 - Informations sur les films/séries disponibles
@@ -18,12 +20,15 @@ L'administrateur peut uploader des fichiers `.txt` contenant des informations qu
 - Informations sur les abonnements et paiements
 
 ### 2. Lister les fichiers existants
+
 Affiche tous les fichiers `.txt` présents dans le dossier `data/` du service chatbot avec :
+
 - Nom du fichier
 - Taille (B, KB, MB)
 - Date de dernière modification
 
 ### 3. Supprimer un fichier
+
 Permet de supprimer un fichier d'information qui n'est plus pertinent.
 
 ## Architecture technique
@@ -33,14 +38,16 @@ Permet de supprimer un fichier d'information qui n'est plus pertinent.
 **Fichier :** `Frontend/src/pages/Admin.js`
 
 **Nouveau state :**
+
 ```javascript
 const [fichierInfo, setFichierInfo] = useState(null);
-const [nomFichierInfo, setNomFichierInfo] = useState('');
+const [nomFichierInfo, setNomFichierInfo] = useState("");
 const [fichiersInfo, setFichiersInfo] = useState([]);
 const [loadingFichiersInfo, setLoadingFichiersInfo] = useState(false);
 ```
 
 **Nouvelles fonctions :**
+
 - `chargerFichiersInfo()` - Charge la liste des fichiers
 - `gererSelectionFichierInfo(e)` - Gère la sélection du fichier
 - `ajouterFichierInfo(e)` - Upload le fichier vers le backend
@@ -53,9 +60,11 @@ const [loadingFichiersInfo, setLoadingFichiersInfo] = useState(false);
 **Nouvelles routes API :**
 
 #### GET `/chatbot/data/files`
+
 Liste tous les fichiers `.txt` dans le dossier `data/`
 
 **Réponse :**
+
 ```json
 {
   "fichiers": [
@@ -69,13 +78,16 @@ Liste tous les fichiers `.txt` dans le dossier `data/`
 ```
 
 #### POST `/chatbot/data/upload`
+
 Upload un fichier texte dans le dossier `data/`
 
 **Paramètres :**
+
 - `fichier` (File) - Le fichier à uploader
 - `nom_fichier` (string, optionnel) - Nom personnalisé pour le fichier
 
 **Réponse :**
+
 ```json
 {
   "success": true,
@@ -85,15 +97,18 @@ Upload un fichier texte dans le dossier `data/`
 ```
 
 **Comportement :**
+
 - Vérifie que le fichier est au format `.txt`
 - Sauvegarde le fichier dans `DATA_DIR`
 - Reconstruit automatiquement l'index RAG pour inclure le nouveau contenu
 - Retourne une erreur si le fichier existe déjà
 
 #### DELETE `/chatbot/data/files/{filename}`
+
 Supprime un fichier du dossier `data/`
 
 **Réponse :**
+
 ```json
 {
   "success": true,
@@ -102,6 +117,7 @@ Supprime un fichier du dossier `data/`
 ```
 
 **Comportement :**
+
 - Vérifie que le fichier existe
 - Supprime le fichier
 - Reconstruit automatiquement l'index RAG
@@ -109,12 +125,15 @@ Supprime un fichier du dossier `data/`
 ## Sécurité
 
 ### Authentification
+
 Toutes les routes nécessitent un token JWT valide avec des privilèges administrateur :
+
 ```
 Authorization: Bearer <token>
 ```
 
 ### Validation des fichiers
+
 - Seuls les fichiers `.txt` sont acceptés
 - Le nom du fichier est validé pour éviter les injections de chemin
 - Vérification de l'existence avant suppression
@@ -143,6 +162,7 @@ Authorization: Bearer <token>
 ### Reconstruction automatique de l'index RAG
 
 Quand un fichier est ajouté ou supprimé, la fonction `initialize_index()` est appelée automatiquement pour :
+
 1. Recharger tous les documents du dossier `data/`
 2. Recréer les embeddings vectoriels
 3. Mettre à jour l'index de recherche sémantique
@@ -152,6 +172,7 @@ Quand un fichier est ajouté ou supprimé, la fonction `initialize_index()` est 
 ### Utilisation dans les réponses
 
 Le chatbot utilise ces fichiers via le système RAG :
+
 1. Une question est posée par l'utilisateur
 2. Le système recherche les passages les plus pertinents dans tous les fichiers `.txt`
 3. Ces informations sont injectées dans le contexte du modèle GPT
@@ -160,6 +181,7 @@ Le chatbot utilise ces fichiers via le système RAG :
 ## Exemples de contenu de fichiers
 
 ### regles_utilisation.txt
+
 ```
 Règles d'utilisation de CinéA
 
@@ -180,6 +202,7 @@ Règles d'utilisation de CinéA
 ```
 
 ### faq_technique.txt
+
 ```
 FAQ Technique CinéA
 
@@ -196,16 +219,21 @@ R: Cliquez sur l'icône CC pendant la lecture et sélectionnez la langue des sou
 ## Notes de développement
 
 ### Dossier de stockage
+
 Les fichiers sont stockés dans : `Backend/micro_services/SERVICE_CHATBOT/data/`
 
 ### Configuration
+
 La variable `DATA_DIR` est définie dans `config.py` :
+
 ```python
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 ```
 
 ### Dépendances
+
 Aucune nouvelle dépendance n'est requise. Le code utilise :
+
 - FastAPI (déjà installé)
 - `UploadFile` et `File` de FastAPI
 - Modules standard Python (`os`, `datetime`, `traceback`)
@@ -213,16 +241,19 @@ Aucune nouvelle dépendance n'est requise. Le code utilise :
 ## Tests recommandés
 
 1. **Upload de fichier valide**
+
    - Uploader un fichier `.txt` de 10KB
    - Vérifier qu'il apparaît dans la liste
    - Poser une question au chatbot liée au contenu
    - Vérifier que la réponse utilise les informations
 
 2. **Upload de fichier invalide**
+
    - Tenter d'uploader un fichier `.pdf`
    - Vérifier le message d'erreur
 
 3. **Suppression de fichier**
+
    - Supprimer un fichier
    - Vérifier qu'il disparaît de la liste
    - Vérifier que le chatbot n'utilise plus ces informations

@@ -107,7 +107,7 @@ function PhotoUpload({ userId, currentPhoto, onPhotoUpdate }) {
               onClick={() => inputFileRef.current?.click()}
               title="Changer la photo"
             >
-              📷
+              ✏️
             </button>
             {currentPhoto && !apercu && (
               <button 

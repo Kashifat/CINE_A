@@ -67,7 +67,7 @@ const CarteVideo = ({ film, estFavoriInitial = false }) => {
           <img src={film.affiche} alt={film.titre} />
         ) : (
           <div className="carte-placeholder">
-            <span>{isSerie ? '📺' : '🎬'}</span>
+            <span>{isSerie ? '' : ''}</span>
           </div>
         )}
         <div className="carte-overlay">
@@ -77,7 +77,7 @@ const CarteVideo = ({ film, estFavoriInitial = false }) => {
               className="btn-bande-annonce" 
               onClick={handleBandeAnnonce}
             >
-              🎬 Bande Annonce
+               Bande Annonce
             </button>
           )}
           {utilisateur && isFilm && (

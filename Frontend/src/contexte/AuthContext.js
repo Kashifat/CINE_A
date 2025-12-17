@@ -25,7 +25,14 @@ const tokenUtils = {
   isTokenExpired: (token) => {
     if (!token) return true;
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Vérifier que le token a le bon format (3 parties séparées par des points)
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        console.warn('⚠️ Token JWT invalide (format incorrect)');
+        return true;
+      }
+      
+      const payload = JSON.parse(atob(parts[1]));
       const exp = payload.exp * 1000; // Convertir en ms
       const now = Date.now();
       const isExpired = now >= exp;
@@ -40,8 +47,9 @@ const tokenUtils = {
       
       return isExpired;
     } catch (e) {
-      console.error('❌ Erreur vérification expiration token:', e);
-      return false; // Ne pas déconnecter sur erreur de parsing
+      console.error('❌ Erreur vérification expiration token:', e.message);
+      // Si le token est corrompu, le considérer comme expiré
+      return true;
     }
   }
 };

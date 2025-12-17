@@ -1,0 +1,220 @@
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MYSQL_DATABASE: cinea
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./Backend/Database:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  service_auth_admin:
+    build:
+      context: ./Backend/micro_services/SERVICE_AUTHENTIFICATION/service_admin
+      dockerfile: ../../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5004:5004"
+    command: ["python", "app.py"]
+
+  service_auth_user:
+    build:
+      context: ./Backend/micro_services/SERVICE_AUTHENTIFICATION/service_utilisateur
+      dockerfile: ../../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./Backend/Serveur_Local:/Serveur_Local
+    command: ["python", "app.py"]
+
+  service_films:
+    build:
+      context: ./Backend/micro_services/SERVICE_FILMS
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./Backend/Serveur_Local:/Serveur_Local
+    command: ["python", "app.py"]
+
+  service_paiement:
+    build:
+      context: ./Backend/micro_services/SERVICE_PAIEMENT
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5003:5003"
+    command: ["python", "app.py"]
+
+  service_publication:
+    build:
+      context: ./Backend/micro_services/SERVICE_PUBLICATION
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5007:5007"
+    volumes:
+      - ./Backend/Serveur_Local:/Serveur_Local
+    command: ["python", "app.py"]
+
+  service_tv:
+    build:
+      context: ./Backend/micro_services/SERVICE_TV
+      dockerfile: ../Dockerfile.python
+    ports:
+      - "5011:5011"
+    volumes:
+      - ./Backend/Serveur_Local:/Serveur_Local:ro
+
+  service_reaction:
+    build:
+      context: ./Backend/micro_services/SERVICE_REACTION_PUB
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5008:5008"
+    command: ["python", "app.py"]
+
+  service_commentaire:
+    build:
+      context: ./Backend/micro_services/SERVICE_COMMENTAIRE
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5009:5009"
+    command: ["python", "app.py"]
+
+  service_historique:
+    build:
+      context: ./Backend/micro_services/SERVICE_HISTORIQUE
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5005:5005"
+    command: ["python", "app.py"]
+
+  service_avis:
+    build:
+      context: ./Backend/micro_services/SERVICE_AVIS_FILM
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5006:5006"
+    command: ["python", "app.py"]
+
+  service_notification:
+    build:
+      context: ./Backend/micro_services/SERVICE_NOTIFICATION
+      dockerfile: ../Dockerfile.python
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ""
+      DB_NAME: cinea
+      DB_PORT: 3306
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5010:5010"
+    command: ["python", "app.py"]
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: ./Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - service_films
+      - service_publication
+      - service_commentaire
+      - service_reaction
+      - service_auth_user
+      - service_auth_admin
+
+volumes:
+  db_data:

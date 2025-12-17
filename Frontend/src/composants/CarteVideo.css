@@ -1,140 +1,263 @@
-.carte-video {
-  background-color: var(--background-light);
-  border-radius: var(--border-radius);
+:root{
+  --bg: #0A0A0A;
+  --bg2: #1A1A1A;
+  --card: rgba(42,42,42,0.70);
+
+  --primary: #FF7F00;
+  --primary2: #FFA500;
+
+  --text: #F5F5F5;
+  --muted: #B3B3B3;
+
+  --border: rgba(255,255,255,0.10);
+  --shadow: 0 18px 40px rgba(0,0,0,0.55);
+  --shadow-soft: 0 10px 22px rgba(0,0,0,0.35);
+
+  --radius: 18px;
+  --transition: 0.18s ease;
+}
+
+/* ================
+   CARTE
+================ */
+.carte-video{
+  background: linear-gradient(180deg, rgba(26,26,26,0.85), rgba(10,10,10,0.85));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
-  transition: var(--transition);
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-soft);
+  transform: translateZ(0);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  cursor: pointer;
 }
 
-.carte-video:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+.carte-video:hover{
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255,127,0,0.35);
+  box-shadow: 0 22px 55px rgba(0,0,0,0.65);
 }
 
-.carte-image {
+.carte-video:focus-within{
+  border-color: rgba(255,127,0,0.55);
+  box-shadow: 0 0 0 4px rgba(255,127,0,0.15), 0 22px 55px rgba(0,0,0,0.65);
+}
+
+/* ================
+   IMAGE
+================ */
+.carte-image{
   position: relative;
   width: 100%;
   padding-top: 150%;
   overflow: hidden;
-  background-color: #2a2a2a;
+  background: radial-gradient(1200px 500px at 30% 20%, rgba(255,127,0,0.12), transparent 45%),
+              linear-gradient(180deg, rgba(26,26,26,1), rgba(10,10,10,1));
 }
 
-.carte-image img {
+/* zoom léger sur l’affiche au hover (style streaming premium) */
+.carte-image img{
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1);
+  filter: saturate(1.02) contrast(1.05);
+  transition: transform 0.35s ease, filter 0.35s ease;
 }
 
-.carte-placeholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
+.carte-video:hover .carte-image img{
+  transform: scale(1.06);
+  filter: saturate(1.05) contrast(1.08);
 }
 
-.carte-overlay {
+/* placeholder (tu as des emojis, mais au moins style propre) */
+.carte-placeholder{
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 3.2rem;
+  color: rgba(245,245,245,0.65);
+}
+
+/* ================
+   OVERLAY
+================ */
+.carte-overlay{
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 15px;
+  gap: 10px;
+  padding: 14px;
+
   opacity: 0;
-  transition: var(--transition);
+  transform: translateY(6px);
+  transition: opacity var(--transition), transform var(--transition);
+
+  /* overlay cinéma + vignette */
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.88) 100%);
 }
 
-.carte-video:hover .carte-overlay {
+.carte-video:hover .carte-overlay{
   opacity: 1;
+  transform: translateY(0);
 }
 
-.btn-play {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  font-weight: 600;
+/* ================
+   BOUTONS
+================ */
+.btn-play,
+.btn-bande-annonce,
+.btn-favori{
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
   cursor: pointer;
-  margin-bottom: 10px;
-  transition: var(--transition);
+  transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition);
 }
 
-.btn-play:hover {
-  background-color: var(--secondary-color);
-  transform: scale(1.05);
+.btn-play{
+  color: #1A1A1A;
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  border-color: rgba(255,127,0,0.55);
+  box-shadow: 0 10px 18px rgba(255,127,0,0.12);
 }
 
-.btn-bande-annonce {
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: var(--border-radius);
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 10px;
-  transition: var(--transition);
+.btn-play:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,165,0,0.75);
 }
 
-.btn-bande-annonce:hover {
-  background-color: #ff5252;
-  transform: scale(1.05);
+/* Bande annonce : version premium (pas rouge), plus "secondary" */
+.btn-bande-annonce{
+  color: var(--text);
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.16);
 }
 
-.carte-info {
+.btn-bande-annonce:hover{
+  transform: translateY(-1px);
+  background: rgba(255,127,0,0.10);
+  border-color: rgba(255,127,0,0.35);
+  color: var(--primary2);
+}
+
+/* Favori : style “pill” soft */
+.btn-favori{
+  color: var(--text);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+}
+
+.btn-favori:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,127,0,0.35);
+  background: rgba(255,127,0,0.10);
+}
+
+.btn-favori:disabled{
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Focus visible */
+.btn-play:focus-visible,
+.btn-bande-annonce:focus-visible,
+.btn-favori:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255,127,0,0.18);
+}
+
+/* ================
+   INFOS overlay (note / durée)
+================ */
+.carte-info{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
+  color: rgba(245,245,245,0.92);
   font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 2px;
 }
 
-.carte-details {
-  padding: 15px;
-  flex: 1;
+.carte-info .note,
+.carte-info .duree{
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(10,10,10,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ================
+   DETAILS (sous image)
+================ */
+.carte-details{
+  padding: 14px 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
 }
 
-.carte-titre {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: var(--text-primary);
+.carte-titre{
   margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+
+  /* 2 lignes max, propre */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.carte-genre {
-  color: var(--text-secondary);
+.carte-genre{
+  margin: 0;
+  color: var(--primary2);
   font-size: 0.9rem;
-  margin: 0;
+  font-weight: 800;
+  opacity: 0.95;
 }
 
-.carte-description {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  line-height: 1.4;
+.carte-description{
   margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+
+  /* 3 lignes max */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .carte-video:hover {
-    transform: scale(1.02);
+/* ================
+   MOBILE
+================ */
+@media (max-width: 768px){
+  .carte-video:hover{
+    transform: translateY(-2px) scale(1.01);
+  }
+
+  /* Sur mobile, l’overlay peut rester un peu plus visible */
+  .carte-overlay{
+    padding: 12px;
   }
 }

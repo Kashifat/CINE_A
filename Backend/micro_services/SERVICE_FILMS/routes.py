@@ -10,7 +10,8 @@ from models import (
     ajouter_saison, get_saisons_serie, supprimer_saison,
     ajouter_episode, get_episodes_saison, modifier_episode, supprimer_episode,
     rechercher_contenus,
-    ajouter_favori, supprimer_favori, lister_favoris
+    ajouter_favori, supprimer_favori, lister_favoris,
+    get_all_categories
 )
 
 films_bp = Blueprint("films", __name__)
@@ -292,3 +293,27 @@ def api_supprimer_favori():
 def api_lister_favoris(id_utilisateur):
     res = lister_favoris(id_utilisateur)
     return jsonify(res), 200
+
+
+@films_bp.route("/films/vedette", methods=["GET"])
+def get_film_vedette():
+    """Retourne un film aléatoire ou tendance en vedette"""
+    try:
+        import random
+        all_films = get_all_films()
+        if not all_films:
+            return jsonify({"succes": False, "erreur": "Aucun film disponible"}), 404
+        
+        film_vedette = random.choice(all_films)
+        return jsonify({"succes": True, "data": film_vedette}), 200
+    except Exception as e:
+        return jsonify({"succes": False, "erreur": str(e)}), 500
+
+
+# #####################################
+#  CATEGORIES
+@films_bp.route("/categories", methods=["GET"])
+def get_categories():
+    """Récupérer toutes les catégories"""
+    categories = get_all_categories()
+    return jsonify({"succes": True, "data": categories}), 200
