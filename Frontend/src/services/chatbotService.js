@@ -2,7 +2,7 @@
  * Service pour communiquer avec le chatbot CinéA
  */
 
-const CHATBOT_API_URL = 'http://127.0.0.1:5012';
+const CHATBOT_API_URL = '/api/chatbot'; // Service chatbot - passe par Nginx
 
 /**
  * Envoie un message au chatbot

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5011'; // Service TV
+const API_URL = '/api/tv'; // Service TV - passe par Nginx
 
 const tvService = {
   // Obtenir toutes les chaînes TV avec images

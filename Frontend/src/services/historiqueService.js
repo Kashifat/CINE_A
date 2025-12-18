@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5005'; // Service historique
+const API_URL = '/api/historique'; // Service historique - passe par Nginx
 
 const getConfig = () => {
   const token = localStorage.getItem('token');

@@ -1,5 +1,5 @@
 // Service pour gérer les catégories depuis l'API
-const API_URL = 'http://localhost:5002'; // Service films (même port que filmsService)
+const API_URL = '/contenus'; // Service films - passe par Nginx
 
 const categoriesService = {
   /**

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL_UTILISATEUR = 'http://localhost:5001';
-const API_URL_PUBLICATION = 'http://localhost:5007';
+const API_URL_UTILISATEUR = '/api/utilisateurs'; // passe par Nginx
+const API_URL_PUBLICATION = '/api/publications'; // passe par Nginx
 
 // Configuration axios avec token
 const getConfig = () => {

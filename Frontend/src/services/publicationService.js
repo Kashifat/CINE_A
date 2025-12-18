@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5007'; // Service publication
+const API_URL = '/api/publications'; // Service publication - passe par Nginx
 
 const getConfig = () => {
   const token = localStorage.getItem('token');

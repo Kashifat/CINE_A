@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001'; // Service utilisateur
-const API_URL_ADMIN = 'http://localhost:5004'; // Service admin
+const API_URL = '/api/utilisateurs'; // Service utilisateur - passe par Nginx
+const API_URL_ADMIN = '/api/admin'; // Service admin - passe par Nginx
 
 // Configuration axios avec token
 const getConfig = () => {

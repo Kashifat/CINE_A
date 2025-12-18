@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5002/contenus'; // Service FILMS
+const API_URL = '/contenus'; // Service FILMS - passe par Nginx
 
 const favorisService = {
   ajouter: async ({ id_utilisateur, id_film = null, id_episode = null }) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5003'; // Service paiement
+const API_URL = '/api/paiement'; // Service paiement - passe par Nginx
 
 const getConfig = () => {
   const token = localStorage.getItem('token');

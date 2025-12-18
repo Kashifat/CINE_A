@@ -3,7 +3,7 @@
  * Communique avec SERVICE_NOTIFICATION (port 5010)
  */
 
-const NOTIFICATION_API_URL = "http://localhost:5010/notifications";
+const NOTIFICATION_API_URL = "/api/notifications"; // passe par Nginx
 
 const notificationApiService = {
   /**
