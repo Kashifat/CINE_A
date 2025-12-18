@@ -1,0 +1,79 @@
+# ============================================
+# REQUIREMENTS.TXT - BACKEND CINEA
+# ============================================
+# Fichier de dépendances Python pour tous les microservices
+# Date: 17 décembre 2025
+
+# ============================================
+# FRAMEWORKS WEB
+# ============================================
+Flask==2.3.3
+Flask-CORS==4.0.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.24.0
+
+# ============================================
+# BASE DE DONNÉES
+# ============================================
+pymysql==1.1.0
+bcrypt==4.1.2
+
+# ============================================
+# CHATBOT & IA (SERVICE_CHATBOT)
+# ============================================
+openai>=1.0.0
+llama-index>=0.10.0
+llama-index-llms-openai>=0.1.0
+llama-index-embeddings-openai>=0.1.0
+
+# ============================================
+# UTILITAIRES
+# ============================================
+python-dotenv==1.0.0
+requests>=2.31.0
+
+# ============================================
+# GESTION FICHIERS & MEDIAS
+# ============================================
+Pillow>=10.0.0
+
+# ============================================
+# VALIDATION & SÉRIALISATION
+# ============================================
+pydantic>=2.0.0
+
+# ============================================
+# NOTES DE DÉPLOIEMENT
+# ============================================
+# Installation complète:
+#   pip install -r requirements.txt
+#
+# Installation avec upgrade:
+#   pip install -r requirements.txt --upgrade
+#
+# Pour un environnement virtuel:
+#   python -m venv venv
+#   .\venv\Scripts\activate  (Windows)
+#   source venv/bin/activate  (Linux/Mac)
+#   pip install -r requirements.txt
+#
+# Variables d'environnement requises (.env):
+#   DB_HOST=localhost
+#   DB_PORT=3306
+#   DB_USER=root
+#   DB_PASSWORD=votre_mot_de_passe
+#   DB_NAME=cinea
+#   OPENAI_API_KEY=votre_clé_api (pour chatbot)
+#
+# Services utilisés:
+#   - SERVICE_AUTHENTIFICATION (Flask + bcrypt)
+#   - SERVICE_FILMS (Flask + pymysql)
+#   - SERVICE_AVIS_FILM (Flask + pymysql)
+#   - SERVICE_CHATBOT (FastAPI + OpenAI + LlamaIndex)
+#   - SERVICE_COMMENTAIRE (Flask + pymysql)
+#   - SERVICE_HISTORIQUE (Flask + pymysql)
+#   - SERVICE_NOTIFICATION (Flask + pymysql)
+#   - SERVICE_PAIEMENT (Flask + pymysql)
+#   - SERVICE_PUBLICATION (Flask + pymysql)
+#   - SERVICE_REACTION_PUB (Flask + pymysql)
+#   - SERVICE_TV (Flask)
