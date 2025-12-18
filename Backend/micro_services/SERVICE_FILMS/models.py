@@ -641,3 +641,68 @@ def get_all_categories():
         return categories
     finally:
         conn.close()
+
+
+def ajouter_categorie(nom):
+    """Ajouter une nouvelle catégorie (admin only)"""
+    if not nom or not nom.strip():
+        return {"erreur": "Le nom de la catégorie ne peut pas être vide"}, 400
+    
+    conn = get_db_connection()
+    if conn is None:
+        return {"erreur": "Connexion base de données indisponible"}, 500
+    
+    try:
+        cur = conn.cursor()
+        
+        # Vérifier si la catégorie existe déjà
+        cur.execute("SELECT id_categorie FROM categories WHERE nom = %s", (nom.strip(),))
+        if cur.fetchone():
+            return {"erreur": "Cette catégorie existe déjà"}, 400
+        
+        # Insérer la nouvelle catégorie
+        cur.execute("INSERT INTO categories (nom) VALUES (%s)", (nom.strip(),))
+        conn.commit()
+        
+        # Récupérer l'ID de la catégorie créée
+        cur.execute("SELECT LAST_INSERT_ID() AS id")
+        row = cur.fetchone()
+        categorie_id = row["id"] if row else None
+        
+        return {
+            "succes": True,
+            "message": f"Catégorie '{nom}' ajoutée avec succès",
+            "id_categorie": categorie_id,
+            "nom": nom.strip()
+        }, 201
+    except pymysql.IntegrityError:
+        return {"erreur": "Erreur lors de l'ajout de la catégorie"}, 500
+    finally:
+        conn.close()
+
+
+def supprimer_categorie(categorie_id):
+    """Supprimer une catégorie (admin only)"""
+    conn = get_db_connection()
+    if conn is None:
+        return {"erreur": "Connexion base de données indisponible"}, 500
+    
+    try:
+        cur = conn.cursor()
+        
+        # Vérifier que la catégorie existe
+        cur.execute("SELECT nom FROM categories WHERE id_categorie = %s", (categorie_id,))
+        cat = cur.fetchone()
+        if not cat:
+            return {"erreur": "Catégorie non trouvée"}, 404
+        
+        # Supprimer la catégorie
+        cur.execute("DELETE FROM categories WHERE id_categorie = %s", (categorie_id,))
+        conn.commit()
+        
+        return {
+            "succes": True,
+            "message": f"Catégorie supprimée avec succès"
+        }, 200
+    finally:
+        conn.close()

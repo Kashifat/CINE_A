@@ -11,7 +11,7 @@ from models import (
     ajouter_episode, get_episodes_saison, modifier_episode, supprimer_episode,
     rechercher_contenus,
     ajouter_favori, supprimer_favori, lister_favoris,
-    get_all_categories
+    get_all_categories, ajouter_categorie, supprimer_categorie
 )
 
 films_bp = Blueprint("films", __name__)
@@ -317,3 +317,22 @@ def get_categories():
     """Récupérer toutes les catégories"""
     categories = get_all_categories()
     return jsonify({"succes": True, "data": categories}), 200
+
+
+@films_bp.route("/categories", methods=["POST"])
+def nouvelle_categorie():
+    """Ajouter une nouvelle catégorie (admin only)"""
+    # Vérifier que l'utilisateur est admin (facultatif, à adapter selon votre auth)
+    data = request.get_json()
+    if not data or "nom" not in data:
+        return jsonify({"erreur": "Le champ 'nom' est obligatoire"}), 400
+    
+    result, status_code = ajouter_categorie(data["nom"])
+    return jsonify(result), status_code
+
+
+@films_bp.route("/categories/<int:categorie_id>", methods=["DELETE"])
+def supprimer_cat(categorie_id):
+    """Supprimer une catégorie (admin only)"""
+    result, status_code = supprimer_categorie(categorie_id)
+    return jsonify(result), status_code

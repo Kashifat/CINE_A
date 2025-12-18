@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexte/AuthContext';
 import uploadService from '../services/uploadService';
+import GestionCategories from '../composants/GestionCategories';
 import './Admin-Modern.css';
 
 const Admin = () => {
@@ -778,6 +779,12 @@ const Admin = () => {
           onClick={() => { setActiveTab('publications'); chargerPublications(); }}
         >
           Publications
+        </button>
+        <button
+          className={`tab ${activeTab === 'categories' ? 'active' : ''}`}
+          onClick={() => { setActiveTab('categories'); }}
+        >
+          Catégories
         </button>
       </div>
 
@@ -1601,6 +1608,13 @@ const Admin = () => {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Catégories */}
+        {activeTab === 'categories' && (
+          <div className="tab-content">
+            <GestionCategories />
           </div>
         )}
 
