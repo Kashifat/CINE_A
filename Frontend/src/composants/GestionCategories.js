@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import categoriesService from '../../services/categoriesService';
+import categoriesService from '../services/categoriesService';
 import './GestionCategories.css';
 
 const GestionCategories = () => {

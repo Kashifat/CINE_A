@@ -506,8 +506,10 @@ def rechercher_contenus(mot_cle):
 # FAVORIS
 def ajouter_favori(id_utilisateur: int, id_film: int = None, id_episode: int = None):
     """Ajouter un favori pour un utilisateur (film ou épisode)."""
-    if not id_utilisateur or (not id_film and not id_episode) or (id_film and id_episode):
-        return {"erreur": "Paramètres invalides"}, 400
+    # Validation: exactement un des deux doit être fourni (XOR)
+    count = sum([id_film is not None, id_episode is not None])
+    if not id_utilisateur or count != 1:
+        return {"erreur": "Paramètres invalides: fournir id_utilisateur et un seul de (id_film, id_episode)"}, 400
 
     conn = get_db_connection()
     if conn is None:
@@ -537,8 +539,9 @@ def ajouter_favori(id_utilisateur: int, id_film: int = None, id_episode: int = N
 
 def supprimer_favori(id_utilisateur: int, id_film: int = None, id_episode: int = None):
     """Supprimer un favori (film ou épisode)."""
-    if not id_utilisateur or (not id_film and not id_episode) or (id_film and id_episode):
-        return {"erreur": "Paramètres invalides"}, 400
+    count = sum([id_film is not None, id_episode is not None])
+    if not id_utilisateur or count != 1:
+        return {"erreur": "Paramètres invalides: fournir id_utilisateur et un seul de (id_film, id_episode)"}, 400
 
     conn = get_db_connection()
     if conn is None:
@@ -551,7 +554,7 @@ def supprimer_favori(id_utilisateur: int, id_film: int = None, id_episode: int =
                 "DELETE FROM favoris WHERE id_utilisateur=%s AND id_film=%s",
                 (id_utilisateur, id_film),
             )
-        else:
+        else:  # id_episode
             cur.execute(
                 "DELETE FROM favoris WHERE id_utilisateur=%s AND id_episode=%s",
                 (id_utilisateur, id_episode),
@@ -567,43 +570,52 @@ def supprimer_favori(id_utilisateur: int, id_film: int = None, id_episode: int =
 def lister_favoris(id_utilisateur: int):
     """Lister les favoris d'un utilisateur, avec détails de films/épisodes."""
     if not id_utilisateur:
-        return []
+        return {"films": [], "episodes": []}
 
     conn = get_db_connection()
     if conn is None:
-        return []
+        return {"films": [], "episodes": []}
 
     try:
         cur = conn.cursor()
+        
         # Récupérer favoris films
-        cur.execute(
-            """
-            SELECT 'Film' AS type, f.id_film, f.titre, f.description, f.affiche, f.bande_annonce,
-                   f.date_sortie, f.duree, f.pays, c.nom AS categorie
-            FROM favoris fav
-            JOIN films f ON fav.id_film = f.id_film
-            LEFT JOIN categories c ON f.id_categorie = c.id_categorie
-            WHERE fav.id_utilisateur = %s
-            """,
-            (id_utilisateur,),
-        )
-        favoris_films = list(cur.fetchall())
+        try:
+            cur.execute(
+                """
+                SELECT 'Film' AS type, f.id_film, f.titre, f.description, f.affiche, f.bande_annonce,
+                       f.date_sortie, f.duree, f.pays, c.nom AS categorie
+                FROM favoris fav
+                JOIN films f ON fav.id_film = f.id_film
+                LEFT JOIN categories c ON f.id_categorie = c.id_categorie
+                WHERE fav.id_utilisateur = %s
+                """,
+                (id_utilisateur,),
+            )
+            favoris_films = list(cur.fetchall())
+        except Exception as e:
+            print(f"[ERREUR] Récupération films favoris: {e}")
+            favoris_films = []
 
         # Récupérer favoris épisodes (avec info série/saison)
-        cur.execute(
-            """
-            SELECT 'Épisode' AS type, e.id_episode, e.titre, e.description, e.bande_annonce,
-                   e.duree, e.numero_episode, s.numero_saison, se.id_serie, se.titre AS serie,
-                   se.affiche
-            FROM favoris fav
-            JOIN episodes e ON fav.id_episode = e.id_episode
-            JOIN saisons s ON e.id_saison = s.id_saison
-            JOIN series se ON s.id_serie = se.id_serie
-            WHERE fav.id_utilisateur = %s
-            """,
-            (id_utilisateur,),
-        )
-        favoris_episodes = list(cur.fetchall())
+        try:
+            cur.execute(
+                """
+                SELECT 'Épisode' AS type, e.id_episode, e.titre, e.description, e.bande_annonce,
+                       e.duree, e.numero_episode, s.numero_saison, se.id_serie, se.titre AS serie,
+                       se.affiche
+                FROM favoris fav
+                JOIN episodes e ON fav.id_episode = e.id_episode
+                JOIN saisons s ON e.id_saison = s.id_saison
+                JOIN series se ON s.id_serie = se.id_serie
+                WHERE fav.id_utilisateur = %s
+                """,
+                (id_utilisateur,),
+            )
+            favoris_episodes = list(cur.fetchall())
+        except Exception as e:
+            print(f"[ERREUR] Récupération épisodes favoris: {e}")
+            favoris_episodes = []
 
         # Normaliser URLs
         for film in favoris_films:
@@ -618,6 +630,9 @@ def lister_favoris(id_utilisateur: int):
             "films": favoris_films,
             "episodes": favoris_episodes,
         }
+    except Exception as e:
+        print(f"[ERREUR] lister_favoris global: {e}")
+        return {"films": [], "series": [], "episodes": []}
     finally:
         conn.close()
 

@@ -7,7 +7,7 @@
   position: fixed;
   top: 80px;
   left: 20px;
-  background-color: #ff6b6b;
+  background-color: var(--primary, #ff7f00);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -19,7 +19,7 @@
 }
 
 .btn-retour:hover {
-  background-color: #ff5252;
+  background-color: var(--primary2, #ffa500);
 }
 
 .profil-header {
@@ -137,7 +137,7 @@
 }
 
 .historique-item:hover {
-  background-color: rgba(192, 57, 43, 0.1);
+  background-color: rgba(255, 127, 0, 0.08);
   border-color: var(--primary-color);
 }
 
@@ -228,8 +228,8 @@ td {
 }
 
 .statut-badge.échoué {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #ff5252;
+  background-color: rgba(255, 127, 0, 0.15);
+  color: var(--primary, #ff7f00);
 }
 
 .empty-message {
@@ -324,7 +324,7 @@ td {
 
 .info-item {
   padding: 15px;
-  background-color: rgba(229, 9, 20, 0.05);
+  background-color: rgba(255, 127, 0, 0.08);
   border-radius: var(--border-radius);
   border-left: 3px solid var(--primary-color);
 }
@@ -375,7 +375,7 @@ td {
 .form-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+  box-shadow: 0 0 10px rgba(255, 127, 0, 0.35);
 }
 
 .form-actions {
@@ -408,13 +408,13 @@ td {
 }
 
 .btn-cancel {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #ff5252;
-  border: 1px solid #ff5252;
+  background-color: rgba(255, 127, 0, 0.15);
+  color: var(--primary, #ff7f00);
+  border: 1px solid var(--primary, #ff7f00);
 }
 
 .btn-cancel:hover {
-  background-color: #ff5252;
+  background-color: var(--primary, #ff7f00);
   color: white;
 }
 
@@ -426,9 +426,9 @@ td {
 }
 
 .message-error {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #ff5252;
-  border: 1px solid #ff5252;
+  background-color: rgba(255, 127, 0, 0.15);
+  color: var(--primary, #ff7f00);
+  border: 1px solid var(--primary, #ff7f00);
 }
 
 .message-success {
@@ -583,14 +583,14 @@ td {
 
 .publication-statut.rejected,
 .publication-statut.rejeté {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #f44336;
+  background-color: rgba(255, 127, 0, 0.15);
+  color: var(--primary, #ff7f00);
 }
 
 .btn-delete-publication {
-  background-color: rgba(244, 67, 54, 0.2);
-  color: #ff6b6b;
-  border: 1px solid #ff6b6b;
+  background-color: rgba(255, 127, 0, 0.15);
+  color: var(--primary, #ff7f00);
+  border: 1px solid var(--primary, #ff7f00);
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
@@ -600,8 +600,8 @@ td {
 }
 
 .btn-delete-publication:hover {
-  background-color: rgba(244, 67, 54, 0.3);
-  box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
+  background-color: rgba(255, 127, 0, 0.25);
+  box-shadow: 0 2px 6px rgba(255, 127, 0, 0.35);
 }
 
 .btn-delete-publication:active {
@@ -644,8 +644,8 @@ td {
 }
 
 .stat-card {
-  background: linear-gradient(135deg, rgba(229, 9, 20, 0.1), rgba(229, 9, 20, 0.05));
-  border: 2px solid rgba(229, 9, 20, 0.2);
+  background: linear-gradient(135deg, rgba(255, 127, 0, 0.12), rgba(255, 127, 0, 0.06));
+  border: 2px solid rgba(255, 127, 0, 0.25);
   border-radius: 15px;
   padding: 25px 20px;
   display: flex;
@@ -673,14 +673,14 @@ td {
 
 .stat-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 12px 30px rgba(229, 9, 20, 0.4);
-  border-color: #e50914;
+  box-shadow: 0 12px 30px rgba(255, 127, 0, 0.4);
+  border-color: var(--primary, #ff7f00);
 }
 
 /* Couleurs spécifiques */
 .stat-card.stat-primary {
-  background: linear-gradient(135deg, rgba(229, 9, 20, 0.15), rgba(229, 9, 20, 0.05));
-  border-color: rgba(229, 9, 20, 0.3);
+  background: linear-gradient(135deg, rgba(255, 127, 0, 0.18), rgba(255, 127, 0, 0.08));
+  border-color: rgba(255, 127, 0, 0.3);
 }
 
 .stat-card.stat-success {
@@ -714,13 +714,13 @@ td {
 }
 
 .stat-card.stat-like {
-  background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(220, 53, 69, 0.05));
-  border-color: rgba(220, 53, 69, 0.3);
+  background: linear-gradient(135deg, rgba(255, 127, 0, 0.15), rgba(255, 127, 0, 0.05));
+  border-color: rgba(255, 127, 0, 0.3);
 }
 
 .stat-card.stat-like:hover {
-  box-shadow: 0 12px 30px rgba(220, 53, 69, 0.4);
-  border-color: #dc3545;
+  box-shadow: 0 12px 30px rgba(255, 127, 0, 0.4);
+  border-color: var(--primary, #ff7f00);
 }
 
 .stat-card.stat-comment {
@@ -762,8 +762,8 @@ td {
 
 /* Résumé */
 .stats-summary {
-  background: linear-gradient(135deg, rgba(229, 9, 20, 0.2), rgba(229, 9, 20, 0.05));
-  border: 2px solid rgba(229, 9, 20, 0.3);
+  background: linear-gradient(135deg, rgba(255, 127, 0, 0.2), rgba(255, 127, 0, 0.06));
+  border: 2px solid rgba(255, 127, 0, 0.3);
   border-radius: 15px;
   padding: 30px;
 }
@@ -793,7 +793,7 @@ td {
 .summary-item:hover {
   transform: translateY(-5px);
   border-color: var(--primary-color);
-  box-shadow: 0 8px 20px rgba(229, 9, 20, 0.3);
+  box-shadow: 0 8px 20px rgba(255, 127, 0, 0.3);
 }
 
 .summary-label {

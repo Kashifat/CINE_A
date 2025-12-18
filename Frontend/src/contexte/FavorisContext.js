@@ -32,7 +32,7 @@ export const FavorisProvider = ({ children }) => {
       setChargement(true);
       const result = await favorisService.lister(id_utilisateur);
       if (result.succes && result.data) {
-        // Construire un Set d'IDs: "film_123" ou "episode_456"
+        // Construire un Set d'IDs: "film_123" ou "episode_789"
         const favorisIds = new Set();
         
         // Ajouter les films favoris
@@ -63,7 +63,7 @@ export const FavorisProvider = ({ children }) => {
   }, []);
 
   // Vérifier si un film/épisode est favori
-  const estFavori = useCallback((id_film, id_episode) => {
+  const estFavori = useCallback((id_film = null, id_episode = null) => {
     if (id_film) return favoris.has(`film_${id_film}`);
     if (id_episode) return favoris.has(`episode_${id_episode}`);
     return false;
@@ -73,19 +73,22 @@ export const FavorisProvider = ({ children }) => {
   const ajouter = useCallback(
     async (id_utilisateur, id_film = null, id_episode = null) => {
       try {
-        // Normaliser: id_serie en id_episode car favoris ne supporte que id_film ET id_episode
-        // Les séries ne sont pas directement des favoris, on favorit des épisodes
         const payload = {
           id_utilisateur,
           id_film,
-          id_episode, // Pour un film id_episode=null, pour une série id_film=null et id_episode=id_episode
+          id_episode,
         };
         const result = await favorisService.ajouter(payload);
         
         if (result.succes) {
           // Mettre à jour le contexte immédiatement (optimistic update)
-          const key = id_film ? `film_${id_film}` : `episode_${id_episode}`;
-          setFavoris((prev) => new Set([...prev, key]));
+          let key = null;
+          if (id_film) key = `film_${id_film}`;
+          else if (id_episode) key = `episode_${id_episode}`;
+          
+          if (key) {
+            setFavoris((prev) => new Set([...prev, key]));
+          }
           return { succes: true };
         } else {
           return { succes: false, erreur: result.erreur };
@@ -111,12 +114,17 @@ export const FavorisProvider = ({ children }) => {
         
         if (result.succes) {
           // Mettre à jour le contexte immédiatement (optimistic update)
-          const key = id_film ? `film_${id_film}` : `episode_${id_episode}`;
-          setFavoris((prev) => {
-            const updated = new Set(prev);
-            updated.delete(key);
-            return updated;
-          });
+          let key = null;
+          if (id_film) key = `film_${id_film}`;
+          else if (id_episode) key = `episode_${id_episode}`;
+          
+          if (key) {
+            setFavoris((prev) => {
+              const updated = new Set(prev);
+              updated.delete(key);
+              return updated;
+            });
+          }
           return { succes: true };
         } else {
           return { succes: false, erreur: result.erreur };

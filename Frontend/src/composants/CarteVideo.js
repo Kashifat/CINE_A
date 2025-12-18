@@ -14,12 +14,11 @@ const CarteVideo = ({ film, estFavoriInitial = false }) => {
   const isFilm = film.type === 'Film' || (film.id_film && !film.id_serie);
   const isSerie = film.type === 'Serie' || (film.id_serie && !film.id_film);
 
-  // Vérifier si c'est un favori en utilisant le contexte
+  // Vérifier si c'est un favori en utilisant le contexte (films uniquement)
   const isFavorited = useMemo(() => {
     if (isFilm && film.id_film) {
       return estFavori(film.id_film, null);
     }
-    // Pour les séries, on ne stocke pas de favoris pour le moment
     return false;
   }, [estFavori, film, isFilm]);
 
@@ -43,17 +42,17 @@ const CarteVideo = ({ film, estFavoriInitial = false }) => {
   const handleToggleFavori = async (e) => {
     e.stopPropagation();
     if (!utilisateur) return;
-    if (!isFilm) return; // Seuls les films peuvent être favoris pour l'instant
+    
     try {
       setEnCours(true);
       const id_utilisateur = utilisateur.id_utilisateur || utilisateur.id;
       
-      if (isFavorited) {
-        // Retirer du favori
-        await retirer(id_utilisateur, film.id_film, null);
-      } else {
-        // Ajouter au favori
-        await ajouter(id_utilisateur, film.id_film, null);
+      if (isFilm && film.id_film) {
+        if (isFavorited) {
+          await retirer(id_utilisateur, film.id_film, null);
+        } else {
+          await ajouter(id_utilisateur, film.id_film, null);
+        }
       }
     } finally {
       setEnCours(false);

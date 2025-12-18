@@ -12,6 +12,7 @@ const favorisService = {
       });
       return { succes: true, data: response.data };
     } catch (error) {
+      console.error('[favorisService] Erreur ajouter:', error.response?.data || error.message);
       return { succes: false, erreur: error.response?.data || 'Erreur ajout favori' };
     }
   },
@@ -23,6 +24,7 @@ const favorisService = {
       });
       return { succes: true, data: response.data };
     } catch (error) {
+      console.error('[favorisService] Erreur retirer:', error.response?.data || error.message);
       return { succes: false, erreur: error.response?.data || 'Erreur retrait favori' };
     }
   },
@@ -32,6 +34,7 @@ const favorisService = {
       const response = await axios.get(`${API_URL}/favoris/${id_utilisateur}`);
       return { succes: true, data: response.data };
     } catch (error) {
+      console.error('[favorisService] Erreur lister:', error.response?.data || error.message);
       return { succes: false, erreur: 'Erreur lors du chargement des favoris' };
     }
   },

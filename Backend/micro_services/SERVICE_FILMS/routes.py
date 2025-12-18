@@ -240,78 +240,77 @@ def recherche():
     return jsonify(resultats)
 
 # =======================================
-# CATEGORIES
-@films_bp.route("/categories", methods=["GET"])
-def liste_categories():
-    """Obtenir toutes les catégories"""
-    from config import get_db_connection
-    
-    conn = get_db_connection()
-    if conn is None:
-        return jsonify({"erreur": "Connexion base de données indisponible"}), 500
-    
-    try:
-        cur = conn.cursor()
-        cur.execute("SELECT id_categorie, nom FROM categories ORDER BY nom")
-        categories = list(cur.fetchall())
-        return jsonify({"categories": categories}), 200
-    except Exception as e:
-        return jsonify({"erreur": f"Erreur: {str(e)}"}), 500
-    finally:
-        conn.close()
-
-
-# =======================================
 # FAVORIS
 @films_bp.route("/favoris", methods=["POST"])
-@require_auth_user
-def api_ajouter_favori():
+def ajouter_favori_route():
+    print(f"[DEBUG] POST /favoris reçu")
     data = request.get_json() or {}
+    print(f"[DEBUG] Données: {data}")
+    
     id_utilisateur = data.get("id_utilisateur")
     id_film = data.get("id_film")
     id_episode = data.get("id_episode")
-    res = ajouter_favori(id_utilisateur, id_film, id_episode)
-    if isinstance(res, tuple):
-        return jsonify(res[0]), res[1]
-    return jsonify(res)
+    
+    print(f"[DEBUG] id_utilisateur={id_utilisateur}, id_film={id_film}, id_episode={id_episode}")
+
+    # Validation simple : besoin d'un user et d'un contenu (film XOR épisode)
+    if (not id_utilisateur) or (not sum([bool(id_film), bool(id_episode)]) == 1):
+        print(f"[DEBUG] Validation échouée")
+        return jsonify({"erreur": "Paramètres invalides: fournir id_utilisateur et un seul de (id_film, id_episode)"}), 400
+
+    result = ajouter_favori(id_utilisateur, id_film=id_film, id_episode=id_episode)
+    print(f"[DEBUG] Résultat ajouter_favori: {result}")
+    if isinstance(result, tuple):
+        return jsonify(result[0]), result[1]
+    return jsonify(result)
 
 
 @films_bp.route("/favoris", methods=["DELETE"])
-@require_auth_user
-def api_supprimer_favori():
+def supprimer_favori_route():
+    print(f"[DEBUG] DELETE /favoris reçu")
     data = request.get_json() or {}
+    print(f"[DEBUG] Données: {data}")
+    
     id_utilisateur = data.get("id_utilisateur")
     id_film = data.get("id_film")
     id_episode = data.get("id_episode")
-    res = supprimer_favori(id_utilisateur, id_film, id_episode)
-    if isinstance(res, tuple):
-        return jsonify(res[0]), res[1]
-    return jsonify(res)
+    
+    print(f"[DEBUG] id_utilisateur={id_utilisateur}, id_film={id_film}, id_episode={id_episode}")
+
+    if (not id_utilisateur) or (not sum([bool(id_film), bool(id_episode)]) == 1):
+        print(f"[DEBUG] Validation échouée")
+        return jsonify({"erreur": "Paramètres invalides: fournir id_utilisateur et un seul de (id_film, id_episode)"}), 400
+
+    result = supprimer_favori(id_utilisateur, id_film=id_film, id_episode=id_episode)
+    print(f"[DEBUG] Résultat supprimer_favori: {result}")
+    if isinstance(result, tuple):
+        return jsonify(result[0]), result[1]
+    return jsonify(result)
 
 
 @films_bp.route("/favoris/<int:id_utilisateur>", methods=["GET"])
-def api_lister_favoris(id_utilisateur):
-    res = lister_favoris(id_utilisateur)
-    return jsonify(res), 200
-
-
-@films_bp.route("/films/vedette", methods=["GET"])
-def get_film_vedette():
-    """Retourne un film aléatoire ou tendance en vedette"""
+def lister_favoris_route(id_utilisateur):
     try:
-        import random
-        all_films = get_all_films()
-        if not all_films:
-            return jsonify({"succes": False, "erreur": "Aucun film disponible"}), 404
+        print(f"[DEBUG] GET /favoris/{id_utilisateur}")
+        data = lister_favoris(id_utilisateur)
+        print(f"[DEBUG] Résultat lister_favoris: {data}")
         
-        film_vedette = random.choice(all_films)
-        return jsonify({"succes": True, "data": film_vedette}), 200
+        if isinstance(data, tuple):
+            return jsonify(data[0]), data[1]
+        
+        # S'assurer que la structure est correcte
+        if not isinstance(data, dict):
+            data = {"films": [], "episodes": []}
+        
+        return jsonify(data), 200
     except Exception as e:
-        return jsonify({"succes": False, "erreur": str(e)}), 500
+        print(f"[ERREUR] GET /favoris/{id_utilisateur}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"erreur": f"Erreur serveur: {str(e)}", "films": [], "series": [], "episodes": []}), 500
 
-
-# #####################################
-#  CATEGORIES
+# =======================================
+# CATEGORIES
 @films_bp.route("/categories", methods=["GET"])
 def get_categories():
     """Récupérer toutes les catégories"""

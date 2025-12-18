@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexte/AuthContext';
 import uploadService from '../services/uploadService';
-import GestionCategories from '../composants/GestionCategories';
-import './Admin-Modern.css';
+import './Admin.css';
 
 const Admin = () => {
   const { estAdmin } = useAuth();
@@ -117,7 +116,8 @@ const Admin = () => {
       const response = await fetch('http://localhost:5002/contenus/categories');
       if (response.ok) {
         const data = await response.json();
-        setCategories(data.categories || []);
+        // Nouveau format: {succes: true, data: [...]}
+        setCategories(data.data || data.categories || []);
       }
     } catch (error) {
       console.error('Erreur:', error);
@@ -779,12 +779,6 @@ const Admin = () => {
           onClick={() => { setActiveTab('publications'); chargerPublications(); }}
         >
           Publications
-        </button>
-        <button
-          className={`tab ${activeTab === 'categories' ? 'active' : ''}`}
-          onClick={() => { setActiveTab('categories'); }}
-        >
-          Catégories
         </button>
       </div>
 
@@ -1540,7 +1534,6 @@ const Admin = () => {
             ) : (
               <div className="table-container-modern">
                 <table className="data-table-modern">
-                  <thead>
                     <tr>
                       <th>ID</th>
                       <th>Utilisateur</th>
@@ -1549,7 +1542,6 @@ const Admin = () => {
                       <th>Statut</th>
                       <th>Date</th>
                     </tr>
-                  </thead>
                   <tbody>
                     {payments.map(payment => (
                       <tr key={payment.id_paiement}>
@@ -1608,13 +1600,6 @@ const Admin = () => {
                 ))}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Catégories */}
-        {activeTab === 'categories' && (
-          <div className="tab-content">
-            <GestionCategories />
           </div>
         )}
 
