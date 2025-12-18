@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/contenus'; // Service films - passe par Nginx
+const API_URL = ''; // Chemins relatifs passent par Nginx
 
 const filmsService = {
   // Obtenir tous les films

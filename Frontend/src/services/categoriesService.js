@@ -1,5 +1,5 @@
 // Service pour gérer les catégories depuis l'API
-const API_URL = '/contenus'; // Service films - passe par Nginx
+const API_URL = ''; // Chemins relatifs passent par Nginx
 
 const categoriesService = {
   /**

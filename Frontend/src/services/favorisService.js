@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_URL = '/contenus'; // Service FILMS - passe par Nginx
+const API_URL = ''; // Chemins relatifs passent par Nginx
 
 const favorisService = {
   ajouter: async ({ id_utilisateur, id_film = null, id_episode = null }) => {
     try {
-      const response = await axios.post(`${API_URL}/favoris`, {
+      const response = await axios.post(`${API_URL}/contenus/favoris`, {
         id_utilisateur,
         id_film,
         id_episode,

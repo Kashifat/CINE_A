@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const API_URL = '/api/tv'; // Service TV - passe par Nginx
+const API_URL = ''; // Chemins relatifs passent par Nginx
 
 const tvService = {
   // Obtenir toutes les chaînes TV avec images
   obtenirChaines: async () => {
     try {
-      const response = await axios.get(`${API_URL}/tv/channels`);
+      const response = await axios.get(`${API_URL}/api/tv/channels`);
       const chaines = Array.isArray(response.data) ? response.data : response.data?.chaines || [];
       
       // Formater les chaînes pour utiliser le champ logo
