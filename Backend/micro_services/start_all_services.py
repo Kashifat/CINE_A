@@ -32,9 +32,24 @@ def demarrer_service(chemin_service, port, nom):
         return None
     
     try:
-        # Démarrer dans un nouveau terminal PowerShell
-        cmd = f'Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd \'{chemin_complet}\'; python app.py"'
-        subprocess.Popen(["powershell", "-Command", cmd], shell=True)
+        # Déterminer le système d'exploitation
+        if sys.platform == "win32":
+            # Windows: Démarrer dans un nouveau terminal PowerShell
+            cmd = f'Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd \'{chemin_complet}\'; python app.py"'
+            subprocess.Popen(["powershell", "-Command", cmd], shell=True)
+        else:
+            # Linux/Mac: Démarrer en background
+            # Créer un fichier de log pour le service
+            log_file = f"/tmp/cinea_{nom.replace(' ', '_').lower()}.log"
+            with open(log_file, 'w') as log:
+                subprocess.Popen(
+                    ["python3", "app.py"],
+                    cwd=chemin_complet,
+                    stdout=log,
+                    stderr=log,
+                    preexec_fn=os.setsid  # Crée un nouveau process group
+                )
+        
         print(f"✅ {nom} (Port {port}) - Démarré")
         return True
     except Exception as e:
